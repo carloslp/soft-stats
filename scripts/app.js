@@ -11,9 +11,7 @@
   /* ------------------------------------------------------------------ */
   /* Config                                                               */
   /* ------------------------------------------------------------------ */
-  const API_URL = (window.SOFT_STATS_CONFIG && window.SOFT_STATS_CONFIG.apiUrl)
-    ? window.SOFT_STATS_CONFIG.apiUrl
-    : '/api/stats';
+  const API_URL = 'https://script.google.com/macros/s/AKfycby7mLKmo5tYeyah3g75xA9FS48FPDbq6SJMkFDPErFi9dgrNAvlOEeapwTQ2fZTlHZg/exec?token=dads-12w1-dd3f-da1g&id=1r56WDn_pgZwoAHiiWmeaadUe1hepXC3Mo4t4PWwwfbQ&hoja=Group';
 
   /* ------------------------------------------------------------------ */
   /* State                                                                */
