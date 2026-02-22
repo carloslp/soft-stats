@@ -132,8 +132,8 @@
     // sort
     list.sort((a, b) => {
       let va = a[sortCol], vb = b[sortCol];
-      if (typeof va === 'string') {
-        va = va.toLowerCase(); vb = vb.toLowerCase();
+      if (typeof va === 'string' || typeof vb === 'string') {
+        va = (va ?? '').toString().toLowerCase(); vb = (vb ?? '').toString().toLowerCase();
         if (va < vb) return sortDir === 'asc' ? -1 : 1;
         if (va > vb) return sortDir === 'asc' ?  1 : -1;
         return 0;
