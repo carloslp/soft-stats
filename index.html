@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Soft Stats — Estadísticas de Softbol</title>
+    <meta name="description" content="Estadísticas de softbol en tiempo real. Consulta promedios de bateo, hits, home runs y más." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles/main.css" />
+  </head>
+  <body>
+    <!-- ===== HEADER ===== -->
+    <header class="site-header">
+      <div class="header-inner container">
+        <div class="brand">
+          <div class="logo" aria-label="Soft Stats logo">
+            <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="28" cy="28" r="28" fill="#CC3433"/>
+              <circle cx="28" cy="28" r="22" fill="#003087"/>
+              <!-- ball seam lines -->
+              <path d="M14 20 Q20 28 14 36" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <path d="M42 20 Q36 28 42 36" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <!-- bat -->
+              <rect x="26" y="10" width="4" height="22" rx="2" fill="white"/>
+              <rect x="24" y="30" width="8" height="6" rx="2" fill="#ACC9E7"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h1 class="brand-name">Soft Stats</h1>
+            <p class="brand-tagline">Estadísticas de Softbol en Tiempo Real</p>
+          </div>
+        </div>
+
+        <nav class="social-nav" aria-label="Redes sociales">
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram" title="Instagram">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Facebook" title="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X / Twitter" title="X / Twitter">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content container">
+
+      <!-- FILTERS -->
+      <section class="filters-section" aria-label="Filtros">
+        <div class="filters-row">
+          <div class="filter-group">
+            <label for="search-input" class="filter-label">Buscar jugador</label>
+            <div class="search-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+              <input
+                type="search"
+                id="search-input"
+                class="filter-input"
+                placeholder="Nombre del jugador…"
+                aria-label="Buscar por nombre de jugador"
+              />
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label for="min-avg" class="filter-label">AVG mínimo</label>
+            <select id="min-avg" class="filter-select" aria-label="Filtrar por promedio mínimo de bateo">
+              <option value="0">Todos</option>
+              <option value="0.1">&ge; .100</option>
+              <option value="0.2">&ge; .200</option>
+              <option value="0.3">&ge; .300</option>
+              <option value="0.5">&ge; .500</option>
+              <option value="1">1.000 (Perfecto)</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="min-hr" class="filter-label">Home Runs mínimos</label>
+            <select id="min-hr" class="filter-select" aria-label="Filtrar por home runs mínimos">
+              <option value="0">Todos</option>
+              <option value="1">&ge; 1 HR</option>
+              <option value="2">&ge; 2 HR</option>
+              <option value="3">&ge; 3 HR</option>
+            </select>
+          </div>
+
+          <div class="filter-group filter-group--right">
+            <button id="reset-filters" class="btn btn--outline" type="button">
+              Limpiar filtros
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SUMMARY CARDS -->
+      <section class="summary-cards" aria-label="Resumen del equipo" id="summary-cards">
+        <div class="card" id="card-players">
+          <span class="card-value" id="stat-players">—</span>
+          <span class="card-label">Jugadores</span>
+        </div>
+        <div class="card" id="card-avg">
+          <span class="card-value" id="stat-avg">—</span>
+          <span class="card-label">AVG Equipo</span>
+        </div>
+        <div class="card" id="card-hits">
+          <span class="card-value" id="stat-hits">—</span>
+          <span class="card-label">Hits Totales</span>
+        </div>
+        <div class="card" id="card-hr">
+          <span class="card-value" id="stat-hr">—</span>
+          <span class="card-label">Home Runs</span>
+        </div>
+        <div class="card" id="card-k">
+          <span class="card-value" id="stat-k">—</span>
+          <span class="card-label">Ponches (K)</span>
+        </div>
+      </section>
+
+      <!-- DATA TABLE -->
+      <section class="table-section" aria-label="Tabla de estadísticas">
+        <!-- Loading state -->
+        <div class="state state--loading" id="state-loading" role="status" aria-live="polite">
+          <div class="spinner" aria-hidden="true"></div>
+          <p>Cargando estadísticas…</p>
+        </div>
+
+        <!-- Error state -->
+        <div class="state state--error" id="state-error" role="alert" aria-live="assertive" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+          <p id="error-message">Error al cargar los datos.</p>
+          <button id="retry-btn" class="btn btn--primary" type="button">Reintentar</button>
+        </div>
+
+        <!-- Empty state -->
+        <div class="state state--empty" id="state-empty" role="status" aria-live="polite" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9.172 16.172a4 4 0 0 1 5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+          <p>No se encontraron jugadores con los filtros seleccionados.</p>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrapper" id="table-wrapper" hidden>
+          <table class="stats-table" id="stats-table" aria-label="Estadísticas de jugadores">
+            <caption class="sr-only">Estadísticas de softbol — haz clic en el encabezado de columna para ordenar</caption>
+            <thead>
+              <tr>
+                <th scope="col" class="th-sortable" data-col="Nombre" data-type="string" tabindex="0" aria-sort="none">
+                  Jugador <span class="sort-icon" aria-hidden="true">⇅</span>
+                </th>
+                <th scope="col" class="th-sortable th--num" data-col="VB" data-type="number" tabindex="0" aria-sort="none">
+                  VB <span class="sort-icon" aria-hidden="true">⇅</span>
+                </th>
+                <th scope="col" class="th-sortable th--num" data-col="H" data-type="number" tabindex="0" aria-sort="none">
+                  H <span class="sort-icon" aria-hidden="true">⇅</span>
+                </th>
+                <th scope="col" class="th-sortable th--num" data-col="HR" data-type="number" tabindex="0" aria-sort="none">
+                  HR <span class="sort-icon" aria-hidden="true">⇅</span>
+                </th>
+                <th scope="col" class="th-sortable th--num" data-col="K" data-type="number" tabindex="0" aria-sort="none">
+                  K <span class="sort-icon" aria-hidden="true">⇅</span>
+                </th>
+                <th scope="col" class="th-sortable th--num th--avg" data-col="AVG" data-type="number" tabindex="0" aria-sort="none">
+                  AVG <span class="sort-icon" aria-hidden="true">⇅</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+            </tbody>
+            <tfoot id="table-foot">
+            </tfoot>
+          </table>
+          <p class="table-meta" id="table-meta" aria-live="polite"></p>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+      <div class="container">
+        <p>&copy; <span id="footer-year"></span> Soft Stats. Hecho con ❤️ para la comunidad softbolera.</p>
+      </div>
+    </footer>
+
+    <script src="scripts/config.js"></script>
+    <script src="scripts/app.js"></script>
+  </body>
+</html>
