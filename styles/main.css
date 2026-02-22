@@ -17,6 +17,10 @@
   padding: 0;
 }
 
+/* Ensure the HTML `hidden` attribute always hides elements,
+   even when a CSS class (e.g. .state { display: flex }) would override it. */
+[hidden] { display: none !important; }
+
 :root {
   --navy:   #003087;
   --navy-dark: #001f5b;
