@@ -53,8 +53,9 @@
 
   /** Format a batting average as a 3-decimal string e.g. ".333" */
   function fmtAvg(val) {
-    if (val === null || val === undefined || isNaN(val)) return '—';
+    if (val === null || val === undefined || val === '') return '.000';
     const n = parseFloat(val);
+    if (isNaN(n)) return '.000';
     if (n >= 1) return '1.000';
     return n.toFixed(3).replace(/^0/, '');   // ".333"
   }
