@@ -784,14 +784,29 @@ body {
   .stats-table th,
   .stats-table td { padding: .6rem .75rem; font-size: .82rem; }
 
-  .lineup-card { grid-template-columns: 1fr; }
-  .field-wrap { flex-direction: column; }
+  .lineup-card { grid-template-columns: 1fr; padding: 1rem .75rem; gap: 1rem; }
+  .batting-order,
+  .field-area { min-width: 0; }
+  .field-wrap,
+  .field { min-width: 0; }
+  .field-wrap { flex-direction: column; align-items: stretch; }
   .field-extras { flex-direction: row; justify-content: center; }
+  .field-extras .field__pos { flex: 0 0 auto; }
+  .field-extras .field__pos-name { min-width: 72px; }
+  .field__row { gap: .3rem; }
   .field__row--midinfield { gap: 1.5rem; }
-  .field__pos-name { min-width: 80px; font-size: .62rem; }
+  .field__row--outfield .field__pos,
+  .field__row--infield .field__pos { flex: 1 1 0; min-width: 0; }
+  .field__row--outfield .field__pos-name,
+  .field__row--infield .field__pos-name { width: 100%; min-width: 0; }
+  .field__pos-name { min-width: 72px; font-size: .62rem; }
   .batting-order__name { font-size: .68rem; }
+  .bench__slot { min-width: 72px; font-size: .64rem; }
 }
 
 @media (max-width: 360px) {
   .summary-cards { grid-template-columns: 1fr; }
+  .field__pos-name { min-width: 60px; font-size: .58rem; }
+  .field-extras .field__pos-name { min-width: 60px; }
+  .bench__slot { min-width: 60px; }
 }
