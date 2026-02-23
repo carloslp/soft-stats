@@ -169,7 +169,7 @@
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td class="td--name">${escapeHtml(p.Nombre)}</td>
-        <td class="td--num">${p.VB ?? '—'}</td>
+        <td class="td--num">${p.AB ?? '—'}</td>
         <td class="td--num">${p.H ?? '—'}</td>
         <td class="td--num">${p.HR ?? '—'}</td>
         <td class="td--num">${p.K ?? '—'}</td>
@@ -181,16 +181,16 @@
     tableBody.appendChild(fragment);
 
     // totals / averages footer row
-    const totVB = players.reduce((s, p) => s + (parseInt(p.VB, 10) || 0), 0);
+    const totAB = players.reduce((s, p) => s + (parseInt(p.AB, 10) || 0), 0);
     const totH  = players.reduce((s, p) => s + (parseInt(p.H,  10) || 0), 0);
     const totHR = players.reduce((s, p) => s + (parseInt(p.HR, 10) || 0), 0);
     const totK  = players.reduce((s, p) => s + (parseInt(p.K,  10) || 0), 0);
-    const teamAvg = totVB > 0 ? totH / totVB : 0;
+    const teamAvg = totAB > 0 ? totH / totAB : 0;
 
     tableFoot.innerHTML = `
       <tr>
         <td>Totales / Promedio</td>
-        <td class="td--num">${totVB}</td>
+        <td class="td--num">${totAB}</td>
         <td class="td--num">${totH}</td>
         <td class="td--num">${totHR}</td>
         <td class="td--num">${totK}</td>
@@ -213,11 +213,11 @@
 
   function updateSummaryCards(players) {
     const count = players.length;
-    const totVB = players.reduce((s, p) => s + (parseInt(p.VB, 10) || 0), 0);
+    const totAB = players.reduce((s, p) => s + (parseInt(p.AB, 10) || 0), 0);
     const totH  = players.reduce((s, p) => s + (parseInt(p.H,  10) || 0), 0);
     const totHR = players.reduce((s, p) => s + (parseInt(p.HR, 10) || 0), 0);
     const totK  = players.reduce((s, p) => s + (parseInt(p.K,  10) || 0), 0);
-    const avg   = totVB > 0 ? totH / totVB : 0;
+    const avg   = totAB > 0 ? totH / totAB : 0;
 
     statPlayers.textContent = count || '—';
     statAvg.textContent     = count ? fmtAvg(avg)  : '—';

@@ -41,7 +41,7 @@ The app expects the API endpoint to return JSON in the following shape:
   "data": [
     {
       "Nombre": "Abel Juárez",
-      "VB": 2,
+      "AB": 2,
       "H": 2,
       "HR": 0,
       "K": 0,
@@ -54,7 +54,7 @@ The app expects the API endpoint to return JSON in the following shape:
 | Field    | Type   | Description            |
 |----------|--------|------------------------|
 | `Nombre` | string | Player name            |
-| `VB`     | number | At-bats                |
+| `AB`     | number | At-bats                |
 | `H`      | number | Hits                   |
 | `HR`     | number | Home runs              |
 | `K`      | number | Strikeouts (ponches)   |
