@@ -111,6 +111,101 @@
         </div>
       </section>
 
+      <!-- BATTING LINEUP CARD -->
+      <section class="lineup-section" aria-label="Cuadro de Bateo y Turno">
+        <h2 class="lineup-section__title">Cuadro de Bateo y Turno</h2>
+
+        <div class="state state--loading" id="lineup-loading" role="status" aria-live="polite">
+          <div class="spinner" aria-hidden="true"></div>
+          <p>Cargando cuadro de bateo…</p>
+        </div>
+
+        <div class="state state--error" id="lineup-error" role="alert" aria-live="assertive" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+          <p id="lineup-error-msg">Error al cargar el cuadro de bateo.</p>
+          <button id="lineup-retry-btn" class="btn btn--primary" type="button">Reintentar</button>
+        </div>
+
+        <div class="lineup-card" id="lineup-card" hidden>
+          <!-- Left: Batting order -->
+          <div class="batting-order">
+            <h3 class="batting-order__title">BATTING ORDER</h3>
+            <ol class="batting-order__list" id="batting-order-list"></ol>
+          </div>
+
+          <!-- Right: Field + Bench -->
+          <div class="field-area">
+            <div class="field-wrap">
+              <!-- Field position grid -->
+              <div class="field">
+                <div class="field__row field__row--outfield">
+                  <div class="field__pos">
+                    <span class="field__pos-label">LF</span>
+                    <span class="field__pos-name" id="fname-LF"></span>
+                  </div>
+                  <div class="field__pos">
+                    <span class="field__pos-label">CF</span>
+                    <span class="field__pos-name" id="fname-CF"></span>
+                  </div>
+                  <div class="field__pos">
+                    <span class="field__pos-label">RF</span>
+                    <span class="field__pos-name" id="fname-RF"></span>
+                  </div>
+                </div>
+                <div class="field__row field__row--midinfield">
+                  <div class="field__pos">
+                    <span class="field__pos-label">SS</span>
+                    <span class="field__pos-name" id="fname-SS"></span>
+                  </div>
+                  <div class="field__pos">
+                    <span class="field__pos-label">2B</span>
+                    <span class="field__pos-name" id="fname-2B"></span>
+                  </div>
+                </div>
+                <div class="field__row field__row--infield">
+                  <div class="field__pos">
+                    <span class="field__pos-label">3B</span>
+                    <span class="field__pos-name" id="fname-3B"></span>
+                  </div>
+                  <div class="field__pos">
+                    <span class="field__pos-label">P</span>
+                    <span class="field__pos-name" id="fname-P"></span>
+                  </div>
+                  <div class="field__pos">
+                    <span class="field__pos-label">1B</span>
+                    <span class="field__pos-name" id="fname-1B"></span>
+                  </div>
+                </div>
+                <div class="field__row field__row--catcher">
+                  <div class="field__pos">
+                    <span class="field__pos-label">C</span>
+                    <span class="field__pos-name" id="fname-C"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Extra positions: DH, BC (right of field) -->
+              <div class="field-extras">
+                <div class="field__pos">
+                  <span class="field__pos-label">DH</span>
+                  <span class="field__pos-name" id="fname-DH"></span>
+                </div>
+                <div class="field__pos">
+                  <span class="field__pos-label">BC</span>
+                  <span class="field__pos-name" id="fname-BC"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bench -->
+            <div class="bench">
+              <h3 class="bench__title">BENCH</h3>
+              <div class="bench__grid" id="bench-grid"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- DATA TABLE -->
       <section class="table-section" aria-label="Tabla de estadísticas">
         <!-- Loading state -->
