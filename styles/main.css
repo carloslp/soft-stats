@@ -523,6 +523,220 @@ body {
   text-align: right;
 }
 
+/* ---------- Lineup / Batting Card Section ---------- */
+.lineup-section {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.lineup-section__title {
+  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
+  color: var(--white);
+  padding: .9rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  border-bottom: 3px solid var(--gold);
+}
+
+/* Green grass card */
+.lineup-card {
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  background: #2d7a35;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 28px,
+      rgba(0,0,0,.07) 28px,
+      rgba(0,0,0,.07) 56px
+    );
+}
+
+/* ---- Batting Order (left column) ---- */
+.batting-order {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.batting-order__title {
+  color: var(--white);
+  font-size: .9rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0,0,0,.4);
+}
+
+.batting-order__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  counter-reset: batting;
+}
+
+.batting-order__item {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  counter-increment: batting;
+}
+
+.batting-order__item::before {
+  content: counter(batting);
+  color: var(--white);
+  font-weight: 700;
+  font-size: .8rem;
+  min-width: 1.5rem;
+  text-align: right;
+  flex-shrink: 0;
+  text-shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+
+.batting-order__name {
+  background: rgba(255,255,255,.9);
+  border-radius: 4px;
+  padding: .25rem .55rem;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--text);
+  flex: 1;
+  min-height: 26px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- Field Area (right column) ---- */
+.field-area {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+/* Field wrap: field grid + extras side column */
+.field-wrap {
+  display: flex;
+  gap: .75rem;
+  align-items: flex-end;
+}
+
+/* Field position grid */
+.field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+}
+
+.field__row {
+  display: flex;
+  align-items: flex-end;
+  gap: .4rem;
+}
+
+.field__row--outfield   { justify-content: space-between; }
+.field__row--midinfield { justify-content: center; gap: 2.5rem; }
+.field__row--infield    { justify-content: space-between; }
+.field__row--catcher    { justify-content: center; }
+
+/* Individual position box */
+.field__pos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .15rem;
+}
+
+.field__pos-label {
+  color: var(--white);
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  text-shadow: 0 1px 3px rgba(0,0,0,.5);
+}
+
+.field__pos-name {
+  background: rgba(255,255,255,.92);
+  border-radius: 4px;
+  padding: .25rem .5rem;
+  font-size: .68rem;
+  font-weight: 600;
+  color: var(--text);
+  min-width: 108px;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+/* Extra positions (DH, BC) to the right of the field */
+.field-extras {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-bottom: .25rem;
+}
+
+.field-extras .field__pos-name {
+  min-width: 85px;
+}
+
+/* Bench */
+.bench {
+  background: rgba(0,0,0,.18);
+  border-radius: var(--radius-sm);
+  padding: .6rem .75rem;
+}
+
+.bench__title {
+  color: var(--white);
+  font-size: .8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: .4rem;
+  text-shadow: 0 1px 3px rgba(0,0,0,.4);
+}
+
+.bench__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+
+.bench__slot {
+  background: rgba(255,255,255,.9);
+  border-radius: 4px;
+  padding: .25rem .5rem;
+  font-size: .68rem;
+  font-weight: 600;
+  color: var(--text);
+  min-width: 100px;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ---------- Footer ---------- */
 .site-footer {
   background: var(--navy-dark);
@@ -569,6 +783,13 @@ body {
 
   .stats-table th,
   .stats-table td { padding: .6rem .75rem; font-size: .82rem; }
+
+  .lineup-card { grid-template-columns: 1fr; }
+  .field-wrap { flex-direction: column; }
+  .field-extras { flex-direction: row; justify-content: center; }
+  .field__row--midinfield { gap: 1.5rem; }
+  .field__pos-name { min-width: 80px; font-size: .62rem; }
+  .batting-order__name { font-size: .68rem; }
 }
 
 @media (max-width: 360px) {

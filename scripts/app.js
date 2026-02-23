@@ -13,6 +13,9 @@
   /* ------------------------------------------------------------------ */
   const API_URL = 'https://script.google.com/macros/s/AKfycby7mLKmo5tYeyah3g75xA9FS48FPDbq6SJMkFDPErFi9dgrNAvlOEeapwTQ2fZTlHZg/exec?token=dads-12w1-dd3f-da1g&id=1r56WDn_pgZwoAHiiWmeaadUe1hepXC3Mo4t4PWwwfbQ&hoja=Group';
 
+  const CUADRO_URL = 'https://script.google.com/macros/s/AKfycby7mLKmo5tYeyah3g75xA9FS48FPDbq6SJMkFDPErFi9dgrNAvlOEeapwTQ2fZTlHZg/exec?token=dads-12w1-dd3f-da1g&id=1r56WDn_pgZwoAHiiWmeaadUe1hepXC3Mo4t4PWwwfbQ&hoja=Cuadro';
+  const ORDEN_URL  = 'https://script.google.com/macros/s/AKfycby7mLKmo5tYeyah3g75xA9FS48FPDbq6SJMkFDPErFi9dgrNAvlOEeapwTQ2fZTlHZg/exec?token=dads-12w1-dd3f-da1g&id=1r56WDn_pgZwoAHiiWmeaadUe1hepXC3Mo4t4PWwwfbQ&hoja=Orden';
+
   /* ------------------------------------------------------------------ */
   /* State                                                                */
   /* ------------------------------------------------------------------ */
@@ -47,6 +50,15 @@
   const statHr        = document.getElementById('stat-hr');
   const statK         = document.getElementById('stat-k');
 
+  /* Lineup card DOM references */
+  const lineupLoading  = document.getElementById('lineup-loading');
+  const lineupError    = document.getElementById('lineup-error');
+  const lineupErrorMsg = document.getElementById('lineup-error-msg');
+  const lineupCard     = document.getElementById('lineup-card');
+  const lineupRetryBtn = document.getElementById('lineup-retry-btn');
+  const battingList    = document.getElementById('batting-order-list');
+  const benchGrid      = document.getElementById('bench-grid');
+
   /* ------------------------------------------------------------------ */
   /* Helpers                                                              */
   /* ------------------------------------------------------------------ */
@@ -75,6 +87,99 @@
     stateError.hidden   = name !== 'error';
     stateEmpty.hidden   = name !== 'empty';
     tableWrapper.hidden = name !== 'table';
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Lineup card: data fetching & rendering                              */
+  /* ------------------------------------------------------------------ */
+
+  function showLineupState(name) {
+    lineupLoading.hidden = name !== 'loading';
+    lineupError.hidden   = name !== 'error';
+    lineupCard.hidden    = name !== 'card';
+  }
+
+  async function fetchLineup() {
+    showLineupState('loading');
+    try {
+      const [cuadroResult, ordenResult] = await Promise.allSettled([
+        fetch(CUADRO_URL, { method: 'GET', headers: { 'Accept': 'application/json' } }),
+        fetch(ORDEN_URL,  { method: 'GET', headers: { 'Accept': 'application/json' } })
+      ]);
+
+      const fetchErrors = [];
+      if (cuadroResult.status === 'rejected') fetchErrors.push(`Cuadro: ${cuadroResult.reason.message}`);
+      if (ordenResult.status === 'rejected')  fetchErrors.push(`Orden: ${ordenResult.reason.message}`);
+      if (fetchErrors.length > 0) throw new Error(fetchErrors.join('; '));
+
+      const cuadroRes = cuadroResult.value;
+      const ordenRes  = ordenResult.value;
+
+      if (!cuadroRes.ok) throw new Error(`Cuadro HTTP ${cuadroRes.status} — ${cuadroRes.statusText}`);
+      if (!ordenRes.ok)  throw new Error(`Orden HTTP ${ordenRes.status} — ${ordenRes.statusText}`);
+
+      const cuadroJson = await cuadroRes.json();
+      const ordenJson  = await ordenRes.json();
+
+      if (!Array.isArray(cuadroJson.data)) throw new Error('Formato de cuadro inesperado.');
+      if (!Array.isArray(ordenJson.data))  throw new Error('Formato de orden inesperado.');
+
+      renderLineup(cuadroJson.data, ordenJson.data);
+    } catch (err) {
+      console.error('[SoftStats] Error al obtener cuadro:', err);
+      lineupErrorMsg.textContent = `Error al cargar el cuadro: ${err.message}`;
+      showLineupState('error');
+    }
+  }
+
+  function renderLineup(cuadro, orden) {
+    // Build position → player map from cuadro; collect bench entries separately
+    const posMap = {};
+    const bench  = [];
+
+    cuadro.forEach(function (entry) {
+      const pos = String(entry.Posiciones || '').trim().toUpperCase();
+      if (pos === 'BANCA') {
+        bench.push(String(entry.Jugador || '').trim());
+      } else if (pos) {
+        posMap[pos] = String(entry.Jugador || '').trim();
+      }
+    });
+
+    // Fill field position name boxes
+    ['CF', 'LF', 'RF', 'SS', '2B', '3B', 'P', '1B', 'C', 'BC', 'DH'].forEach(function (pos) {
+      const el = document.getElementById('fname-' + pos);
+      if (!el) return;
+      const name = posMap[pos] || '';
+      el.textContent = name;
+      el.title = name;
+    });
+
+    // Batting order list
+    battingList.innerHTML = '';
+    orden.forEach(function (entry) {
+      const li = document.createElement('li');
+      li.className = 'batting-order__item';
+      const nameEl = document.createElement('span');
+      nameEl.className = 'batting-order__name';
+      const name = String(entry.Jugador || '').trim();
+      nameEl.textContent = name;
+      nameEl.title = name;
+      li.appendChild(nameEl);
+      battingList.appendChild(li);
+    });
+
+    // Bench slots
+    benchGrid.innerHTML = '';
+    bench.forEach(function (name) {
+      const slot = document.createElement('div');
+      slot.className = 'bench__slot';
+      slot.textContent = name;
+      slot.title = name;
+      benchGrid.appendChild(slot);
+    });
+
+    showLineupState('card');
   }
 
   /* ------------------------------------------------------------------ */
@@ -297,10 +402,14 @@
   // Retry on error
   retryBtn.addEventListener('click', fetchStats);
 
+  // Lineup retry
+  lineupRetryBtn.addEventListener('click', fetchLineup);
+
   /* ------------------------------------------------------------------ */
   /* Init                                                                 */
   /* ------------------------------------------------------------------ */
   footerYear.textContent = new Date().getFullYear();
+  fetchLineup();
   fetchStats();
 
 })();
