@@ -119,6 +119,10 @@ body {
   transition: transform var(--transition);
 }
 
+.logo img {
+  border-radius: var(--radius);
+}
+
 .logo:hover { transform: scale(1.08) rotate(-4deg); }
 
 .brand-name {
