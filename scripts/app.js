@@ -147,7 +147,7 @@
     });
 
     // Fill field position name boxes
-    ['CF', 'LF', 'RF', 'SS', '2B', '3B', 'P', '1B', 'C', 'BC', 'DH'].forEach(function (pos) {
+    ['LCF', 'RCF', 'LF', 'RF', 'SS', '2B', '3B', 'P', '1B', 'C', 'BC', 'DH'].forEach(function (pos) {
       const el = document.getElementById('fname-' + pos);
       if (!el) return;
       const name = posMap[pos] || '';

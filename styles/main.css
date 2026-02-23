@@ -638,18 +638,40 @@ body {
   display: flex;
   flex-direction: column;
   gap: .45rem;
+  position: relative;
+  border-radius: var(--radius-sm);
+  padding: .5rem .5rem .6rem;
+  overflow: hidden;
+}
+
+/* Dirt infield arc */
+.field::before {
+  content: '';
+  position: absolute;
+  bottom: -8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110%;
+  height: 62%;
+  background: radial-gradient(ellipse at 50% 100%, #c8a454 0%, #b5903a 50%, transparent 65%);
+  border-radius: 50% 50% 0 0 / 60% 60% 0 0;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .field__row {
   display: flex;
   align-items: flex-end;
   gap: .4rem;
+  position: relative;
+  z-index: 1;
 }
 
-.field__row--outfield   { justify-content: space-between; }
-.field__row--midinfield { justify-content: center; gap: 2.5rem; }
-.field__row--infield    { justify-content: space-between; }
-.field__row--catcher    { justify-content: center; }
+.field__row--deep-outfield { justify-content: center; gap: 2rem; }
+.field__row--outfield      { justify-content: space-between; }
+.field__row--midinfield    { justify-content: center; gap: 2.5rem; }
+.field__row--infield       { justify-content: space-between; }
+.field__row--catcher       { justify-content: center; }
 
 /* Individual position box */
 .field__pos {
@@ -787,6 +809,7 @@ body {
   .lineup-card { grid-template-columns: 1fr; }
   .field-wrap { flex-direction: column; }
   .field-extras { flex-direction: row; justify-content: center; }
+  .field__row--deep-outfield { gap: 1rem; }
   .field__row--midinfield { gap: 1.5rem; }
   .field__pos-name { min-width: 80px; font-size: .62rem; }
   .batting-order__name { font-size: .68rem; }
