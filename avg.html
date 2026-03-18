@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cachorros de Sinaloa — Promedios de Bateo</title>
+    <meta name="description" content="Promedios de bateo por juego. Cachorros de Sinaloa — Estadísticas de Softbol." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles/avg.css" />
+  </head>
+  <body>
+    <div class="avg-page">
+
+      <!-- ===== HEADER ===== -->
+      <header class="avg-header">
+        <div class="avg-header-top">
+          <a href="index.html" class="avg-back-btn" aria-label="Regresar a estadísticas">&#8592;</a>
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/8/89/Chicago_Cubs_Cap_Insignia.svg"
+            alt="Cachorros de Sinaloa logo"
+            class="avg-logo"
+            width="48"
+            height="48"
+          />
+          <div class="avg-header-text">
+            <h1 class="avg-header-title">Cachorros de Sinaloa</h1>
+            <p class="avg-header-subtitle">Promedios de Bateo</p>
+          </div>
+        </div>
+      </header>
+
+      <!-- ===== GAME SELECTOR ===== -->
+      <div class="game-selector-bar">
+        <span class="game-selector-label" id="game-selector-label">Juego:</span>
+        <select
+          id="game-select"
+          class="game-select"
+          aria-labelledby="game-selector-label"
+        >
+          <!-- Options injected by avg.js -->
+        </select>
+      </div>
+
+      <!-- ===== LOADING STATE ===== -->
+      <div
+        class="avg-state avg-state--loading"
+        id="avg-loading"
+        role="status"
+        aria-live="polite"
+      >
+        <div class="avg-spinner" aria-hidden="true"></div>
+        <p>Cargando promedios&hellip;</p>
+      </div>
+
+      <!-- ===== ERROR STATE ===== -->
+      <div
+        class="avg-state avg-state--error"
+        id="avg-error"
+        role="alert"
+        aria-live="assertive"
+        hidden
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>
+        </svg>
+        <p id="avg-error-msg">Error al cargar los datos.</p>
+        <button id="avg-retry-btn" class="avg-btn" type="button">Reintentar</button>
+      </div>
+
+      <!-- ===== TEAM AVG HERO CARD ===== -->
+      <section class="team-avg-section" id="team-avg-section" aria-label="Promedio del equipo" hidden>
+        <div class="team-avg-card">
+          <div class="team-avg-left">
+            <span class="team-avg-game-label" id="team-game-label"></span>
+            <span class="team-avg-title">AVG del Equipo</span>
+            <div class="team-avg-stats">
+              <div class="team-stat-item">
+                <span class="team-stat-value" id="team-ab-value">—</span>
+                <span class="team-stat-label">AB</span>
+              </div>
+              <div class="team-stat-item">
+                <span class="team-stat-value" id="team-h-value">—</span>
+                <span class="team-stat-label">H</span>
+              </div>
+              <div class="team-stat-item">
+                <span class="team-stat-value" id="team-hr-value">—</span>
+                <span class="team-stat-label">HR</span>
+              </div>
+            </div>
+          </div>
+          <span class="team-avg-value-big" id="team-avg-value" aria-label="Promedio de equipo">—</span>
+        </div>
+      </section>
+
+      <!-- ===== PLAYERS LIST ===== -->
+      <section class="players-section" id="players-section" aria-label="Promedios por jugador" hidden>
+        <div class="players-header">
+          <h2 class="players-header-title">Jugadores</h2>
+          <span class="players-count" id="players-count" aria-live="polite">0</span>
+        </div>
+        <div
+          class="players-list"
+          id="players-list"
+          role="list"
+          aria-label="Lista de jugadores ordenada por promedio de bateo"
+        >
+          <!-- Injected by avg.js -->
+        </div>
+      </section>
+
+      <!-- ===== FOOTER ===== -->
+      <footer class="avg-footer">
+        <p>&copy; <span id="avg-footer-year"></span> Cachorros de Sinaloa.</p>
+      </footer>
+
+    </div><!-- /.avg-page -->
+
+    <script src="scripts/avg.js"></script>
+  </body>
+</html>
