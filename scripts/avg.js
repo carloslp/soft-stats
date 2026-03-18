@@ -17,21 +17,6 @@
     'https://script.google.com/macros/s/AKfycby7mLKmo5tYeyah3g75xA9FS48FPDbq6SJMkFDPErFi9dgrNAvlOEeapwTQ2fZTlHZg/exec' +
     '?token=dads-12w1-dd3f-da1g&id=1r56WDn_pgZwoAHiiWmeaadUe1hepXC3Mo4t4PWwwfbQ&hoja=Data';
 
-  /**
-   * GAMES defines the items in the dropdown selector.
-   * juego: null  → show all games aggregated
-   * juego: N     → filter records where Juego === N
-   */
-  const GAMES = [
-    { label: 'Todos los juegos', juego: null },
-    { label: 'Juego 1',          juego: 1    },
-    { label: 'Juego 2',          juego: 2    },
-    { label: 'Juego 3',          juego: 3    },
-    { label: 'Juego 4',          juego: 4    },
-    { label: 'Juego 5',          juego: 5    },
-    { label: 'Juego 6',          juego: 6    },
-  ];
-
   /* ------------------------------------------------------------------ */
   /* DOM references                                                       */
   /* ------------------------------------------------------------------ */
@@ -167,6 +152,7 @@
       }
 
       allData = json.data;
+      populateGameSelector();
       renderAll();
     } catch (err) {
       console.error('[AvgPage] Error:', err);
@@ -181,8 +167,8 @@
     const totHR = players.reduce((s, p) => s + (parseInt(p.HR, 10) || 0), 0);
     const avg   = totAB > 0 ? totH / totAB : 0;
 
-    const selectedGame = GAMES.find(g => g.juego === currentJuego);
-    teamGameLabel.textContent = selectedGame ? selectedGame.label : '';
+    const selectedOption = gameSelect.options[gameSelect.selectedIndex];
+    teamGameLabel.textContent = selectedOption ? selectedOption.textContent : '';
     teamAvgValue.textContent  = fmtAvg(avg);
     teamAbValue.textContent   = totAB;
     teamHValue.textContent    = totH;
@@ -228,14 +214,44 @@
   }
 
   /* ------------------------------------------------------------------ */
-  /* Init: populate game selector                                         */
+  /* Init: populate game selector dynamically from fetched data          */
   /* ------------------------------------------------------------------ */
-  GAMES.forEach(function (game) {
-    const opt = document.createElement('option');
-    opt.value       = game.juego === null ? '' : String(game.juego);
-    opt.textContent = game.label;
-    gameSelect.appendChild(opt);
-  });
+  function populateGameSelector() {
+    // Extract unique Juego values, sorted ascending
+    const juegos = Array.from(
+      new Set(
+        allData
+          .map(function (r) { return parseInt(r.Juego, 10); })
+          .filter(function (n) { return !isNaN(n); })
+      )
+    ).sort(function (a, b) { return a - b; });
+
+    // Clear existing options
+    gameSelect.innerHTML = '';
+
+    // "All games" option
+    const allOpt = document.createElement('option');
+    allOpt.value = '';
+    allOpt.textContent = 'Todos los juegos';
+    gameSelect.appendChild(allOpt);
+
+    // One option per unique Juego
+    juegos.forEach(function (n) {
+      const opt = document.createElement('option');
+      opt.value = String(n);
+      opt.textContent = 'Juego ' + n;
+      gameSelect.appendChild(opt);
+    });
+
+    // Restore the current selection if it's still valid; otherwise reset to "all"
+    const currentVal = currentJuego === null ? '' : String(currentJuego);
+    if (Array.from(gameSelect.options).some(function (o) { return o.value === currentVal; })) {
+      gameSelect.value = currentVal;
+    } else {
+      gameSelect.value = '';
+      currentJuego = null;
+    }
+  }
 
   /* ------------------------------------------------------------------ */
   /* Event listeners                                                      */
