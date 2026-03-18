@@ -1,29 +1,35 @@
 /**
  * avg.js — Promedios de Bateo page logic
  *
- * Fetches player batting averages for a selected game (or all games combined)
- * and renders a mobile-friendly, Instagram-shareable ranked list.
+ * Fetches all player batting stats from hoja=Group (which returns every game),
+ * then renders a mobile-friendly, Instagram-shareable ranked list.
+ * The game selector filters the already-loaded data client-side.
  */
 
 (function () {
   'use strict';
 
   /* ------------------------------------------------------------------ */
-  /* Game configuration                                                   */
-  /* Update the sheet names below to match your Google Sheets tab names. */
+  /* API configuration                                                    */
+  /* hoja=Group returns all games in one response.                       */
   /* ------------------------------------------------------------------ */
-  const BASE_URL =
+  const API_URL =
     'https://script.google.com/macros/s/AKfycby7mLKmo5tYeyah3g75xA9FS48FPDbq6SJMkFDPErFi9dgrNAvlOEeapwTQ2fZTlHZg/exec' +
-    '?token=dads-12w1-dd3f-da1g&id=1r56WDn_pgZwoAHiiWmeaadUe1hepXC3Mo4t4PWwwfbQ&hoja=';
+    '?token=dads-12w1-dd3f-da1g&id=1r56WDn_pgZwoAHiiWmeaadUe1hepXC3Mo4t4PWwwfbQ&hoja=Group';
 
+  /**
+   * GAMES defines the items in the dropdown selector.
+   * juego: null  → show all games aggregated
+   * juego: N     → filter records where Juego === N
+   */
   const GAMES = [
-    { label: 'Todos los juegos', sheet: 'Group' },
-    { label: 'Juego 1',          sheet: 'Juego1' },
-    { label: 'Juego 2',          sheet: 'Juego2' },
-    { label: 'Juego 3',          sheet: 'Juego3' },
-    { label: 'Juego 4',          sheet: 'Juego4' },
-    { label: 'Juego 5',          sheet: 'Juego5' },
-    { label: 'Juego 6',          sheet: 'Juego6' },
+    { label: 'Todos los juegos', juego: null },
+    { label: 'Juego 1',          juego: 1    },
+    { label: 'Juego 2',          juego: 2    },
+    { label: 'Juego 3',          juego: 3    },
+    { label: 'Juego 4',          juego: 4    },
+    { label: 'Juego 5',          juego: 5    },
+    { label: 'Juego 6',          juego: 6    },
   ];
 
   /* ------------------------------------------------------------------ */
@@ -48,7 +54,11 @@
   /* ------------------------------------------------------------------ */
   /* State                                                                */
   /* ------------------------------------------------------------------ */
-  let currentSheet = GAMES[0].sheet;
+  /** All raw rows returned by the API (one row per player per game). */
+  let allData = [];
+
+  /** juego number to display, or null for all games combined. */
+  let currentJuego = null;
 
   /* ------------------------------------------------------------------ */
   /* Helpers                                                              */
@@ -94,10 +104,54 @@
   /* ------------------------------------------------------------------ */
   /* Fetch & render                                                       */
   /* ------------------------------------------------------------------ */
-  async function fetchAndRender(sheet) {
+
+  /**
+   * Aggregate raw per-game rows by player name.
+   * When juegoFilter is null, all games are included.
+   * Returns an array of objects: { Jugador, AB, H, HR, K, AVG }.
+   */
+  function aggregatePlayers(juegoFilter) {
+    var rows = juegoFilter === null
+      ? allData
+      : allData.filter(function (r) { return parseInt(r.Juego, 10) === juegoFilter; });
+
+    var map = Object.create(null);
+    rows.forEach(function (r) {
+      var name = r.Jugador || '';
+      if (!map[name]) {
+        map[name] = { Jugador: name, AB: 0, H: 0, HR: 0, K: 0 };
+      }
+      map[name].AB += parseInt(r.AB, 10) || 0;
+      map[name].H  += parseInt(r.H,  10) || 0;
+      map[name].HR += parseInt(r.HR, 10) || 0;
+      map[name].K  += parseInt(r.K,  10) || 0;
+    });
+
+    return Object.keys(map).map(function (name) {
+      var p = map[name];
+      return {
+        Jugador: p.Jugador,
+        AB: p.AB,
+        H:  p.H,
+        HR: p.HR,
+        K:  p.K,
+        AVG: p.AB > 0 ? p.H / p.AB : 0,
+      };
+    });
+  }
+
+  /** Re-render the view using the current filter. */
+  function renderAll() {
+    var players = aggregatePlayers(currentJuego);
+    renderTeamStats(players);
+    renderPlayers(players);
+    showState('data');
+  }
+
+  async function fetchAndRender() {
     showState('loading');
     try {
-      const resp = await fetch(BASE_URL + encodeURIComponent(sheet), {
+      const resp = await fetch(API_URL, {
         method: 'GET',
         headers: { 'Accept': 'application/json' }
       });
@@ -112,10 +166,8 @@
         throw new Error('Formato de respuesta inesperado.');
       }
 
-      const players = json.data;
-      renderTeamStats(players);
-      renderPlayers(players);
-      showState('data');
+      allData = json.data;
+      renderAll();
     } catch (err) {
       console.error('[AvgPage] Error:', err);
       errorMessage.textContent = `Error al cargar los datos: ${err.message}`;
@@ -129,7 +181,7 @@
     const totHR = players.reduce((s, p) => s + (parseInt(p.HR, 10) || 0), 0);
     const avg   = totAB > 0 ? totH / totAB : 0;
 
-    const selectedGame = GAMES.find(g => g.sheet === currentSheet);
+    const selectedGame = GAMES.find(g => g.juego === currentJuego);
     teamGameLabel.textContent = selectedGame ? selectedGame.label : '';
     teamAvgValue.textContent  = fmtAvg(avg);
     teamAbValue.textContent   = totAB;
@@ -163,7 +215,7 @@
       card.innerHTML =
         `<span class="player-rank${isTop ? ' player-rank--top' : ''}" aria-label="Posición ${rank}">${rank}</span>` +
         `<div class="player-info">` +
-          `<div class="player-name">${esc(p.Nombre)}</div>` +
+          `<div class="player-name">${esc(p.Jugador)}</div>` +
           `<div class="player-detail">${ab} AB · ${h} H · ${hr} HR · ${k} K</div>` +
         `</div>` +
         `<span class="avg-badge ${avgBadgeClass(p.AVG)}" aria-label="Promedio ${fmtAvg(p.AVG)}">${fmtAvg(p.AVG)}</span>`;
@@ -180,7 +232,7 @@
   /* ------------------------------------------------------------------ */
   GAMES.forEach(function (game) {
     const opt = document.createElement('option');
-    opt.value       = game.sheet;
+    opt.value       = game.juego === null ? '' : String(game.juego);
     opt.textContent = game.label;
     gameSelect.appendChild(opt);
   });
@@ -189,18 +241,21 @@
   /* Event listeners                                                      */
   /* ------------------------------------------------------------------ */
   gameSelect.addEventListener('change', function () {
-    currentSheet = gameSelect.value;
-    fetchAndRender(currentSheet);
+    const val = gameSelect.value;
+    currentJuego = val === '' ? null : parseInt(val, 10);
+    if (allData.length > 0) {
+      renderAll();
+    }
   });
 
   retryBtn.addEventListener('click', function () {
-    fetchAndRender(currentSheet);
+    fetchAndRender();
   });
 
   /* ------------------------------------------------------------------ */
   /* Boot                                                                 */
   /* ------------------------------------------------------------------ */
   footerYear.textContent = new Date().getFullYear();
-  fetchAndRender(currentSheet);
+  fetchAndRender();
 
 })();
