@@ -40,6 +40,11 @@ body {
   flex-direction: column;
 }
 
+/* Ensure the HTML `hidden` attribute always hides elements even when a CSS
+   class like `.scatter-state` or `.scatter-main` sets display: flex, which
+   would otherwise override the user-agent [hidden] { display: none } rule. */
+[hidden] { display: none !important; }
+
 /* ── Accessibility ── */
 .sr-only {
   position: absolute; width: 1px; height: 1px;
