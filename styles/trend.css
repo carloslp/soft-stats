@@ -1,0 +1,385 @@
+/* =========================================================
+   trend.css — Gráfica de Tendencia (Line Chart) page
+   Chicago Cubs theme: Navy / Red / Sky / Gold
+   ========================================================= */
+
+/* ── Variables (mirrored from scatter.css / avg.css) ── */
+:root {
+  --navy:      #003087;
+  --navy-dark: #001f5b;
+  --red:       #CC3433;
+  --red-dark:  #a82726;
+  --sky:       #ACC9E7;
+  --gold:      #F9C645;
+  --green:     #22c55e;
+  --white:     #ffffff;
+  --off-white: #f4f6fb;
+  --gray-100:  #eef1f7;
+  --gray-500:  #7a84a0;
+  --gray-700:  #3a4260;
+
+  --shadow-sm: 0 1px 3px rgba(0,48,135,.08);
+  --shadow:    0 4px 16px rgba(0,48,135,.12);
+  --shadow-lg: 0 8px 32px rgba(0,48,135,.18);
+
+  --radius:    12px;
+  --radius-sm: 8px;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+[hidden] { display: none !important; }
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--off-white);
+  color: var(--gray-700);
+  line-height: 1.5;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Accessibility ── */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* =========================================================
+   Header
+   ========================================================= */
+.trend-header {
+  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
+  color: var(--white);
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.trend-header-top {
+  display: flex;
+  align-items: center;
+  gap: .875rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.trend-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: rgba(255,255,255,.12);
+  color: var(--white);
+  text-decoration: none;
+  font-size: 1.125rem;
+  transition: background .2s;
+  flex-shrink: 0;
+}
+.trend-back-btn:hover,
+.trend-back-btn:focus-visible {
+  background: rgba(255,255,255,.24);
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.trend-logo { border-radius: 50%; flex-shrink: 0; }
+
+.trend-header-text { flex: 1; min-width: 0; }
+.trend-header-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.trend-header-subtitle {
+  font-size: .8rem;
+  color: var(--sky);
+  margin-top: .125rem;
+}
+
+/* =========================================================
+   Controls bar
+   ========================================================= */
+.trend-controls {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-100);
+  padding: .75rem 1.25rem;
+}
+
+.trend-controls-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .75rem;
+}
+
+.ctrl-label {
+  font-size: .8125rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  white-space: nowrap;
+}
+
+.ctrl-select {
+  font-family: inherit;
+  font-size: .875rem;
+  color: var(--gray-700);
+  background: var(--off-white);
+  border: 1.5px solid var(--gray-100);
+  border-radius: var(--radius-sm);
+  padding: .375rem .625rem;
+  cursor: pointer;
+  transition: border-color .2s;
+  min-width: 180px;
+}
+.ctrl-select:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-color: var(--navy);
+}
+
+.ctrl-group {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+/* =========================================================
+   States (loading / error)
+   ========================================================= */
+.trend-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: var(--gray-500);
+  font-size: .9375rem;
+}
+
+.trend-state svg {
+  width: 2rem;
+  height: 2rem;
+  stroke: var(--red);
+}
+
+/* Spinner */
+.trend-spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid var(--gray-100);
+  border-top-color: var(--navy);
+  border-radius: 50%;
+  animation: spin .75s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* =========================================================
+   Retry button
+   ========================================================= */
+.trend-btn {
+  font-family: inherit;
+  font-size: .875rem;
+  font-weight: 600;
+  padding: .5rem 1.25rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: var(--navy);
+  color: var(--white);
+  transition: background .2s, transform .1s;
+}
+.trend-btn:hover { background: var(--navy-dark); }
+.trend-btn:active { transform: scale(.97); }
+.trend-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* =========================================================
+   Main content
+   ========================================================= */
+.trend-main {
+  flex: 1;
+  padding: 1.25rem;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* =========================================================
+   Summary cards
+   ========================================================= */
+.trend-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: .75rem;
+}
+
+.trend-summary-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: .875rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .25rem;
+  text-align: center;
+}
+
+.trend-summary-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1;
+}
+
+.trend-summary-label {
+  font-size: .75rem;
+  font-weight: 500;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+/* =========================================================
+   Chart card
+   ========================================================= */
+.chart-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+  overflow: hidden;
+}
+
+.chart-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: .25rem;
+}
+
+.chart-subtitle {
+  font-size: .8125rem;
+  color: var(--gray-500);
+  margin-bottom: 1rem;
+}
+
+.chart-canvas-wrap {
+  position: relative;
+  width: 100%;
+}
+
+#trend-canvas {
+  width: 100% !important;
+  display: block;
+}
+
+/* =========================================================
+   Info bar
+   ========================================================= */
+.trend-info {
+  font-size: .8125rem;
+  color: var(--gray-500);
+  text-align: center;
+  margin-top: .75rem;
+}
+
+/* =========================================================
+   Legend
+   ========================================================= */
+.trend-legend {
+  display: flex;
+  flex-direction: column;
+  gap: .625rem;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 1rem 1.25rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: flex-start;
+  gap: .75rem;
+  padding: .5rem .75rem;
+  border-radius: var(--radius-sm);
+  background: var(--off-white);
+  border-left: 4px solid;
+}
+
+.legend-item--line  { border-color: var(--navy); }
+.legend-item--avg   { border-color: var(--gold); }
+.legend-item--slump { border-color: var(--red);  }
+
+.legend-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 3px;
+  border: 2px solid;
+}
+.legend-dot--line  { background: rgba(0,48,135,.15); border-color: var(--navy); }
+.legend-dot--avg   { background: rgba(249,198,69,.3); border-color: var(--gold); }
+.legend-dot--slump { background: rgba(204,52,51,.2); border-color: var(--red);  }
+
+.legend-name {
+  font-size: .875rem;
+  font-weight: 700;
+  color: var(--gray-700);
+  line-height: 1.2;
+}
+.legend-desc {
+  font-size: .75rem;
+  color: var(--gray-500);
+  margin-top: .125rem;
+  line-height: 1.4;
+}
+
+/* =========================================================
+   Footer
+   ========================================================= */
+.trend-footer {
+  text-align: center;
+  font-size: .75rem;
+  color: var(--gray-500);
+  padding: 1.25rem;
+  border-top: 1px solid var(--gray-100);
+  background: var(--white);
+}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+@media (max-width: 640px) {
+  .trend-summary { grid-template-columns: repeat(2, 1fr); }
+
+  .trend-header-title { font-size: .95rem; }
+
+  .trend-controls-inner { gap: .5rem; }
+
+  .ctrl-select { min-width: 0; flex: 1; }
+}
+
+@media (max-width: 400px) {
+  .trend-summary { grid-template-columns: 1fr 1fr; }
+}

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cachorros de Sinaloa — Gráfica de Tendencia</title>
+    <meta name="description" content="Gráfica de tendencia por jugador. Promedio de bateo o hits a lo largo de la temporada. Cachorros de Sinaloa — Estadísticas de Softbol." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles/trend.css" />
+  </head>
+  <body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="trend-header">
+      <div class="trend-header-top">
+        <a href="index.html" class="trend-back-btn" aria-label="Regresar a estadísticas">&#8592;</a>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/8/89/Chicago_Cubs_Cap_Insignia.svg"
+          alt="Cachorros de Sinaloa logo"
+          class="trend-logo"
+          width="44"
+          height="44"
+        />
+        <div class="trend-header-text">
+          <h1 class="trend-header-title">Cachorros de Sinaloa</h1>
+          <p class="trend-header-subtitle">Gráfica de Tendencia</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== CONTROLS ===== -->
+    <div class="trend-controls">
+      <div class="trend-controls-inner">
+        <div class="ctrl-group">
+          <label for="trend-player-select" class="ctrl-label" id="trend-player-label">Jugador:</label>
+          <select
+            id="trend-player-select"
+            class="ctrl-select"
+            aria-labelledby="trend-player-label"
+          >
+            <!-- Options injected by trend.js -->
+          </select>
+        </div>
+        <div class="ctrl-group">
+          <label for="trend-metric-select" class="ctrl-label" id="trend-metric-label">Métrica:</label>
+          <select
+            id="trend-metric-select"
+            class="ctrl-select"
+            aria-labelledby="trend-metric-label"
+          >
+            <option value="avg">Promedio de Bateo (AVG)</option>
+            <option value="hits">Total de Hits</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== LOADING STATE ===== -->
+    <div
+      class="trend-state trend-state--loading"
+      id="trend-loading"
+      role="status"
+      aria-live="polite"
+    >
+      <div class="trend-spinner" aria-hidden="true"></div>
+      <p>Cargando datos&hellip;</p>
+    </div>
+
+    <!-- ===== ERROR STATE ===== -->
+    <div
+      class="trend-state trend-state--error"
+      id="trend-error"
+      role="alert"
+      aria-live="assertive"
+      hidden
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>
+      </svg>
+      <p id="trend-error-msg">Error al cargar los datos.</p>
+      <button id="trend-retry-btn" class="trend-btn" type="button">Reintentar</button>
+    </div>
+
+    <!-- ===== CHART SECTION ===== -->
+    <main class="trend-main" id="trend-chart-section" hidden>
+
+      <!-- Summary cards -->
+      <section class="trend-summary" id="trend-summary" aria-label="Resumen del jugador">
+        <div class="trend-summary-card">
+          <span class="trend-summary-value" id="trend-stat-games">—</span>
+          <span class="trend-summary-label">Juegos</span>
+        </div>
+        <div class="trend-summary-card">
+          <span class="trend-summary-value" id="trend-stat-avg">—</span>
+          <span class="trend-summary-label">AVG Temporada</span>
+        </div>
+        <div class="trend-summary-card">
+          <span class="trend-summary-value" id="trend-stat-hits">—</span>
+          <span class="trend-summary-label">Hits Totales</span>
+        </div>
+        <div class="trend-summary-card">
+          <span class="trend-summary-value" id="trend-stat-hr">—</span>
+          <span class="trend-summary-label">Home Runs</span>
+        </div>
+      </section>
+
+      <!-- Chart card -->
+      <section class="chart-card" aria-label="Gráfica de tendencia por juego">
+        <h2 class="chart-title" id="trend-chart-title">Tendencia por Juego</h2>
+        <p class="chart-subtitle" id="trend-chart-subtitle">
+          Eje X: Juego (cronológico) &nbsp;·&nbsp; Eje Y: Promedio de Bateo (AVG)
+        </p>
+        <div class="chart-canvas-wrap">
+          <canvas id="trend-canvas" role="img" aria-label="Gráfica de tendencia de bateo"></canvas>
+        </div>
+        <p class="trend-info" id="trend-info" aria-live="polite"></p>
+      </section>
+
+      <!-- Slump legend -->
+      <section class="trend-legend" aria-label="Leyenda de la gráfica">
+        <div class="legend-item legend-item--line">
+          <span class="legend-dot legend-dot--line" aria-hidden="true"></span>
+          <div class="legend-text">
+            <p class="legend-name">Rendimiento por juego</p>
+            <p class="legend-desc">Valor de la métrica seleccionada en cada juego individual.</p>
+          </div>
+        </div>
+        <div class="legend-item legend-item--avg">
+          <span class="legend-dot legend-dot--avg" aria-hidden="true"></span>
+          <div class="legend-text">
+            <p class="legend-name">Promedio de la temporada</p>
+            <p class="legend-desc">Línea punteada de referencia con el promedio acumulado de la temporada.</p>
+          </div>
+        </div>
+        <div class="legend-item legend-item--slump">
+          <span class="legend-dot legend-dot--slump" aria-hidden="true"></span>
+          <div class="legend-text">
+            <p class="legend-name">Mala racha (Slump)</p>
+            <p class="legend-desc">Puntos por debajo del promedio de temporada indican una racha negativa.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="trend-footer">
+      <p>&copy; <span id="trend-footer-year"></span> Cachorros de Sinaloa.</p>
+    </footer>
+
+    <!-- Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" crossorigin="anonymous"></script>
+    <script src="scripts/trend.js"></script>
+  </body>
+</html>
