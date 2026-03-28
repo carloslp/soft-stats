@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cachorros de Sinaloa — Gráfico de Dispersión</title>
+    <meta name="description" content="Gráfico de dispersión Contacto vs Poder. Cachorros de Sinaloa — Estadísticas de Softbol." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles/scatter.css" />
+  </head>
+  <body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="scatter-header">
+      <div class="scatter-header-top">
+        <a href="index.html" class="scatter-back-btn" aria-label="Regresar a estadísticas">&#8592;</a>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/8/89/Chicago_Cubs_Cap_Insignia.svg"
+          alt="Cachorros de Sinaloa logo"
+          class="scatter-logo"
+          width="44"
+          height="44"
+        />
+        <div class="scatter-header-text">
+          <h1 class="scatter-header-title">Cachorros de Sinaloa</h1>
+          <p class="scatter-header-subtitle">Contacto vs Poder</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== CONTROLS ===== -->
+    <div class="scatter-controls">
+      <div class="scatter-controls-inner">
+        <div class="ctrl-group">
+          <label for="sc-game-select" class="ctrl-label" id="sc-game-label">Juego:</label>
+          <select
+            id="sc-game-select"
+            class="ctrl-select"
+            aria-labelledby="sc-game-label"
+          >
+            <!-- Options injected by scatter.js -->
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== LOADING STATE ===== -->
+    <div
+      class="scatter-state scatter-state--loading"
+      id="sc-loading"
+      role="status"
+      aria-live="polite"
+    >
+      <div class="scatter-spinner" aria-hidden="true"></div>
+      <p>Cargando datos&hellip;</p>
+    </div>
+
+    <!-- ===== ERROR STATE ===== -->
+    <div
+      class="scatter-state scatter-state--error"
+      id="sc-error"
+      role="alert"
+      aria-live="assertive"
+      hidden
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>
+      </svg>
+      <p id="sc-error-msg">Error al cargar los datos.</p>
+      <button id="sc-retry-btn" class="scatter-btn" type="button">Reintentar</button>
+    </div>
+
+    <!-- ===== CHART SECTION ===== -->
+    <main class="scatter-main" id="sc-chart-section" hidden>
+
+      <!-- Chart card -->
+      <section class="chart-card" aria-label="Gráfico de dispersión Contacto vs Poder">
+        <h2 class="chart-title">Gráfico de Dispersión: Contacto vs Poder</h2>
+        <p class="chart-subtitle">
+          Eje X: AVG (contacto) &nbsp;·&nbsp; Eje Y: HR (poder) &nbsp;·&nbsp;
+          Las líneas punteadas marcan la mediana del equipo.
+        </p>
+        <div class="chart-canvas-wrap">
+          <canvas id="scatter-canvas" role="img" aria-label="Gráfico de dispersión de bateadores"></canvas>
+        </div>
+        <p class="scatter-info" id="sc-info" aria-live="polite"></p>
+      </section>
+
+      <!-- Quadrant legend -->
+      <section aria-label="Leyenda de cuadrantes">
+        <div class="quadrant-legend">
+          <div class="quadrant-item quadrant-item--star">
+            <span class="quadrant-emoji" aria-hidden="true">⭐</span>
+            <div class="quadrant-text">
+              <p class="quadrant-name">Superestrellas</p>
+              <p class="quadrant-desc">Alto contacto y mucho poder. Los más completos.</p>
+            </div>
+          </div>
+          <div class="quadrant-item quadrant-item--contact">
+            <span class="quadrant-emoji" aria-hidden="true">🎯</span>
+            <div class="quadrant-text">
+              <p class="quadrant-name">Bateadores de Contacto</p>
+              <p class="quadrant-desc">No se ponchan pero sin muchos jonrones.</p>
+            </div>
+          </div>
+          <div class="quadrant-item quadrant-item--power">
+            <span class="quadrant-emoji" aria-hidden="true">💪</span>
+            <div class="quadrant-text">
+              <p class="quadrant-name">Poder Puro</p>
+              <p class="quadrant-desc">Pegan jonrones pero se ponchan seguido.</p>
+            </div>
+          </div>
+          <div class="quadrant-item quadrant-item--avg">
+            <span class="quadrant-emoji" aria-hidden="true">📊</span>
+            <div class="quadrant-text">
+              <p class="quadrant-name">Promedio</p>
+              <p class="quadrant-desc">Por debajo de la mediana en contacto y poder.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="scatter-footer">
+      <p>&copy; <span id="sc-footer-year"></span> Cachorros de Sinaloa.</p>
+    </footer>
+
+    <!-- Chart.js from CDN (no local dependency needed) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" crossorigin="anonymous"></script>
+    <script src="scripts/scatter.js"></script>
+  </body>
+</html>
