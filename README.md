@@ -14,6 +14,7 @@ Built with vanilla HTML, CSS, and JavaScript — ready to deploy on [Vercel](htt
 - 🎛️ **Multiple filters** — minimum batting average (AVG) and minimum home runs (HR)
 - 📈 **Summary cards** — team-wide totals for AB, Hits, HR, K, and batting average
 - 🎯 **Scatter plot** — interactive Contact vs. Power chart with visual quadrants
+- 📉 **Trend chart** — line chart showing a player's AVG or Hits evolution across games
 - ⚡ **Loading & error states** — spinner while fetching, error message with retry button
 - 📱 **Fully responsive** — works on mobile, tablet, and desktop
 - ♿ **Accessible** — ARIA labels, keyboard-navigable sort headers, screen-reader-friendly
@@ -27,6 +28,7 @@ Built with vanilla HTML, CSS, and JavaScript — ready to deploy on [Vercel](htt
 | `index.html` | Main dashboard — sortable stats table + batting lineup card |
 | `avg.html` | Batting averages — per-game or cumulative ranked player list |
 | `scatter.html` | **Scatter plot** — Contact (AVG) vs. Power (HR) with quadrant analysis |
+| `trend.html` | **Trend chart** — Line chart of a player's AVG or Hits evolution across games |
 
 ---
 
@@ -48,6 +50,28 @@ Dashed lines drawn at the team **median** of each axis create four quadrants:
 
 A **game selector** lets you switch between individual games or view all games combined.
 Hover (or tap) any dot to see the player's full stat line.
+
+---
+
+## Trend Chart — Player Performance Over Time
+
+The trend chart (`trend.html`) visualises a single player's batting performance across all games of the season as a line chart:
+
+- **X-axis**: Game number (chronological order)
+- **Y-axis**: AVG per game (H / AB) **or** Total Hits per game (selectable)
+
+A **player selector** lets you choose any player on the roster.
+A **metric selector** switches between Batting Average (AVG) and Total Hits.
+
+A dashed reference line marks the player's season average, making slumps and hot streaks immediately visible:
+
+| Point colour | Meaning |
+|--------------|---------|
+| 🟢 Green | Above season average — hot streak |
+| 🔴 Red | Below season average — slump |
+| 🟡 Gold | Equal to season average |
+
+Summary cards show the player's season totals (Games, AVG, Hits, HR) above the chart.
 
 ---
 
@@ -155,15 +179,18 @@ soft-stats/
 ├── index.html          # Main HTML shell — stats table + lineup card
 ├── avg.html            # Batting averages page (per-game or cumulative)
 ├── scatter.html        # Scatter plot: Contact vs. Power
+├── trend.html          # Trend chart: player AVG / Hits over time
 ├── styles/
 │   ├── main.css        # Dashboard styles (Chicago Cubs theme, responsive)
 │   ├── avg.css         # Batting averages page styles
-│   └── scatter.css     # Scatter plot page styles
+│   ├── scatter.css     # Scatter plot page styles
+│   └── trend.css       # Trend chart page styles
 ├── scripts/
 │   ├── config.js       # API URL configuration
 │   ├── app.js          # Main dashboard logic
 │   ├── avg.js          # Batting averages page logic
-│   └── scatter.js      # Scatter plot logic (Chart.js)
+│   ├── scatter.js      # Scatter plot logic (Chart.js)
+│   └── trend.js        # Trend chart logic (Chart.js line chart)
 ├── vercel.json         # Vercel deployment configuration
 ├── .env.example        # Example environment variable file
 └── README.md
