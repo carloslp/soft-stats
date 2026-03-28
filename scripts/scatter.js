@@ -241,7 +241,7 @@
             callbacks: {
               title: function (items) {
                 var idx = items[0].dataIndex;
-                return esc(points[idx].label);
+                return points[idx].label;
               },
               label: function (item) {
                 var idx = item.dataIndex;
