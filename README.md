@@ -13,9 +13,41 @@ Built with vanilla HTML, CSS, and JavaScript — ready to deploy on [Vercel](htt
 - 🔍 **Live search** — filter players by name as you type
 - 🎛️ **Multiple filters** — minimum batting average (AVG) and minimum home runs (HR)
 - 📈 **Summary cards** — team-wide totals for AB, Hits, HR, K, and batting average
+- 🎯 **Scatter plot** — interactive Contact vs. Power chart with visual quadrants
 - ⚡ **Loading & error states** — spinner while fetching, error message with retry button
 - 📱 **Fully responsive** — works on mobile, tablet, and desktop
 - ♿ **Accessible** — ARIA labels, keyboard-navigable sort headers, screen-reader-friendly
+
+---
+
+## Pages
+
+| Page | Description |
+|------|-------------|
+| `index.html` | Main dashboard — sortable stats table + batting lineup card |
+| `avg.html` | Batting averages — per-game or cumulative ranked player list |
+| `scatter.html` | **Scatter plot** — Contact (AVG) vs. Power (HR) with quadrant analysis |
+
+---
+
+## Scatter Plot — Contact vs. Power
+
+The scatter plot (`scatter.html`) visualises every player as a dot on a 2-axis chart:
+
+- **X-axis**: AVG (batting average — measures contact quality)
+- **Y-axis**: HR (home runs — measures raw power)
+
+Dashed lines drawn at the team **median** of each axis create four quadrants:
+
+| Quadrant | Position | Profile |
+|----------|----------|---------|
+| ⭐ **Superestrellas** | Top-right | High contact *and* high power — the most complete hitters |
+| 🎯 **Bateadores de Contacto** | Bottom-right | High contact, few home runs |
+| 💪 **Poder Puro** | Top-left | Many home runs but low contact / high strikeouts |
+| 📊 **Promedio** | Bottom-left | Below the team median in both dimensions |
+
+A **game selector** lets you switch between individual games or view all games combined.
+Hover (or tap) any dot to see the player's full stat line.
 
 ---
 
@@ -51,14 +83,22 @@ The app expects the API endpoint to return JSON in the following shape:
 }
 ```
 
-| Field    | Type   | Description            |
-|----------|--------|------------------------|
-| `Nombre` | string | Player name            |
-| `AB`     | number | At-bats                |
-| `H`      | number | Hits                   |
-| `HR`     | number | Home runs              |
-| `K`      | number | Strikeouts (ponches)   |
-| `AVG`    | number | Batting average (0–1)  |
+The scatter plot (`scatter.html`) uses the per-game format from `hoja=Data`:
+
+```json
+{
+  "data": [
+    {
+      "Juego": 1,
+      "Jugador": "Roque Ruiz",
+      "AB": 3,
+      "H": 1,
+      "HR": 0,
+      "K": 0
+    }
+  ]
+}
+```
 
 ---
 
@@ -112,12 +152,18 @@ The included `vercel.json` configures single-page-app rewrites and security head
 
 ```
 soft-stats/
-├── index.html          # Main HTML shell
+├── index.html          # Main HTML shell — stats table + lineup card
+├── avg.html            # Batting averages page (per-game or cumulative)
+├── scatter.html        # Scatter plot: Contact vs. Power
 ├── styles/
-│   └── main.css        # All styles (Chicago Cubs theme, responsive)
+│   ├── main.css        # Dashboard styles (Chicago Cubs theme, responsive)
+│   ├── avg.css         # Batting averages page styles
+│   └── scatter.css     # Scatter plot page styles
 ├── scripts/
 │   ├── config.js       # API URL configuration
-│   └── app.js          # Data fetching, filtering, sorting, rendering
+│   ├── app.js          # Main dashboard logic
+│   ├── avg.js          # Batting averages page logic
+│   └── scatter.js      # Scatter plot logic (Chart.js)
 ├── vercel.json         # Vercel deployment configuration
 ├── .env.example        # Example environment variable file
 └── README.md
