@@ -21,6 +21,9 @@
   /* DOM references                                                       */
   /* ------------------------------------------------------------------ */
   const gameSelect       = document.getElementById('game-select');
+  const minAbBar         = document.getElementById('min-ab-bar');
+  const minAbInput       = document.getElementById('min-ab-input');
+  const minAbHint        = document.getElementById('min-ab-hint');
   const stateLoading     = document.getElementById('avg-loading');
   const stateError       = document.getElementById('avg-error');
   const errorMessage     = document.getElementById('avg-error-msg');
@@ -44,6 +47,9 @@
 
   /** juego number to display, or null for all games combined. */
   let currentJuego = null;
+
+  /** Minimum AB required to appear in the player list (all-games view only). */
+  let minAB = 10;
 
   /* ------------------------------------------------------------------ */
   /* Helpers                                                              */
@@ -127,9 +133,17 @@
 
   /** Re-render the view using the current filter. */
   function renderAll() {
-    var players = aggregatePlayers(currentJuego);
-    renderTeamStats(players);
-    renderPlayers(players);
+    var allPlayers = aggregatePlayers(currentJuego);
+
+    // Team stats always reflect ALL players (no min AB filter)
+    renderTeamStats(allPlayers);
+
+    // Player list: apply min AB filter only in all-games view
+    var displayPlayers = (currentJuego === null && minAB > 0)
+      ? allPlayers.filter(function (p) { return p.AB >= minAB; })
+      : allPlayers;
+
+    renderPlayers(displayPlayers, allPlayers.length);
     showState('data');
   }
 
@@ -175,7 +189,7 @@
     teamHrValue.textContent   = totHR;
   }
 
-  function renderPlayers(players) {
+  function renderPlayers(players, totalCount) {
     // Sort by AVG descending
     const sorted = players.slice().sort((a, b) => {
       const va = parseFloat(a.AVG) || 0;
@@ -184,6 +198,16 @@
     });
 
     playersCount.textContent = sorted.length;
+
+    // Update hint: how many players were filtered out
+    if (currentJuego === null && minAB > 0 && typeof totalCount === 'number') {
+      const hidden = totalCount - sorted.length;
+      minAbHint.textContent = hidden > 0
+        ? `(${hidden} jugador${hidden !== 1 ? 'es' : ''} con menos de ${minAB} AB oculto${hidden !== 1 ? 's' : ''})`
+        : '';
+    } else {
+      minAbHint.textContent = '';
+    }
 
     const fragment = document.createDocumentFragment();
     sorted.forEach(function (p, idx) {
@@ -259,6 +283,17 @@
   gameSelect.addEventListener('change', function () {
     const val = gameSelect.value;
     currentJuego = val === '' ? null : parseInt(val, 10);
+    // Show min AB filter only when viewing all games
+    minAbBar.hidden = currentJuego !== null;
+    if (allData.length > 0) {
+      renderAll();
+    }
+  });
+
+  minAbInput.addEventListener('change', function () {
+    const val = parseInt(minAbInput.value, 10);
+    minAB = isNaN(val) || val < 0 ? 0 : val;
+    minAbInput.value = minAB;
     if (allData.length > 0) {
       renderAll();
     }
@@ -272,6 +307,8 @@
   /* Boot                                                                 */
   /* ------------------------------------------------------------------ */
   footerYear.textContent = new Date().getFullYear();
+  // Show min AB bar on initial load (all-games view is the default)
+  minAbBar.hidden = false;
   fetchAndRender();
 
 })();

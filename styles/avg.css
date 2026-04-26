@@ -195,7 +195,62 @@ body {
   box-shadow: 0 0 0 3px rgba(0,48,135,.15);
 }
 
-/* ---- Team AVG hero card ---- */
+/* ---- Min AB filter bar ---- */
+.min-ab-bar {
+  background: var(--gray-100);
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  flex-wrap: wrap;
+}
+
+.min-ab-label {
+  font-size: .78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--gray-500);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.min-ab-input {
+  width: 64px;
+  height: 34px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  padding-inline: .5rem;
+  font-family: var(--font);
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--white);
+  text-align: center;
+  appearance: textfield;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.min-ab-input::-webkit-inner-spin-button,
+.min-ab-input::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+.min-ab-input:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(0,48,135,.15);
+}
+
+.min-ab-hint {
+  font-size: .72rem;
+  color: var(--gray-500);
+  font-style: italic;
+  flex: 1;
+}
+
+
 .team-avg-section {
   padding: 1rem 1rem .5rem;
 }
