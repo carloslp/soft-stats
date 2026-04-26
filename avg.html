@@ -49,6 +49,20 @@
         </select>
       </div>
 
+      <!-- ===== MIN AB FILTER (visible only for "Todos los juegos") ===== -->
+      <div class="min-ab-bar" id="min-ab-bar" hidden>
+        <label class="min-ab-label" for="min-ab-input">Mín. AB:</label>
+        <input
+          type="number"
+          id="min-ab-input"
+          class="min-ab-input"
+          min="0"
+          value="10"
+          aria-label="Mínimo de turnos al bat para filtrar jugadores"
+        />
+        <span class="min-ab-hint" id="min-ab-hint"></span>
+      </div>
+
       <!-- ===== LOADING STATE ===== -->
       <div
         class="avg-state avg-state--loading"
