@@ -1,11 +1,12 @@
 (function () {
   'use strict';
 
-  const API_URL =
+  const API_URL = window.SOFT_STATS_DATA_API_URL ||
     'https://script.google.com/macros/s/AKfycby7mLKmo5tYeyah3g75xA9FS48FPDbq6SJMkFDPErFi9dgrNAvlOEeapwTQ2fZTlHZg/exec' +
     '?token=dads-12w1-dd3f-da1g&id=1r56WDn_pgZwoAHiiWmeaadUe1hepXC3Mo4t4PWwwfbQ&hoja=Data';
 
   const POSITIONS = ['P', 'C', '1B', '2B', '3B', 'SS', 'RF', 'CF', 'LF', 'BD', 'DH'];
+  const HAS_CRYPTO = typeof window.crypto !== 'undefined' && typeof window.crypto.getRandomValues === 'function';
 
   const loadingState = document.getElementById('tb-loading');
   const errorState = document.getElementById('tb-error');
@@ -39,6 +40,13 @@
       .replace(/'/g, '&#39;');
   }
 
+  function fmtAvg(val) {
+    const n = parseFloat(val);
+    if (isNaN(n) || n <= 0) return '.000';
+    if (n >= 1) return '1.000';
+    return n.toFixed(3).replace(/^0\./, '.');
+  }
+
   function buildPlayerStats(rows) {
     const map = Object.create(null);
 
@@ -68,12 +76,12 @@
   function renderPlayers() {
     playersList.innerHTML = '';
 
-    statsByPlayer.forEach(function (p) {
-      const id = 'tb-player-' + p.Jugador.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    statsByPlayer.forEach(function (p, idx) {
+      const id = 'tb-player-' + idx;
       const item = document.createElement('label');
       item.className = 'tb-player-item';
       item.setAttribute('for', id);
-      item.innerHTML = '<input type="checkbox" id="' + id + '" data-player="' + esc(p.Jugador) + '" checked />' +
+      item.innerHTML = '<input type="checkbox" id="' + id + '" data-player="' + esc(p.Jugador) + '" aria-label="Asistencia de ' + esc(p.Jugador) + '" checked />' +
         '<span>' + esc(p.Jugador) + '</span>';
       playersList.appendChild(item);
     });
@@ -98,8 +106,21 @@
 
   function shuffle(arr) {
     const out = arr.slice();
+
+    function randomIndex(maxInclusive) {
+      if (!HAS_CRYPTO) return Math.floor(Math.random() * (maxInclusive + 1));
+
+      const max = maxInclusive + 1;
+      const limit = Math.floor(0x100000000 / max) * max;
+      const random = new Uint32Array(1);
+      do {
+        window.crypto.getRandomValues(random);
+      } while (random[0] >= limit);
+      return random[0] % max;
+    }
+
     for (let i = out.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = randomIndex(i);
       const tmp = out[i];
       out[i] = out[j];
       out[j] = tmp;
@@ -137,7 +158,7 @@
 
     sorted.forEach(function (p) {
       const li = document.createElement('li');
-      li.textContent = p.Jugador + ' — AVG ' + (p.AVG >= 1 ? '1.000' : p.AVG.toFixed(3).replace(/^0/, '')) +
+      li.textContent = p.Jugador + ' — AVG ' + fmtAvg(p.AVG) +
         ' · H ' + p.H + ' · HR ' + p.HR + ' · K ' + p.K;
       battingOrder.appendChild(li);
     });
