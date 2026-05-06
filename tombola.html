@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cachorros de Sinaloa — Tómbola de Posiciones</title>
+    <meta name="description" content="Tómbola para asignar posiciones a los asistentes y ordenar el turno al bat usando métricas de la hoja Data." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles/tombola.css" />
+  </head>
+  <body>
+    <header class="tb-header">
+      <div class="tb-header-top">
+        <a href="index.html" class="tb-back-btn" aria-label="Regresar a estadísticas">&#8592;</a>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Chicago_Cubs_Cap_Insignia.svg" alt="Cachorros de Sinaloa logo" class="tb-logo" width="44" height="44" />
+        <div class="tb-header-text">
+          <h1 class="tb-header-title">Cachorros de Sinaloa</h1>
+          <p class="tb-header-subtitle">Lista y Tómbola de Posiciones</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="tb-main">
+      <section class="tb-state tb-state--loading" id="tb-loading" role="status" aria-live="polite">
+        <div class="tb-spinner" aria-hidden="true"></div>
+        <p>Cargando integrantes...</p>
+      </section>
+
+      <section class="tb-state tb-state--error" id="tb-error" role="alert" aria-live="assertive" hidden>
+        <p id="tb-error-msg">Error al cargar la lista del equipo.</p>
+        <button id="tb-retry-btn" class="tb-btn" type="button">Reintentar</button>
+      </section>
+
+      <section id="tb-content" hidden>
+        <div class="tb-toolbar">
+          <button id="tb-select-all-btn" class="tb-btn tb-btn--light" type="button">Seleccionar todos</button>
+          <button id="tb-clear-all-btn" class="tb-btn tb-btn--light" type="button">Desmarcar todos</button>
+          <button id="tb-draw-btn" class="tb-btn" type="button">Hacer tómbola</button>
+        </div>
+
+        <div class="tb-layout">
+          <section class="tb-card" aria-label="Asistencia de jugadores">
+            <h2 class="tb-card-title">Asistencia</h2>
+            <p class="tb-muted">Desmarca a quienes no asistieron. Solo los seleccionados entran a la tómbola.</p>
+            <p class="tb-count" id="tb-attendance-count">0 asistentes</p>
+            <div id="tb-players-list" class="tb-players-list"></div>
+          </section>
+
+          <section class="tb-card" aria-label="Asignación de posiciones">
+            <h2 class="tb-card-title">Posiciones asignadas</h2>
+            <ol id="tb-positions-list" class="tb-assignment-list"></ol>
+          </section>
+        </div>
+
+        <section class="tb-card" aria-label="Turno al bat por métricas">
+          <h2 class="tb-card-title">Turno al bat (métricas Data)</h2>
+          <p class="tb-muted">Ordenado por AVG, Hits y HR (desempate por menos K).</p>
+          <ol id="tb-batting-order" class="tb-assignment-list"></ol>
+        </section>
+      </section>
+    </main>
+
+    <footer class="tb-footer">
+      <p>&copy; <span id="tb-footer-year"></span> Cachorros de Sinaloa.</p>
+    </footer>
+
+    <script src="scripts/tombola.js"></script>
+  </body>
+</html>
