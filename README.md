@@ -29,6 +29,7 @@ Built with vanilla HTML, CSS, and JavaScript — ready to deploy on [Vercel](htt
 | `avg.html` | Batting averages — per-game or cumulative ranked player list |
 | `scatter.html` | **Scatter plot** — Contact (AVG) vs. Power (HR) with quadrant analysis |
 | `trend.html` | **Trend chart** — Line chart of a player's AVG or Hits evolution across games |
+| `tombola.html` | Team attendance checklist + random position draw + batting order by metrics |
 
 ---
 
@@ -180,17 +181,20 @@ soft-stats/
 ├── avg.html            # Batting averages page (per-game or cumulative)
 ├── scatter.html        # Scatter plot: Contact vs. Power
 ├── trend.html          # Trend chart: player AVG / Hits over time
+├── tombola.html        # Attendance + random position draw + batting order
 ├── styles/
 │   ├── main.css        # Dashboard styles (Chicago Cubs theme, responsive)
 │   ├── avg.css         # Batting averages page styles
 │   ├── scatter.css     # Scatter plot page styles
-│   └── trend.css       # Trend chart page styles
+│   ├── trend.css       # Trend chart page styles
+│   └── tombola.css     # Tombola page styles
 ├── scripts/
 │   ├── config.js       # API URL configuration
 │   ├── app.js          # Main dashboard logic
 │   ├── avg.js          # Batting averages page logic
 │   ├── scatter.js      # Scatter plot logic (Chart.js)
-│   └── trend.js        # Trend chart logic (Chart.js line chart)
+│   ├── trend.js        # Trend chart logic (Chart.js line chart)
+│   └── tombola.js      # Tombola logic (attendance, positions, batting order)
 ├── vercel.json         # Vercel deployment configuration
 ├── .env.example        # Example environment variable file
 └── README.md
