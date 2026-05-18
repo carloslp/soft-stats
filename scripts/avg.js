@@ -20,6 +20,7 @@
   /* ------------------------------------------------------------------ */
   /* DOM references                                                       */
   /* ------------------------------------------------------------------ */
+  const seasonSelect     = document.getElementById('season-select');
   const gameSelect       = document.getElementById('game-select');
   const minAbBar         = document.getElementById('min-ab-bar');
   const minAbInput       = document.getElementById('min-ab-input');
@@ -47,6 +48,9 @@
 
   /** juego number to display, or null for all games combined. */
   let currentJuego = null;
+
+  /** temporada to display (parent filter). */
+  let currentTemporada = null;
 
   /** Minimum AB required to appear in the player list (all-games view only). */
   let minAB = 10;
@@ -84,6 +88,20 @@
       .replace(/'/g, '&#39;');
   }
 
+  /** Read temporada value from row, supporting both "Temporada" and "temporada". */
+  function getTemporada(row) {
+    if (!row || typeof row !== 'object') return '';
+    if (row.Temporada !== undefined && row.Temporada !== null) return String(row.Temporada).trim();
+    if (row.temporada !== undefined && row.temporada !== null) return String(row.temporada).trim();
+    return '';
+  }
+
+  /** Return rows for the selected temporada (parent filter). */
+  function getRowsForCurrentTemporada() {
+    if (currentTemporada === null || currentTemporada === '') return allData;
+    return allData.filter(function (r) { return getTemporada(r) === currentTemporada; });
+  }
+
   /** Show only one state */
   function showState(name) {
     stateLoading.hidden  = name !== 'loading';
@@ -102,9 +120,10 @@
    * Returns an array of objects: { Jugador, AB, H, HR, K, AVG }.
    */
   function aggregatePlayers(juegoFilter) {
+    var temporadaRows = getRowsForCurrentTemporada();
     var rows = juegoFilter === null
-      ? allData
-      : allData.filter(function (r) { return parseInt(r.Juego, 10) === juegoFilter; });
+      ? temporadaRows
+      : temporadaRows.filter(function (r) { return parseInt(r.Juego, 10) === juegoFilter; });
 
     var map = Object.create(null);
     rows.forEach(function (r) {
@@ -169,6 +188,7 @@
       }
 
       allData = json.data;
+      populateSeasonSelector();
       populateGameSelector();
       renderAll();
     } catch (err) {
@@ -243,11 +263,43 @@
   /* ------------------------------------------------------------------ */
   /* Init: populate game selector dynamically from fetched data          */
   /* ------------------------------------------------------------------ */
+  function populateSeasonSelector() {
+    const temporadas = Array.from(
+      new Set(
+        allData
+          .map(getTemporada)
+          .filter(function (v) { return v !== ''; })
+      )
+    );
+
+    seasonSelect.innerHTML = '';
+
+    temporadas.forEach(function (temporada) {
+      const opt = document.createElement('option');
+      opt.value = temporada;
+      opt.textContent = temporada;
+      seasonSelect.appendChild(opt);
+    });
+
+    const defaultTemporada = allData.length > 0 ? getTemporada(allData[allData.length - 1]) : null;
+    if (defaultTemporada && temporadas.indexOf(defaultTemporada) !== -1) {
+      currentTemporada = defaultTemporada;
+    } else if (temporadas.length > 0) {
+      currentTemporada = temporadas[temporadas.length - 1];
+    } else {
+      currentTemporada = null;
+    }
+
+    seasonSelect.value = currentTemporada || '';
+  }
+
   function populateGameSelector() {
+    const filteredRows = getRowsForCurrentTemporada();
+
     // Extract unique Juego values, sorted ascending
     const juegos = Array.from(
       new Set(
-        allData
+        filteredRows
           .map(function (r) { return parseInt(r.Juego, 10); })
           .filter(function (n) { return !isNaN(n); })
       )
@@ -283,6 +335,16 @@
   /* ------------------------------------------------------------------ */
   /* Event listeners                                                      */
   /* ------------------------------------------------------------------ */
+  seasonSelect.addEventListener('change', function () {
+    currentTemporada = seasonSelect.value || null;
+    currentJuego = null;
+    populateGameSelector();
+    minAbBar.hidden = false;
+    if (allData.length > 0) {
+      renderAll();
+    }
+  });
+
   gameSelect.addEventListener('change', function () {
     const val = gameSelect.value;
     currentJuego = val === '' ? null : parseInt(val, 10);
