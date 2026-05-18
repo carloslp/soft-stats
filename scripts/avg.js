@@ -45,8 +45,8 @@
   /** All raw rows returned by the API (one row per player per game). */
   let allData = [];
 
-  /** Selected season to display, or null for all seasons combined. */
-  let currentTemporada = null;
+  /** juego number to display, or null for all games combined. */
+  let currentJuego = null;
 
   /** Minimum AB required to appear in the player list (all-games view only). */
   let minAB = 10;
@@ -84,16 +84,6 @@
       .replace(/'/g, '&#39;');
   }
 
-  /** Return normalized season value from a row (fallback to Juego for legacy data). */
-  function getSeasonValue(row) {
-    var temporada = row && row.Temporada;
-    if (temporada !== null && temporada !== undefined && String(temporada).trim() !== '') {
-      return String(temporada).trim();
-    }
-    var juego = parseInt(row && row.Juego, 10);
-    return isNaN(juego) ? null : 'Juego ' + juego;
-  }
-
   /** Show only one state */
   function showState(name) {
     stateLoading.hidden  = name !== 'loading';
@@ -108,13 +98,13 @@
 
   /**
    * Aggregate raw per-game rows by player name.
-   * When temporadaFilter is null, all seasons are included.
+   * When juegoFilter is null, all games are included.
    * Returns an array of objects: { Jugador, AB, H, HR, K, AVG }.
    */
-  function aggregatePlayers(temporadaFilter) {
-    var rows = temporadaFilter === null
+  function aggregatePlayers(juegoFilter) {
+    var rows = juegoFilter === null
       ? allData
-      : allData.filter(function (r) { return getSeasonValue(r) === temporadaFilter; });
+      : allData.filter(function (r) { return parseInt(r.Juego, 10) === juegoFilter; });
 
     var map = Object.create(null);
     rows.forEach(function (r) {
@@ -143,7 +133,7 @@
 
   /** Re-render the view using the current filter. */
   function renderAll() {
-    var allPlayers = aggregatePlayers(currentTemporada);
+    var allPlayers = aggregatePlayers(currentJuego);
 
     // Team stats always reflect ALL players (no min AB filter)
     renderTeamStats(allPlayers);
@@ -152,7 +142,7 @@
     var nonZeroPlayers = allPlayers.filter(function (p) { return p.AB > 0; });
 
     // In all-games view, also apply the min AB filter
-    var displayPlayers = (currentTemporada === null && minAB > 0)
+    var displayPlayers = (currentJuego === null && minAB > 0)
       ? nonZeroPlayers.filter(function (p) { return p.AB >= minAB; })
       : nonZeroPlayers;
 
@@ -213,7 +203,7 @@
     playersCount.textContent = sorted.length;
 
     // Update hint: how many players were filtered out
-    if (currentTemporada === null && minAB > 0 && typeof totalCount === 'number') {
+    if (currentJuego === null && minAB > 0 && typeof totalCount === 'number') {
       const hidden = totalCount - sorted.length;
       minAbHint.textContent = hidden > 0
         ? `(${hidden} jugador${hidden !== 1 ? 'es' : ''} con menos de ${minAB} AB oculto${hidden !== 1 ? 's' : ''})`
@@ -254,14 +244,14 @@
   /* Init: populate game selector dynamically from fetched data          */
   /* ------------------------------------------------------------------ */
   function populateGameSelector() {
-    // Extract unique Temporada values preserving original order.
-    const temporadas = Array.from(
+    // Extract unique Juego values, sorted ascending
+    const juegos = Array.from(
       new Set(
         allData
-          .map(getSeasonValue)
-          .filter(function (v) { return v !== null; })
+          .map(function (r) { return parseInt(r.Juego, 10); })
+          .filter(function (n) { return !isNaN(n); })
       )
-    );
+    ).sort(function (a, b) { return a - b; });
 
     // Clear existing options
     gameSelect.innerHTML = '';
@@ -269,28 +259,24 @@
     // "All games" option
     const allOpt = document.createElement('option');
     allOpt.value = '';
-    allOpt.textContent = 'Todas las temporadas';
+    allOpt.textContent = 'Todos los juegos';
     gameSelect.appendChild(allOpt);
 
-    // One option per unique Temporada
-    temporadas.forEach(function (temporada) {
+    // One option per unique Juego
+    juegos.forEach(function (n) {
       const opt = document.createElement('option');
-      opt.value = temporada;
-      opt.textContent = temporada;
+      opt.value = String(n);
+      opt.textContent = 'Juego ' + n;
       gameSelect.appendChild(opt);
     });
 
-    // Default to the season from the last record unless a valid selection already exists.
-    const lastSeason = getSeasonValue(allData[allData.length - 1]);
-    const currentVal = currentTemporada === null ? '' : String(currentTemporada);
+    // Restore the current selection if it's still valid; otherwise reset to "all"
+    const currentVal = currentJuego === null ? '' : String(currentJuego);
     if (Array.from(gameSelect.options).some(function (o) { return o.value === currentVal; })) {
       gameSelect.value = currentVal;
-    } else if (lastSeason && Array.from(gameSelect.options).some(function (o) { return o.value === lastSeason; })) {
-      gameSelect.value = lastSeason;
-      currentTemporada = lastSeason;
     } else {
       gameSelect.value = '';
-      currentTemporada = null;
+      currentJuego = null;
     }
   }
 
@@ -299,9 +285,9 @@
   /* ------------------------------------------------------------------ */
   gameSelect.addEventListener('change', function () {
     const val = gameSelect.value;
-    currentTemporada = val === '' ? null : val;
+    currentJuego = val === '' ? null : parseInt(val, 10);
     // Show min AB filter only when viewing all games
-    minAbBar.hidden = currentTemporada !== null;
+    minAbBar.hidden = currentJuego !== null;
     if (allData.length > 0) {
       renderAll();
     }
