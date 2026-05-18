@@ -138,12 +138,15 @@
     // Team stats always reflect ALL players (no min AB filter)
     renderTeamStats(allPlayers);
 
-    // Player list: apply min AB filter only in all-games view
-    var displayPlayers = (currentJuego === null && minAB > 0)
-      ? allPlayers.filter(function (p) { return p.AB >= minAB; })
-      : allPlayers;
+    // Always exclude players with 0 AB
+    var nonZeroPlayers = allPlayers.filter(function (p) { return p.AB > 0; });
 
-    renderPlayers(displayPlayers, allPlayers.length);
+    // In all-games view, also apply the min AB filter
+    var displayPlayers = (currentJuego === null && minAB > 0)
+      ? nonZeroPlayers.filter(function (p) { return p.AB >= minAB; })
+      : nonZeroPlayers;
+
+    renderPlayers(displayPlayers, nonZeroPlayers.length);
     showState('data');
   }
 
