@@ -249,11 +249,21 @@
       const hr  = parseInt(p.HR, 10) || 0;
       const k   = parseInt(p.K, 10)  || 0;
 
+      const avgVal = parseFloat(p.AVG) || 0;
+      const avgPct = Math.min(avgVal * 100, 100).toFixed(2);
+      const barColor = avgVal >= 0.500 ? 'var(--green)'
+                     : avgVal >= 0.250 ? 'var(--navy)'
+                     : avgVal > 0      ? 'var(--red)'
+                     : 'var(--gray-200)';
+
       card.innerHTML =
         `<span class="player-rank${isTop ? ' player-rank--top' : ''}" aria-label="Posición ${rank}">${rank}</span>` +
         `<div class="player-info">` +
           `<div class="player-name">${esc(p.Jugador)}</div>` +
           `<div class="player-detail">${ab} AB · ${h} H · ${hr} HR · ${k} K</div>` +
+          `<div class="avg-bar-track" role="progressbar" aria-valuenow="${avgPct}" aria-valuemin="0" aria-valuemax="100">` +
+            `<div class="avg-bar-fill" style="width:${avgPct}%;background:${barColor};"></div>` +
+          `</div>` +
         `</div>` +
         `<span class="avg-badge ${avgBadgeClass(p.AVG)}" aria-label="Promedio ${fmtAvg(p.AVG)}">${fmtAvg(p.AVG)}</span>`;
 
