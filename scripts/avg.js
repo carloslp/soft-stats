@@ -217,7 +217,11 @@
     const sorted = players.slice().sort((a, b) => {
       const va = parseFloat(a.AVG) || 0;
       const vb = parseFloat(b.AVG) || 0;
-      return vb - va;
+      if (vb !== va) return vb - va;
+
+      const aba = parseInt(a.AB, 10) || 0;
+      const abb = parseInt(b.AB, 10) || 0;
+      return abb - aba;
     });
 
     playersCount.textContent = sorted.length;
