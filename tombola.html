@@ -57,7 +57,18 @@
 
         <section class="tb-card" aria-label="Turno al bat por métricas">
           <h2 class="tb-card-title">Turno al bat (métricas Data)</h2>
-          <p class="tb-muted">Ordenado por AVG, Hits y HR (desempate por menos K).</p>
+          <div class="tb-lineup-mode" role="group" aria-labelledby="tb-lineup-mode-label">
+            <span id="tb-lineup-mode-label" class="tb-muted">Modo:</span>
+            <label class="tb-mode-option">
+              <input type="radio" name="lineup-mode" value="traditional" checked />
+              <span>Tradicional</span>
+            </label>
+            <label class="tb-mode-option">
+              <input type="radio" name="lineup-mode" value="smart" />
+              <span>Inteligente (Roles)</span>
+            </label>
+          </div>
+          <p class="tb-muted" id="tb-lineup-desc">Ordenado por AVG, Hits y HR (desempate por menos K).</p>
           <ol id="tb-batting-order" class="tb-assignment-list"></ol>
         </section>
       </section>

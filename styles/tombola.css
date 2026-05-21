@@ -151,3 +151,44 @@ body {
   text-align: center;
   color: #6a7c9f;
 }
+
+.tb-lineup-mode {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+  margin: .5rem 0;
+}
+
+.tb-mode-option {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-size: .9rem;
+  cursor: pointer;
+}
+
+.tb-mode-option input[type="radio"] {
+  accent-color: var(--tb-red);
+  cursor: pointer;
+}
+
+.tb-role {
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 700;
+  padding: .1rem .45rem;
+  border-radius: 999px;
+  vertical-align: middle;
+  margin-right: .2rem;
+}
+
+.tb-role--contacto {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.tb-role--poder {
+  background: #fee2e2;
+  color: #991b1b;
+}
