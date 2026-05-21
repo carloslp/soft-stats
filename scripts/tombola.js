@@ -20,6 +20,7 @@
   const selectAllBtn = document.getElementById('tb-select-all-btn');
   const clearAllBtn = document.getElementById('tb-clear-all-btn');
   const attendanceCount = document.getElementById('tb-attendance-count');
+  const lineupDesc = document.getElementById('tb-lineup-desc');
   const footerYear = document.getElementById('tb-footer-year');
 
   let statsByPlayer = [];
@@ -67,6 +68,8 @@
     return Object.keys(map).map(function (name) {
       const p = map[name];
       p.AVG = p.AB > 0 ? p.H / p.AB : 0;
+      p.K_pct = p.AB > 0 ? (p.K / p.AB) * 100 : 0;
+      p.HR_rate = p.AB > 0 ? p.HR / p.AB : 0;
       return p;
     }).sort(function (a, b) {
       return a.Jugador.localeCompare(b.Jugador, 'es', { sensitivity: 'base' });
@@ -140,15 +143,39 @@
     });
   }
 
-  function renderBattingOrder(list) {
-    battingOrder.innerHTML = '';
+  function generateSmartLineup(list) {
+    if (list.length === 0) return [];
 
-    if (list.length === 0) {
-      battingOrder.innerHTML = '<li class="tb-empty">No hay asistentes seleccionados.</li>';
-      return;
+    const pool = list.slice();
+    const result = [];
+
+    // 1st and 2nd batters — Contact: highest composite score (AVG minus K%)
+    pool.sort(function (a, b) {
+      const scoreA = a.AVG - (a.K_pct / 100);
+      const scoreB = b.AVG - (b.K_pct / 100);
+      if (scoreB !== scoreA) return scoreB - scoreA;
+      return a.Jugador.localeCompare(b.Jugador, 'es', { sensitivity: 'base' });
+    });
+
+    const contactCount = Math.min(2, pool.length);
+    for (let i = 0; i < contactCount; i++) {
+      result.push({ player: pool.shift(), role: 'Contacto' });
     }
 
-    const sorted = list.slice().sort(function (a, b) {
+    // 3rd and 4th batters — Power: highest HR_rate from remaining players
+    pool.sort(function (a, b) {
+      if (b.HR_rate !== a.HR_rate) return b.HR_rate - a.HR_rate;
+      if (b.HR !== a.HR) return b.HR - a.HR;
+      return a.Jugador.localeCompare(b.Jugador, 'es', { sensitivity: 'base' });
+    });
+
+    const powerCount = Math.min(2, pool.length);
+    for (let j = 0; j < powerCount; j++) {
+      result.push({ player: pool.shift(), role: 'Poder' });
+    }
+
+    // 5th and beyond — sorted by AVG descending (traditional)
+    pool.sort(function (a, b) {
       if (b.AVG !== a.AVG) return b.AVG - a.AVG;
       if (b.H !== a.H) return b.H - a.H;
       if (b.HR !== a.HR) return b.HR - a.HR;
@@ -156,12 +183,61 @@
       return a.Jugador.localeCompare(b.Jugador, 'es', { sensitivity: 'base' });
     });
 
-    sorted.forEach(function (p) {
-      const li = document.createElement('li');
-      li.textContent = p.Jugador + ' — AVG ' + fmtAvg(p.AVG) +
-        ' · H ' + p.H + ' · HR ' + p.HR + ' · K ' + p.K;
-      battingOrder.appendChild(li);
+    pool.forEach(function (p) {
+      result.push({ player: p, role: null });
     });
+
+    return result;
+  }
+
+  function getLineupMode() {
+    const checked = document.querySelector('input[name="lineup-mode"]:checked');
+    return checked ? checked.value : 'traditional';
+  }
+
+  function renderBattingOrder(list, mode) {
+    battingOrder.innerHTML = '';
+
+    if (list.length === 0) {
+      battingOrder.innerHTML = '<li class="tb-empty">No hay asistentes seleccionados.</li>';
+      return;
+    }
+
+    if (mode === 'smart') {
+      lineupDesc.textContent = 'Lineup inteligente: 1-2 Contacto (AVG alto, K% bajo) · 3-4 Poder (HR alto) · 5+ por AVG.';
+      const lineup = generateSmartLineup(list);
+      lineup.forEach(function (entry) {
+        const p = entry.player;
+        const li = document.createElement('li');
+        if (entry.role === 'Contacto') {
+          li.innerHTML = '<span class="tb-role tb-role--contacto">Contacto</span> ' +
+            esc(p.Jugador) + ' — AVG ' + fmtAvg(p.AVG) + ' · K% ' + p.K_pct.toFixed(1) + '% · H ' + p.H;
+        } else if (entry.role === 'Poder') {
+          li.innerHTML = '<span class="tb-role tb-role--poder">Poder</span> ' +
+            esc(p.Jugador) + ' — HR ' + p.HR + ' · AVG ' + fmtAvg(p.AVG) + ' · K% ' + p.K_pct.toFixed(1) + '%';
+        } else {
+          li.textContent = p.Jugador + ' — AVG ' + fmtAvg(p.AVG) +
+            ' · H ' + p.H + ' · HR ' + p.HR + ' · K ' + p.K;
+        }
+        battingOrder.appendChild(li);
+      });
+    } else {
+      lineupDesc.textContent = 'Ordenado por AVG, Hits y HR (desempate por menos K).';
+      const sorted = list.slice().sort(function (a, b) {
+        if (b.AVG !== a.AVG) return b.AVG - a.AVG;
+        if (b.H !== a.H) return b.H - a.H;
+        if (b.HR !== a.HR) return b.HR - a.HR;
+        if (a.K !== b.K) return a.K - b.K;
+        return a.Jugador.localeCompare(b.Jugador, 'es', { sensitivity: 'base' });
+      });
+
+      sorted.forEach(function (p) {
+        const li = document.createElement('li');
+        li.textContent = p.Jugador + ' — AVG ' + fmtAvg(p.AVG) +
+          ' · H ' + p.H + ' · HR ' + p.HR + ' · K ' + p.K;
+        battingOrder.appendChild(li);
+      });
+    }
   }
 
   function updateAttendanceCount() {
@@ -173,7 +249,7 @@
     const selected = selectedPlayers();
     updateAttendanceCount();
     renderAssignments(selected);
-    renderBattingOrder(selected);
+    renderBattingOrder(selected, getLineupMode());
   }
 
   async function fetchRoster() {
@@ -217,6 +293,12 @@
 
   drawBtn.addEventListener('click', runDraw);
   retryBtn.addEventListener('click', fetchRoster);
+
+  document.querySelectorAll('input[name="lineup-mode"]').forEach(function (radio) {
+    radio.addEventListener('change', function () {
+      renderBattingOrder(selectedPlayers(), getLineupMode());
+    });
+  });
 
   footerYear.textContent = new Date().getFullYear();
   fetchRoster();
