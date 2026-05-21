@@ -11,6 +11,9 @@
  * A dashed reference line marks the player's season average.
  * Points below the season average are highlighted in red to help
  * identify slumps; points above are highlighted in green.
+ *
+ * A smooth rolling-average line (last 3 games) is overlaid to help
+ * identify sustained hot streaks or slumps.
  */
 
 (function () {
@@ -130,6 +133,28 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* Moving average calculation                                           */
+  /* ------------------------------------------------------------------ */
+
+  /**
+   * Calculates a rolling average over `period` games.
+   * For the first (period-1) games the window is shortened to the
+   * available data so the line never has gaps.
+   *
+   * @param {number[]} values  Per-game metric values (ordered chronologically)
+   * @param {number}   period  Window size (e.g. 3)
+   * @returns {number[]}
+   */
+  function calculateMovingAverage(values, period) {
+    return values.map(function (_, i) {
+      var start = Math.max(0, i - period + 1);
+      var slice = values.slice(start, i + 1);
+      var sum   = slice.reduce(function (s, v) { return s + v; }, 0);
+      return sum / slice.length;
+    });
+  }
+
+  /* ------------------------------------------------------------------ */
   /* Chart rendering                                                      */
   /* ------------------------------------------------------------------ */
   function renderChart(games) {
@@ -147,6 +172,9 @@
     var labels = games.map(function (g) { return 'J' + g.juego; });
     var values = games.map(function (g) { return metric === 'avg' ? g.avg : g.H; });
 
+    /* Moving average (last 3 games) */
+    var maData = calculateMovingAverage(values, 3);
+
     /* Per-point colors: green above reference, red below */
     var pointColors = values.map(function (v) {
       if (v > refValue)  return 'rgba(34,197,94,.90)';   /* green */
@@ -163,8 +191,8 @@
     /* Reference line dataset (constant) */
     var refData = games.map(function () { return refValue; });
 
-    /* Y-axis range */
-    var allVals = values.concat([refValue]);
+    /* Y-axis range — include MA values so the line is never clipped */
+    var allVals = values.concat([refValue]).concat(maData);
     var minVal  = Math.min.apply(null, allVals);
     var maxVal  = Math.max.apply(null, allVals);
     var pad     = metric === 'avg' ? 0.05 : 1;
@@ -205,6 +233,17 @@
             pointHoverRadius: 0,
             fill: false,
             order: 2
+          },
+          {
+            label: 'Tendencia últimos 3 juegos',
+            data: maData,
+            borderColor: 'rgba(16,185,129,.90)',
+            borderWidth: 3,
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            fill: false,
+            tension: 0.4,
+            order: 0
           }
         ]
       },
@@ -278,14 +317,18 @@
               },
               label: function (item) {
                 if (item.datasetIndex === 1) return null; /* skip reference line */
+                if (item.datasetIndex === 2) return null; /* skip MA line entry */
                 var g = games[item.dataIndex];
                 var avgStr = fmtAvg(g.avg);
+                var maVal  = maData[item.dataIndex];
+                var maStr  = metric === 'avg' ? fmtAvg(maVal) : maVal.toFixed(2);
                 return [
                   'AVG: ' + avgStr,
                   'H:   ' + g.H,
                   'AB:  ' + g.AB,
                   'HR:  ' + g.HR,
-                  'K:   ' + g.K
+                  'K:   ' + g.K,
+                  'Media móvil (3j): ' + maStr
                 ];
               },
               filter: function (item) { return item.datasetIndex === 0; }
