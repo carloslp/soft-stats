@@ -295,6 +295,13 @@ body {
   margin-top: .3rem;
 }
 
+.team-distribution-summary {
+  margin-top: .5rem;
+  font-size: .72rem;
+  color: var(--sky);
+  line-height: 1.35;
+}
+
 .team-stat-item {
   display: flex;
   flex-direction: column;
