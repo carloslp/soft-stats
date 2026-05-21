@@ -445,6 +445,21 @@ body {
 .avg-badge--low  { color: var(--red); }
 .avg-badge--zero { color: var(--gray-500); }
 
+/* AVG progress bar */
+.avg-bar-track {
+  height: 4px;
+  background: var(--gray-100);
+  border-radius: 2px;
+  margin-top: .35rem;
+  overflow: hidden;
+}
+
+.avg-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width var(--transition);
+}
+
 /* ---- State panels ---- */
 .avg-state {
   flex: 1;
