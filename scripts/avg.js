@@ -37,6 +37,7 @@
   const teamAbValue      = document.getElementById('team-ab-value');
   const teamHValue       = document.getElementById('team-h-value');
   const teamHrValue      = document.getElementById('team-hr-value');
+  const teamDistributionSummary = document.getElementById('team-distribution-summary');
   const playersSection   = document.getElementById('players-section');
   const playersCount     = document.getElementById('players-count');
   const playersList      = document.getElementById('players-list');
@@ -205,6 +206,9 @@
     const totH  = players.reduce((s, p) => s + (parseInt(p.H,  10) || 0), 0);
     const totHR = players.reduce((s, p) => s + (parseInt(p.HR, 10) || 0), 0);
     const avg   = totAB > 0 ? totH / totAB : 0;
+    const activePlayers = players.filter(function (p) { return (parseInt(p.AB, 10) || 0) > 0; });
+    const highAvgCount = activePlayers.filter(function (p) { return (parseFloat(p.AVG) || 0) >= UMBRAL_ALTO; }).length;
+    const lowAvgCount = activePlayers.filter(function (p) { return (parseFloat(p.AVG) || 0) < UMBRAL_MEDIO; }).length;
 
     const selectedOption = gameSelect.options[gameSelect.selectedIndex];
     teamGameLabel.textContent = selectedOption ? selectedOption.textContent : '';
@@ -212,6 +216,7 @@
     teamAbValue.textContent   = totAB;
     teamHValue.textContent    = totH;
     teamHrValue.textContent   = totHR;
+    teamDistributionSummary.textContent = `De ${activePlayers.length} jugadores activos, ${highAvgCount} batean sobre .500 y ${lowAvgCount} por debajo de .250`;
   }
 
   function renderPlayers(players, totalCount) {
