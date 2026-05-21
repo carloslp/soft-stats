@@ -13,6 +13,8 @@
   /* API configuration                                                    */
   /* hoja=Group returns all games in one response.                       */
   /* ------------------------------------------------------------------ */
+  const UMBRAL_ALTO = 0.500;
+  const UMBRAL_MEDIO = 0.250;
   const API_URL =
     'https://script.google.com/macros/s/AKfycby7mLKmo5tYeyah3g75xA9FS48FPDbq6SJMkFDPErFi9dgrNAvlOEeapwTQ2fZTlHZg/exec' +
     '?token=dads-12w1-dd3f-da1g&id=1r56WDn_pgZwoAHiiWmeaadUe1hepXC3Mo4t4PWwwfbQ&hoja=Data';
@@ -72,8 +74,8 @@
   function avgBadgeClass(val) {
     const n = parseFloat(val);
     if (isNaN(n) || n === 0) return 'avg-badge--zero';
-    if (n >= 0.500)          return 'avg-badge--high';
-    if (n >= 0.250)          return 'avg-badge--mid';
+    if (n >= UMBRAL_ALTO)    return 'avg-badge--high';
+    if (n >= UMBRAL_MEDIO)   return 'avg-badge--mid';
     return 'avg-badge--low';
   }
 
