@@ -335,3 +335,51 @@ body {
 
   .ctrl-select { min-width: 0; flex: 1; }
 }
+
+/* =========================================================
+   Dark Mode
+   ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --off-white: #0f172a;
+    --white:     #1e293b;
+    --gray-100:  #243244;
+    --gray-500:  #94a3b8;
+    --gray-700:  #cbd5e1;
+    color-scheme: dark;
+  }
+
+  /* Restore true-white text on always-dark surfaces */
+  .scatter-header,
+  .scatter-back-btn,
+  .scatter-btn { color: #ffffff; }
+}
+
+html.dark {
+  --off-white: #0f172a;
+  --white:     #1e293b;
+  --gray-100:  #243244;
+  --gray-500:  #94a3b8;
+  --gray-700:  #cbd5e1;
+  color-scheme: dark;
+}
+
+html.dark .scatter-header,
+html.dark .scatter-back-btn,
+html.dark .scatter-btn { color: #ffffff; }
+
+html.light {
+  --off-white: #f4f6fb;
+  --white:     #ffffff;
+  --gray-100:  #eef1f7;
+  --gray-500:  #7a84a0;
+  --gray-700:  #3a4260;
+  color-scheme: light;
+}
+
+/* Dark mode toggle button */
+#dark-mode-toggle {
+  border: none;
+  cursor: pointer;
+}

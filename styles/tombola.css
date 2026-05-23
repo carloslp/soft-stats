@@ -192,3 +192,77 @@ body {
   background: #fee2e2;
   color: #991b1b;
 }
+
+/* =========================================================
+   Dark Mode
+   ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tb-bg:     #0f172a;
+    --tb-white:  #1e293b;
+    --tb-border: #334155;
+    --tb-text:   #e2e8f0;
+    color-scheme: dark;
+  }
+
+  .tb-muted   { color: #94a3b8; }
+  .tb-empty   { color: #94a3b8; }
+  .tb-footer  { color: #94a3b8; }
+  .tb-spinner { border-color: #334155; }
+
+  /* Restore true-white text on always-dark surfaces */
+  .tb-header,
+  .tb-back-btn,
+  .tb-btn { color: #ffffff; }
+
+  /* Light button variant: swap to dark-mode outline style */
+  .tb-btn--light {
+    background: transparent;
+    color: #cbd5e1;
+    border: 1px solid #334155;
+  }
+
+  .tb-role--contacto { background: #1e3a5f; color: #93c5fd; }
+  .tb-role--poder    { background: #4c1d1d; color: #fca5a5; }
+}
+
+html.dark {
+  --tb-bg:     #0f172a;
+  --tb-white:  #1e293b;
+  --tb-border: #334155;
+  --tb-text:   #e2e8f0;
+  color-scheme: dark;
+}
+
+html.dark .tb-muted   { color: #94a3b8; }
+html.dark .tb-empty   { color: #94a3b8; }
+html.dark .tb-footer  { color: #94a3b8; }
+html.dark .tb-spinner { border-color: #334155; }
+
+html.dark .tb-header,
+html.dark .tb-back-btn,
+html.dark .tb-btn { color: #ffffff; }
+
+html.dark .tb-btn--light {
+  background: transparent;
+  color: #cbd5e1;
+  border: 1px solid #334155;
+}
+
+html.dark .tb-role--contacto { background: #1e3a5f; color: #93c5fd; }
+html.dark .tb-role--poder    { background: #4c1d1d; color: #fca5a5; }
+
+html.light {
+  --tb-bg:     #f6f8fc;
+  --tb-white:  #ffffff;
+  --tb-border: #d9e1ef;
+  --tb-text:   #1d2b44;
+  color-scheme: light;
+}
+
+/* Dark mode toggle button */
+#dark-mode-toggle {
+  border: none;
+  cursor: pointer;
+}

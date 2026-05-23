@@ -814,6 +814,92 @@ body {
 .stats-table tbody tr:nth-child(9)  { animation-delay: .27s; }
 .stats-table tbody tr:nth-child(10) { animation-delay: .30s; }
 
+/* ---------- Dark Mode ---------- */
+
+/* System preference: auto dark */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --off-white: #0f172a;   /* slate-900  — page background                 */
+    --white:     #1e293b;   /* slate-800  — card / panel backgrounds         */
+    --gray-100:  #243244;   /* between slate-800/700 — subtle row tint       */
+    --gray-200:  #334155;   /* slate-700  — borders                          */
+    --gray-500:  #94a3b8;   /* slate-400  — muted / secondary text           */
+    --gray-700:  #cbd5e1;   /* slate-300  — body text                        */
+    --text:      #e2e8f0;   /* slate-200  — primary text                     */
+    color-scheme: dark;
+  }
+
+  /* Green AVG tier must be lighter to remain legible on dark backgrounds */
+  .avg--high { color: #4ade80; }
+
+  /* Select chevron — lighter stroke matching dark --gray-500 */
+  .filter-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  }
+
+  /* Restore true-white text on always-dark surfaces (navy header, buttons, field) */
+  .site-header,
+  .brand-name,
+  .nav-link,
+  .social-link,
+  .btn--primary,
+  .stats-table thead,
+  .lineup-section__title,
+  .batting-order__title,
+  .batting-order__item::before,
+  .field__pos-label,
+  .bench__title { color: #ffffff; }
+}
+
+/* Class-based dark mode — manual toggle, overrides system preference */
+html.dark {
+  --off-white: #0f172a;
+  --white:     #1e293b;
+  --gray-100:  #243244;
+  --gray-200:  #334155;
+  --gray-500:  #94a3b8;
+  --gray-700:  #cbd5e1;
+  --text:      #e2e8f0;
+  color-scheme: dark;
+}
+
+html.dark .avg--high { color: #4ade80; }
+
+html.dark .filter-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* Restore true-white text on always-dark surfaces in class-toggled dark mode */
+html.dark .site-header,
+html.dark .brand-name,
+html.dark .nav-link,
+html.dark .social-link,
+html.dark .btn--primary,
+html.dark .stats-table thead,
+html.dark .lineup-section__title,
+html.dark .batting-order__title,
+html.dark .batting-order__item::before,
+html.dark .field__pos-label,
+html.dark .bench__title { color: #ffffff; }
+
+/* Force light mode when user has toggled it on (overrides system dark pref) */
+html.light {
+  --off-white: #f4f6fb;
+  --white:     #ffffff;
+  --gray-100:  #eef1f7;
+  --gray-200:  #d5daea;
+  --gray-500:  #7a84a0;
+  --gray-700:  #3a4260;
+  --text:      #1a1f36;
+  color-scheme: light;
+}
+
+/* Dark mode toggle button */
+#dark-mode-toggle {
+  border: none;
+  cursor: pointer;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 640px) {
   .header-inner { flex-wrap: wrap; gap: .6rem; }
