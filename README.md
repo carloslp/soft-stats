@@ -15,7 +15,7 @@ Built with vanilla HTML, CSS, and JavaScript — ready to deploy on [Vercel](htt
 - 📈 **Summary cards** — team-wide totals for AB, Hits, HR, K, and batting average
 - 🎯 **Scatter plot** — interactive Contact vs. Power chart with visual quadrants
 - 📉 **Trend chart** — line chart showing a player's AVG or Hits evolution across games
-- ⚡ **Loading & error states** — spinner while fetching, error message with retry button
+- ⚡ **Loading & error states** — skeleton loaders while fetching, error message with retry button
 - 📱 **Fully responsive** — works on mobile, tablet, and desktop
 - ♿ **Accessible** — ARIA labels, keyboard-navigable sort headers, screen-reader-friendly
 
