@@ -135,9 +135,71 @@
       <section class="lineup-section" aria-label="Cuadro de Bateo y Turno">
         <h2 class="lineup-section__title">Cuadro de Bateo y Turno</h2>
 
-        <div class="state state--loading" id="lineup-loading" role="status" aria-live="polite">
-          <div class="spinner" aria-hidden="true"></div>
-          <p>Cargando cuadro de bateo…</p>
+        <div class="state state--loading state--skeleton" id="lineup-loading" role="status" aria-live="polite">
+          <span class="sr-only">Cargando cuadro de bateo…</span>
+          <div class="lineup-card lineup-card--skeleton animate-pulse" aria-hidden="true">
+            <div class="lineup-skeleton__order">
+              <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__heading"></div>
+              <div class="lineup-skeleton__rows">
+                <div class="lineup-skeleton__row">
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
+                </div>
+                <div class="lineup-skeleton__row">
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
+                </div>
+                <div class="lineup-skeleton__row">
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
+                </div>
+                <div class="lineup-skeleton__row">
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
+                </div>
+                <div class="lineup-skeleton__row">
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
+                </div>
+                <div class="lineup-skeleton__row">
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
+                </div>
+                <div class="lineup-skeleton__row">
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
+                </div>
+                <div class="lineup-skeleton__row">
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
+                </div>
+              </div>
+            </div>
+            <div class="lineup-skeleton__field-area">
+              <div class="lineup-skeleton__diamond">
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+              </div>
+              <div class="lineup-skeleton__bench">
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__bench-title"></div>
+                <div class="lineup-skeleton__bench-grid">
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__bench-slot"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__bench-slot"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__bench-slot"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__bench-slot"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="state state--error" id="lineup-error" role="alert" aria-live="assertive" hidden>
@@ -229,9 +291,81 @@
       <!-- DATA TABLE -->
       <section class="table-section" aria-label="Tabla de estadísticas">
         <!-- Loading state -->
-        <div class="state state--loading" id="state-loading" role="status" aria-live="polite">
-          <div class="spinner" aria-hidden="true"></div>
-          <p>Cargando estadísticas…</p>
+        <div class="state state--loading state--skeleton" id="state-loading" role="status" aria-live="polite">
+          <span class="sr-only">Cargando estadísticas…</span>
+          <div class="stats-skeleton animate-pulse" aria-hidden="true">
+            <div class="summary-cards stats-skeleton__cards">
+              <div class="card skeleton-card">
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__value"></div>
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__label"></div>
+              </div>
+              <div class="card skeleton-card">
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__value"></div>
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__label"></div>
+              </div>
+              <div class="card skeleton-card">
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__value"></div>
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__label"></div>
+              </div>
+              <div class="card skeleton-card">
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__value"></div>
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__label"></div>
+              </div>
+              <div class="card skeleton-card">
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__value"></div>
+                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__label"></div>
+              </div>
+            </div>
+            <div class="stats-skeleton__table-wrap">
+              <div class="stats-skeleton__table">
+                <div class="stats-skeleton__row">
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell stats-skeleton__cell--name"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                </div>
+                <div class="stats-skeleton__row">
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell stats-skeleton__cell--name"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                </div>
+                <div class="stats-skeleton__row">
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell stats-skeleton__cell--name"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                </div>
+                <div class="stats-skeleton__row">
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell stats-skeleton__cell--name"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                </div>
+                <div class="stats-skeleton__row">
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell stats-skeleton__cell--name"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Error state -->
