@@ -677,24 +677,38 @@ body {
   align-items: flex-end;
 }
 
-/* Field position grid */
+/* Field position grid — CSS Grid diamond layout
+   4 columns × 4 rows:
+   row 1  [LF] [CF    ] [RF]
+   row 2       [SS][2B]
+   row 3  [3B] [P     ] [1B]
+   row 4       [C     ]
+*/
 .field {
   flex: 1;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, auto);
   gap: .45rem;
+  justify-items: center;
 }
 
-.field__row {
-  display: flex;
-  align-items: flex-end;
-  gap: .4rem;
-}
+/* Outfield */
+.field__pos--lf { grid-column: 1;       grid-row: 1; }
+.field__pos--cf { grid-column: 2 / span 2; grid-row: 1; }
+.field__pos--rf { grid-column: 4;       grid-row: 1; }
 
-.field__row--outfield   { justify-content: space-between; }
-.field__row--midinfield { justify-content: center; gap: 2.5rem; }
-.field__row--infield    { justify-content: space-between; }
-.field__row--catcher    { justify-content: center; }
+/* Mid-infield */
+.field__pos--ss { grid-column: 2;       grid-row: 2; }
+.field__pos--2b { grid-column: 3;       grid-row: 2; }
+
+/* Infield */
+.field__pos--3b { grid-column: 1;       grid-row: 3; }
+.field__pos--p  { grid-column: 2 / span 2; grid-row: 3; }
+.field__pos--1b { grid-column: 4;       grid-row: 3; }
+
+/* Catcher */
+.field__pos--c  { grid-column: 2 / span 2; grid-row: 4; }
 
 /* Individual position box */
 .field__pos {
@@ -839,12 +853,6 @@ body {
   .field-extras { flex-direction: row; justify-content: center; }
   .field-extras .field__pos { flex: 0 0 auto; }
   .field-extras .field__pos-name { min-width: 72px; }
-  .field__row { gap: .3rem; }
-  .field__row--midinfield { gap: 1.5rem; }
-  .field__row--outfield .field__pos,
-  .field__row--infield .field__pos { flex: 1 1 0; min-width: 0; }
-  .field__row--outfield .field__pos-name,
-  .field__row--infield .field__pos-name { width: 100%; min-width: 0; }
   .field__pos-name { min-width: 72px; font-size: .62rem; }
   .batting-order__name { font-size: .68rem; }
   .bench__slot { min-width: 72px; font-size: .64rem; }
