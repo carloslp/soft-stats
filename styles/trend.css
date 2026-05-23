@@ -383,3 +383,54 @@ body {
 @media (max-width: 400px) {
   .trend-summary { grid-template-columns: 1fr 1fr; }
 }
+
+/* =========================================================
+   Dark Mode
+   ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --off-white: #0f172a;
+    --white:     #1e293b;
+    --gray-100:  #243244;
+    --gray-200:  #334155;
+    --gray-500:  #94a3b8;
+    --gray-700:  #cbd5e1;
+    color-scheme: dark;
+  }
+
+  /* Restore true-white text on always-dark surfaces */
+  .trend-header,
+  .trend-back-btn,
+  .trend-btn { color: #ffffff; }
+}
+
+html.dark {
+  --off-white: #0f172a;
+  --white:     #1e293b;
+  --gray-100:  #243244;
+  --gray-200:  #334155;
+  --gray-500:  #94a3b8;
+  --gray-700:  #cbd5e1;
+  color-scheme: dark;
+}
+
+html.dark .trend-header,
+html.dark .trend-back-btn,
+html.dark .trend-btn { color: #ffffff; }
+
+html.light {
+  --off-white: #f4f6fb;
+  --white:     #ffffff;
+  --gray-100:  #eef1f7;
+  --gray-200:  #d5daea;
+  --gray-500:  #7a84a0;
+  --gray-700:  #3a4260;
+  color-scheme: light;
+}
+
+/* Dark mode toggle button */
+#dark-mode-toggle {
+  border: none;
+  cursor: pointer;
+}

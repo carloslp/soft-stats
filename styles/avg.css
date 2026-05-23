@@ -542,3 +542,64 @@ body {
   font-size: .78rem;
   margin-top: auto;
 }
+
+/* =========================================================
+   Dark Mode
+   ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --off-white: #0f172a;
+    --white:     #1e293b;
+    --gray-100:  #243244;
+    --gray-200:  #334155;
+    --gray-500:  #94a3b8;
+    --gray-700:  #cbd5e1;
+    --text:      #e2e8f0;
+    --green:     #4ade80;  /* lighter green for dark backgrounds */
+    color-scheme: dark;
+  }
+
+  /* Restore true-white text on always-dark surfaces */
+  .avg-header,
+  .avg-back-btn,
+  .avg-btn,
+  .team-avg-title,
+  .team-stat-value { color: #ffffff; }
+}
+
+html.dark {
+  --off-white: #0f172a;
+  --white:     #1e293b;
+  --gray-100:  #243244;
+  --gray-200:  #334155;
+  --gray-500:  #94a3b8;
+  --gray-700:  #cbd5e1;
+  --text:      #e2e8f0;
+  --green:     #4ade80;
+  color-scheme: dark;
+}
+
+html.dark .avg-header,
+html.dark .avg-back-btn,
+html.dark .avg-btn,
+html.dark .team-avg-title,
+html.dark .team-stat-value { color: #ffffff; }
+
+html.light {
+  --off-white: #f4f6fb;
+  --white:     #ffffff;
+  --gray-100:  #eef1f7;
+  --gray-200:  #d5daea;
+  --gray-500:  #7a84a0;
+  --gray-700:  #3a4260;
+  --text:      #1a1f36;
+  --green:     #0a7a0a;
+  color-scheme: light;
+}
+
+/* Dark mode toggle button */
+#dark-mode-toggle {
+  border: none;
+  cursor: pointer;
+}

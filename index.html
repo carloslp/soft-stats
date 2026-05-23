@@ -9,6 +9,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles/main.css" />
+    <!-- Anti-flash: apply saved dark/light preference before first paint -->
+    <script>
+      (function () {
+        var t = localStorage.getItem('theme');
+        var d = document.documentElement;
+        if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          d.classList.add('dark');
+        } else if (t === 'light') {
+          d.classList.add('light');
+        }
+      })();
+    </script>
   </head>
   <body>
     <!-- ===== HEADER ===== -->
@@ -42,6 +54,12 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="16" height="16"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
               Tómbola
             </a>
+            <button id="dark-mode-toggle" class="nav-link" type="button" aria-label="Cambiar a modo oscuro" title="Modo oscuro">
+              <!-- Moon icon: shown in light mode -->
+              <svg class="dm-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="16" height="16"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              <!-- Sun icon: shown in dark mode -->
+              <svg class="dm-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="16" height="16" hidden><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </button>
           </nav>
           <nav class="social-nav" aria-label="Redes sociales">
             <a href="https://www.instagram.com/cachorrosdesin" target="_blank" rel="noopener noreferrer" class="social-link min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" aria-label="Instagram" title="Instagram">
@@ -418,5 +436,6 @@
 
     <script src="scripts/config.js"></script>
     <script src="scripts/app.js"></script>
+    <script src="scripts/dark-mode.js"></script>
   </body>
 </html>
