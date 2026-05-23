@@ -273,7 +273,7 @@
     players.forEach((p) => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td class="td--name">${escapeHtml(p.Nombre)}</td>
+        <td class="td--name sticky-player-col sticky left-0 bg-white z-10 shadow-[2px_0_5px_rgba(0,0,0,0.05)]">${escapeHtml(p.Nombre)}</td>
         <td class="td--num">${p.AB ?? '—'}</td>
         <td class="td--num">${p.H ?? '—'}</td>
         <td class="td--num">${p.HR ?? '—'}</td>
@@ -294,7 +294,7 @@
 
     tableFoot.innerHTML = `
       <tr>
-        <td>Totales / Promedio</td>
+        <td class="sticky-player-col sticky left-0 bg-white z-10 shadow-[2px_0_5px_rgba(0,0,0,0.05)]">Totales / Promedio</td>
         <td class="td--num">${totAB}</td>
         <td class="td--num">${totH}</td>
         <td class="td--num">${totHR}</td>

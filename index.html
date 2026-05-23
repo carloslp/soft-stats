@@ -382,12 +382,12 @@
         </div>
 
         <!-- Table -->
-        <div class="table-wrapper" id="table-wrapper" hidden>
-          <table class="stats-table" id="stats-table" aria-label="Estadísticas de jugadores">
+        <div class="table-wrapper overflow-x-auto" id="table-wrapper" hidden>
+          <table class="stats-table w-full text-sm text-left" id="stats-table" aria-label="Estadísticas de jugadores">
             <caption class="sr-only">Estadísticas de softbol — haz clic en el encabezado de columna para ordenar</caption>
             <thead>
               <tr>
-                <th scope="col" class="th-sortable" data-col="Nombre" data-type="string" tabindex="0" aria-sort="none">
+                <th scope="col" class="th-sortable sticky-player-col sticky left-0 bg-white z-10 shadow-[2px_0_5px_rgba(0,0,0,0.05)]" data-col="Nombre" data-type="string" tabindex="0" aria-sort="none">
                   Jugador <span class="sort-icon" aria-hidden="true">⇅</span>
                 </th>
                 <th scope="col" class="th-sortable th--num" data-col="AB" data-type="number" tabindex="0" aria-sort="none">

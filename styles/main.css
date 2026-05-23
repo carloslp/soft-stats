@@ -976,6 +976,19 @@ body {
   .stats-table th,
   .stats-table td { padding: .6rem .75rem; font-size: .82rem; }
 
+  .stats-table .sticky-player-col {
+    position: sticky;
+    left: 0;
+    background: var(--white);
+    z-index: 10;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+  }
+
+  .stats-table thead .sticky-player-col {
+    color: var(--navy);
+    z-index: 11;
+  }
+
   .lineup-card { grid-template-columns: 1fr; padding: 1rem .75rem; gap: 1rem; }
   .lineup-skeleton__diamond { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .batting-order,
