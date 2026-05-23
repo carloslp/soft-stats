@@ -21,7 +21,7 @@
    even when a CSS class (e.g. .state { display: flex }) would override it. */
 [hidden] { display: none !important; }
 
-:root {
+html {
   --navy:   #003087;
   --navy-dark: #001f5b;
   --red:    #CC3433;
