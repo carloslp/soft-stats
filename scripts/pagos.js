@@ -161,12 +161,12 @@
       var name = rawName === null || rawName === undefined ? '' : String(rawName);
       if (unpaidKeys.length > 0) {
         var desglose = unpaidKeys.map(function (k) { return k + ': $0'; }).join(', ');
-        lines.push(name + ' — ' + desglose);
+        lines.push('*' + name + '*' + ' — ' + desglose);
       }
     });
 
     if (lines.length === 0) return 'No hay jugadores sin pagar.';
-    return '⚾ Jugadores sin pagar:\n' + lines.join('\n');
+    return '*⚾ Jugadores sin pagar:*\n' + lines.join('\n');
   }
 
   filterUnpaid.addEventListener('change', function () {
