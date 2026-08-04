@@ -49,6 +49,14 @@
       </section>
 
       <section id="pay-content" hidden>
+        <div class="pay-toolbar">
+          <label class="pay-filter-label">
+            <input type="checkbox" id="pay-filter-unpaid" />
+            Solo sin pagar
+          </label>
+          <button id="pay-copy-btn" class="pay-btn" type="button">&#128203; Copiar sin pagar</button>
+          <span id="pay-copy-feedback" class="pay-copy-feedback" hidden>¡Copiado!</span>
+        </div>
         <div class="pay-table-wrap" role="region" aria-label="Tabla de seguimiento de pagos" tabindex="0">
           <table class="pay-table" id="pay-table">
             <thead id="pay-thead"></thead>

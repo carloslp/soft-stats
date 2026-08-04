@@ -131,6 +131,42 @@ body {
   color: var(--pay-muted);
 }
 
+.pay-toolbar {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+  margin-bottom: .75rem;
+}
+
+.pay-filter-label {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .92rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+}
+
+.pay-filter-label input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--pay-red);
+  cursor: pointer;
+}
+
+.pay-copy-feedback {
+  font-size: .85rem;
+  color: #2a7a2a;
+  font-weight: 600;
+}
+
+.pay-cell--unpaid {
+  color: var(--pay-red);
+  font-weight: 700;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --pay-bg: #0f172a;
@@ -165,6 +201,8 @@ html.dark .pay-btn { color: #ffffff; }
 html.dark .pay-spinner { border-color: #334155; }
 html.dark .pay-table th { background: #162034; }
 html.dark .pay-row--summary td { background: #1a263d; }
+
+html.dark .pay-copy-feedback { color: #4ade80; }
 
 html.light {
   --pay-bg: #f6f8fc;
