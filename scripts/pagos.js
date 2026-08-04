@@ -13,6 +13,12 @@
   var thead = document.getElementById('pay-thead');
   var tbody = document.getElementById('pay-tbody');
   var footerYear = document.getElementById('pay-footer-year');
+  var filterUnpaid = document.getElementById('pay-filter-unpaid');
+  var copyBtn = document.getElementById('pay-copy-btn');
+  var copyFeedback = document.getElementById('pay-copy-feedback');
+
+  var allRows = [];
+  var currentColumns = { nameKey: '', valueKeys: [] };
 
   function showState(name) {
     stateLoading.hidden = name !== 'loading';
@@ -71,10 +77,58 @@
     return n === 'acumulado' || n === 'total' || n === 'restante';
   }
 
+  function isUnpaid(row, valueKeys) {
+    return valueKeys.some(function (key) {
+      var n = toNumber(row ? row[key] : '');
+      return !isNaN(n) && n === 0;
+    });
+  }
+
+  function getUnpaidKeys(row, valueKeys) {
+    return valueKeys.filter(function (key) {
+      var n = toNumber(row ? row[key] : '');
+      return !isNaN(n) && n === 0;
+    });
+  }
+
+  function renderRows(rows) {
+    var nameKey = currentColumns.nameKey;
+    var valueKeys = currentColumns.valueKeys;
+    var onlyUnpaid = filterUnpaid.checked;
+
+    var fragment = document.createDocumentFragment();
+    rows.forEach(function (row) {
+      var rawName = row && row[nameKey] !== undefined ? row[nameKey] : '';
+      if (isSummaryRow(rawName)) return;
+      if (onlyUnpaid && !isUnpaid(row, valueKeys)) return;
+
+      var tr = document.createElement('tr');
+      var tdName = document.createElement('td');
+      tdName.textContent = rawName === null || rawName === undefined ? '' : String(rawName);
+      tr.appendChild(tdName);
+
+      valueKeys.forEach(function (key) {
+        var td = document.createElement('td');
+        var val = row ? row[key] : '';
+        var n = toNumber(val);
+        td.textContent = formatMoney(val);
+        if (!isNaN(n) && n === 0) td.classList.add('pay-cell--unpaid');
+        tr.appendChild(td);
+      });
+
+      fragment.appendChild(tr);
+    });
+
+    tbody.innerHTML = '';
+    tbody.appendChild(fragment);
+  }
+
   function renderTable(rows) {
-    var columns = extractColumns(rows);
-    var nameKey = columns.nameKey;
-    var valueKeys = columns.valueKeys;
+    currentColumns = extractColumns(rows);
+    allRows = rows;
+
+    var nameKey = currentColumns.nameKey;
+    var valueKeys = currentColumns.valueKeys;
 
     var headRow = document.createElement('tr');
     var thName = document.createElement('th');
@@ -90,27 +144,63 @@
     thead.innerHTML = '';
     thead.appendChild(headRow);
 
-    var fragment = document.createDocumentFragment();
-    rows.forEach(function (row) {
-      var tr = document.createElement('tr');
+    renderRows(rows);
+  }
+
+  function buildWhatsAppText() {
+    var nameKey = currentColumns.nameKey;
+    var valueKeys = currentColumns.valueKeys;
+    var lines = [];
+
+    allRows.forEach(function (row) {
       var rawName = row && row[nameKey] !== undefined ? row[nameKey] : '';
-      if (isSummaryRow(rawName)) tr.classList.add('pay-row--summary');
+      if (isSummaryRow(rawName)) return;
+      if (!isUnpaid(row, valueKeys)) return;
 
-      var tdName = document.createElement('td');
-      tdName.textContent = rawName === null || rawName === undefined ? '' : String(rawName);
-      tr.appendChild(tdName);
-
-      valueKeys.forEach(function (key) {
-        var td = document.createElement('td');
-        td.textContent = formatMoney(row ? row[key] : '');
-        tr.appendChild(td);
-      });
-
-      fragment.appendChild(tr);
+      var unpaidKeys = getUnpaidKeys(row, valueKeys);
+      var name = rawName === null || rawName === undefined ? '' : String(rawName);
+      if (unpaidKeys.length > 0) {
+        var desglose = unpaidKeys.map(function (k) { return k + ': $0'; }).join(', ');
+        lines.push(name + ' — ' + desglose);
+      }
     });
 
-    tbody.innerHTML = '';
-    tbody.appendChild(fragment);
+    if (lines.length === 0) return 'No hay jugadores sin pagar.';
+    return '⚾ Jugadores sin pagar:\n' + lines.join('\n');
+  }
+
+  filterUnpaid.addEventListener('change', function () {
+    renderRows(allRows);
+  });
+
+  copyBtn.addEventListener('click', function () {
+    var text = buildWhatsAppText();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        showCopyFeedback();
+      }).catch(function () {
+        fallbackCopy(text);
+      });
+    } else {
+      fallbackCopy(text);
+    }
+  });
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) { /* ignore */ }
+    document.body.removeChild(ta);
+    showCopyFeedback();
+  }
+
+  function showCopyFeedback() {
+    copyFeedback.hidden = false;
+    setTimeout(function () { copyFeedback.hidden = true; }, 2000);
   }
 
   async function fetchAndRender() {
