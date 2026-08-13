@@ -18,7 +18,7 @@
   var copyFeedback = document.getElementById('pay-copy-feedback');
 
   var allRows = [];
-  var currentColumns = { nameKey: '', valueKeys: [] };
+  var currentColumns = { nameKey: '', deudaKey: '', concepts: [] };
 
   function showState(name) {
     stateLoading.hidden = name !== 'loading';
@@ -41,6 +41,8 @@
     return n.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
+  // Returns an array of concept objects: { label, cuotaKey, pagadoKey }
+  // for keys that follow the "[prefix] - Cuota" / "[prefix] - Pagado" pattern.
   function extractColumns(rows) {
     var keySet = Object.create(null);
     rows.forEach(function (row) {
@@ -49,27 +51,35 @@
 
     var keys = Object.keys(keySet);
     var nameKey = keys.find(function (k) { return k.toLowerCase() === 'nombre del jugador'; }) || keys[0] || 'Nombre del Jugador';
+    var deudaKey = keys.find(function (k) { return k.toLowerCase() === 'deuda total'; }) || '';
 
-    var metricKeys = keys.filter(function (k) { return k !== nameKey; });
-    var inscripcionKey = metricKeys.find(function (k) { return k.toLowerCase().indexOf('inscrip') !== -1; }) || null;
+    // Collect concept prefixes from keys ending in " - Cuota"
+    var conceptMap = Object.create(null);
+    keys.forEach(function (k) {
+      var m = k.match(/^(.+)\s+-\s+Cuota$/);
+      if (m) {
+        var prefix = m[1];
+        conceptMap[prefix] = { label: prefix, cuotaKey: k, pagadoKey: prefix + ' - Pagado' };
+      }
+    });
 
-    var gameKeys = metricKeys.filter(function (k) { return /^juego\s+\d+/i.test(k); });
-    gameKeys.sort(function (a, b) {
-      var na = parseInt((a.match(/\d+/) || ['0'])[0], 10);
-      var nb = parseInt((b.match(/\d+/) || ['0'])[0], 10);
+    // Sort concepts by their leading numeric prefix (e.g. "01", "02", ...)
+    var concepts = Object.values(conceptMap);
+    concepts.sort(function (a, b) {
+      var na = parseInt((a.label.match(/^\d+/) || ['0'])[0], 10);
+      var nb = parseInt((b.label.match(/^\d+/) || ['0'])[0], 10);
       return na - nb;
     });
 
-    var otherKeys = metricKeys.filter(function (k) {
-      return k !== inscripcionKey && gameKeys.indexOf(k) === -1;
-    });
+    // Fallback: if no Cuota/Pagado pattern found, treat all non-name/non-deuda keys as legacy value keys
+    if (concepts.length === 0) {
+      var metricKeys = keys.filter(function (k) { return k !== nameKey && k !== deudaKey; });
+      metricKeys.forEach(function (k) {
+        concepts.push({ label: k, cuotaKey: k, pagadoKey: null });
+      });
+    }
 
-    var ordered = [];
-    if (inscripcionKey) ordered.push(inscripcionKey);
-    return {
-      nameKey: nameKey,
-      valueKeys: ordered.concat(gameKeys, otherKeys)
-    };
+    return { nameKey: nameKey, deudaKey: deudaKey, concepts: concepts };
   }
 
   function isSummaryRow(name) {
@@ -77,44 +87,77 @@
     return n === 'acumulado' || n === 'total' || n === 'restante';
   }
 
-  function isUnpaid(row, valueKeys) {
-    return valueKeys.some(function (key) {
-      var n = toNumber(row ? row[key] : '');
-      return !isNaN(n) && n === 0;
+  // A row has pending debt if any concept has pagado < cuota
+  function isUnpaid(row, concepts) {
+    return concepts.some(function (c) {
+      if (!c.pagadoKey) {
+        var n = toNumber(row ? row[c.cuotaKey] : '');
+        return !isNaN(n) && n === 0;
+      }
+      var pagado = toNumber(row ? row[c.pagadoKey] : '');
+      var cuota = toNumber(row ? row[c.cuotaKey] : '');
+      return !isNaN(pagado) && !isNaN(cuota) && pagado < cuota;
     });
   }
 
-  function getUnpaidKeys(row, valueKeys) {
-    return valueKeys.filter(function (key) {
-      var n = toNumber(row ? row[key] : '');
-      return !isNaN(n) && n === 0;
+  // Returns concepts where pagado < cuota
+  function getUnpaidConcepts(row, concepts) {
+    return concepts.filter(function (c) {
+      if (!c.pagadoKey) {
+        var n = toNumber(row ? row[c.cuotaKey] : '');
+        return !isNaN(n) && n === 0;
+      }
+      var pagado = toNumber(row ? row[c.pagadoKey] : '');
+      var cuota = toNumber(row ? row[c.cuotaKey] : '');
+      return !isNaN(pagado) && !isNaN(cuota) && pagado < cuota;
     });
   }
 
   function renderRows(rows) {
     var nameKey = currentColumns.nameKey;
-    var valueKeys = currentColumns.valueKeys;
+    var deudaKey = currentColumns.deudaKey;
+    var concepts = currentColumns.concepts;
     var onlyUnpaid = filterUnpaid.checked;
 
     var fragment = document.createDocumentFragment();
     rows.forEach(function (row) {
       var rawName = row && row[nameKey] !== undefined ? row[nameKey] : '';
       if (isSummaryRow(rawName)) return;
-      if (onlyUnpaid && !isUnpaid(row, valueKeys)) return;
+      if (onlyUnpaid && !isUnpaid(row, concepts)) return;
 
       var tr = document.createElement('tr');
       var tdName = document.createElement('td');
       tdName.textContent = rawName === null || rawName === undefined ? '' : String(rawName);
       tr.appendChild(tdName);
 
-      valueKeys.forEach(function (key) {
+      concepts.forEach(function (c) {
         var td = document.createElement('td');
-        var val = row ? row[key] : '';
-        var n = toNumber(val);
-        td.textContent = formatMoney(val);
-        if (!isNaN(n) && n === 0) td.classList.add('pay-cell--unpaid');
+        if (c.pagadoKey) {
+          var pagado = row ? row[c.pagadoKey] : '';
+          var cuota = row ? row[c.cuotaKey] : '';
+          var pagadoN = toNumber(pagado);
+          var cuotaN = toNumber(cuota);
+          td.textContent = formatMoney(pagado) + ' / ' + formatMoney(cuota);
+          if (!isNaN(pagadoN) && !isNaN(cuotaN) && pagadoN < cuotaN) {
+            td.classList.add('pay-cell--unpaid');
+          }
+        } else {
+          var val = row ? row[c.cuotaKey] : '';
+          var n = toNumber(val);
+          td.textContent = formatMoney(val);
+          if (!isNaN(n) && n === 0) td.classList.add('pay-cell--unpaid');
+        }
         tr.appendChild(td);
       });
+
+      if (deudaKey) {
+        var tdDeuda = document.createElement('td');
+        var deudaVal = row ? row[deudaKey] : '';
+        var deudaN = toNumber(deudaVal);
+        tdDeuda.textContent = formatMoney(deudaVal);
+        if (!isNaN(deudaN) && deudaN > 0) tdDeuda.classList.add('pay-cell--unpaid');
+        tr.appendChild(tdDeuda);
+      }
 
       fragment.appendChild(tr);
     });
@@ -128,18 +171,25 @@
     allRows = rows;
 
     var nameKey = currentColumns.nameKey;
-    var valueKeys = currentColumns.valueKeys;
+    var deudaKey = currentColumns.deudaKey;
+    var concepts = currentColumns.concepts;
 
     var headRow = document.createElement('tr');
     var thName = document.createElement('th');
     thName.textContent = 'Jugador';
     headRow.appendChild(thName);
 
-    valueKeys.forEach(function (key) {
+    concepts.forEach(function (c) {
       var th = document.createElement('th');
-      th.textContent = key;
+      th.textContent = c.pagadoKey ? c.label + ' (Pagado / Cuota)' : c.label;
       headRow.appendChild(th);
     });
+
+    if (deudaKey) {
+      var thDeuda = document.createElement('th');
+      thDeuda.textContent = deudaKey;
+      headRow.appendChild(thDeuda);
+    }
 
     thead.innerHTML = '';
     thead.appendChild(headRow);
@@ -149,19 +199,33 @@
 
   function buildWhatsAppText() {
     var nameKey = currentColumns.nameKey;
-    var valueKeys = currentColumns.valueKeys;
+    var deudaKey = currentColumns.deudaKey;
+    var concepts = currentColumns.concepts;
     var lines = [];
 
     allRows.forEach(function (row) {
       var rawName = row && row[nameKey] !== undefined ? row[nameKey] : '';
       if (isSummaryRow(rawName)) return;
-      if (!isUnpaid(row, valueKeys)) return;
+      if (!isUnpaid(row, concepts)) return;
 
-      var unpaidKeys = getUnpaidKeys(row, valueKeys);
+      var unpaidConcepts = getUnpaidConcepts(row, concepts);
       var name = rawName === null || rawName === undefined ? '' : String(rawName);
-      if (unpaidKeys.length > 0) {
-        var desglose = unpaidKeys.map(function (k) { return k + ': $0'; }).join(', ');
-        lines.push('*' + name + '*' + ' — ' + desglose);
+      if (unpaidConcepts.length > 0) {
+        var desglose = unpaidConcepts.map(function (c) {
+          if (c.pagadoKey) {
+            var pagado = toNumber(row ? row[c.pagadoKey] : '');
+            var cuota = toNumber(row ? row[c.cuotaKey] : '');
+            var restante = !isNaN(cuota) && !isNaN(pagado) ? cuota - pagado : '';
+            return c.label + ': $' + formatMoney(restante);
+          }
+          return c.label + ': $0';
+        }).join(', ');
+
+        var deudaStr = '';
+        if (deudaKey && row[deudaKey] !== undefined) {
+          deudaStr = ' | Deuda Total: $' + formatMoney(row[deudaKey]);
+        }
+        lines.push('*' + name + '*' + ' — ' + desglose + deudaStr);
       }
     });
 
