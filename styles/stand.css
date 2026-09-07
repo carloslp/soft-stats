@@ -55,3 +55,55 @@ th:first-child .sort-btn { justify-content:flex-start; }
   .summary { grid-template-columns:1fr; }
   .glossary dl div { grid-template-columns:1fr; }
 }
+
+/* Estilos para el glosario mejorado */
+.glossary-intro {
+  margin-bottom: 2rem;
+  color: var(--text-muted, #666);
+  font-size: 0.95rem;
+}
+
+.glossary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.glossary-module h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color, #eaeaea);
+}
+
+.glossary-module dl {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 0;
+}
+
+.glossary-module dt {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.glossary-module dd {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-color, #333);
+}
+
+.formula {
+  display: inline-block;
+  margin-top: 0.4rem;
+  padding: 0.2rem 0.5rem;
+  background: var(--bg-surface, #f5f5f5);
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: var(--text-primary, #000);
+}
