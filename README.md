@@ -26,6 +26,7 @@ Built with vanilla HTML, CSS, and JavaScript — ready to deploy on [Vercel](htt
 | Page | Description |
 |------|-------------|
 | `index.html` | Main dashboard — sortable stats table + batting lineup card |
+| `stand.html` | Standings por temporada — clasificación y métricas sabermétricas |
 | `avg.html` | Batting averages — per-game or cumulative ranked player list |
 | `scatter.html` | **Scatter plot** — Contact (AVG) vs. Power (HR) with quadrant analysis |
 | `trend.html` | **Trend chart** — Line chart of a player's AVG or Hits evolution across games |
@@ -178,12 +179,14 @@ The included `vercel.json` configures single-page-app rewrites and security head
 ```
 soft-stats/
 ├── index.html          # Main HTML shell — stats table + lineup card
+├── stand.html          # Standings by season
 ├── avg.html            # Batting averages page (per-game or cumulative)
 ├── scatter.html        # Scatter plot: Contact vs. Power
 ├── trend.html          # Trend chart: player AVG / Hits over time
 ├── tombola.html        # Attendance + random position draw + batting order
 ├── styles/
 │   ├── main.css        # Dashboard styles (Chicago Cubs theme, responsive)
+│   ├── stand.css       # Standings page styles
 │   ├── avg.css         # Batting averages page styles
 │   ├── scatter.css     # Scatter plot page styles
 │   ├── trend.css       # Trend chart page styles
@@ -191,6 +194,7 @@ soft-stats/
 ├── scripts/
 │   ├── config.js       # API URL configuration
 │   ├── app.js          # Main dashboard logic
+│   ├── stand.js        # Standings calculations and season filtering
 │   ├── avg.js          # Batting averages page logic
 │   ├── scatter.js      # Scatter plot logic (Chart.js)
 │   ├── trend.js        # Trend chart logic (Chart.js line chart)
