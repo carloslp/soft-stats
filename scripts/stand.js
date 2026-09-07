@@ -20,6 +20,18 @@
   var offenseValue = document.getElementById('offense-value');
   var offenseTag = document.getElementById('offense-tag');
 
+  // NORMALIZACIÓN ABSOLUTA DE TEXTOS
+  function cleanString(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .normalize('NFD') // Separa caracteres de sus acentos
+      .replace(/[\u0300-\u036f]/g, '') // Elimina los acentos
+      .replace(/[\r\n\t\u200B-\u200D\uFEFF]/g, ' ') // Quita saltos de línea y caracteres invisibles
+      .replace(/\s+/g, ' ') // Colapsa múltiples espacios en uno solo
+      .trim()
+      .toUpperCase();
+  }
+
   function showState(name) {
     loadingState.hidden = name !== 'loading';
     errorState.hidden = name !== 'error';
@@ -30,9 +42,8 @@
 
   function getSeason(row) {
     if (!row || typeof row !== 'object') return '';
-    if (row.temporada !== undefined && row.temporada !== null) return String(row.temporada).trim().toUpperCase();
-    if (row.Temporada !== undefined && row.Temporada !== null) return String(row.Temporada).trim().toUpperCase();
-    return '';
+    var s = row.temporada !== undefined ? row.temporada : row.Temporada;
+    return cleanString(s);
   }
 
   function parseRuns(v) {
@@ -53,7 +64,7 @@
 
   function getFinalGamesBySeason() {
     return allGames.filter(function (g) {
-      return getSeason(g) === currentSeason && String(g.estatus || '').trim().toUpperCase() === 'FINALIZADO';
+      return getSeason(g) === currentSeason && cleanString(g.estatus) === 'FINALIZADO';
     });
   }
 
@@ -119,11 +130,14 @@
     var teams = Object.create(null);
 
     finals.forEach(function (g) {
-      // Convertir a mayúsculas para unificar nombres antes de agrupar
-      var home = String(g.equipo_local_id || '').trim().toUpperCase();
-      var away = String(g.equipo_visitante_id || '').trim().toUpperCase();
+      var homeRaw = g.equipo_local !== undefined ? g.equipo_local : g.equipo_local_id;
+      var awayRaw = g.equipo_visitante !== undefined ? g.equipo_visitante : g.equipo_visitante_id;
+      
+      var home = cleanString(homeRaw);
+      var away = cleanString(awayRaw);
       var homeRuns = parseRuns(g.carreras_local);
       var awayRuns = parseRuns(g.carreras_visitante);
+      
       if (!home || !away || homeRuns === null || awayRuns === null) return;
 
       initTeam(teams, home);
