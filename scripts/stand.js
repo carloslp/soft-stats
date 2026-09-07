@@ -30,8 +30,8 @@
 
   function getSeason(row) {
     if (!row || typeof row !== 'object') return '';
-    if (row.temporada !== undefined && row.temporada !== null) return String(row.temporada).trim();
-    if (row.Temporada !== undefined && row.Temporada !== null) return String(row.Temporada).trim();
+    if (row.temporada !== undefined && row.temporada !== null) return String(row.temporada).trim().toUpperCase();
+    if (row.Temporada !== undefined && row.Temporada !== null) return String(row.Temporada).trim().toUpperCase();
     return '';
   }
 
@@ -119,8 +119,9 @@
     var teams = Object.create(null);
 
     finals.forEach(function (g) {
-      var home = String(g.equipo_local_id || '').trim();
-      var away = String(g.equipo_visitante_id || '').trim();
+      // Convertir a mayúsculas para unificar nombres antes de agrupar
+      var home = String(g.equipo_local_id || '').trim().toUpperCase();
+      var away = String(g.equipo_visitante_id || '').trim().toUpperCase();
       var homeRuns = parseRuns(g.carreras_local);
       var awayRuns = parseRuns(g.carreras_visitante);
       if (!home || !away || homeRuns === null || awayRuns === null) return;
