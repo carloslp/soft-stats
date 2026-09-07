@@ -65,12 +65,29 @@
           <table aria-label="Tabla de standings">
             <thead>
               <tr>
-                <th>Equipo</th><th>JJ</th><th>G</th><th>P</th><th>PCT</th><th>GB</th><th>CA</th><th>CP</th><th>DIF</th><th>C/J</th><th>CP/J</th><th>LOC</th><th>VIS</th><th>1-RUN</th><th>SHO</th><th>EXP-PCT</th><th>STRK</th><th>L10</th><th>U5</th>
+                <th data-sort-key="equipo">Equipo</th><th data-sort-key="jj">JJ</th><th data-sort-key="g">G</th><th data-sort-key="p">P</th><th data-sort-key="pct">PCT</th><th data-sort-key="gb">GB</th><th data-sort-key="ca">CA</th><th data-sort-key="cp">CP</th><th data-sort-key="dif">DIF</th><th data-sort-key="rpg">C/J</th><th data-sort-key="rapg">CP/J</th><th data-sort-key="loc">LOC</th><th data-sort-key="vis">VIS</th><th data-sort-key="oneRun">1-RUN</th><th data-sort-key="sho">SHO</th><th data-sort-key="expPct">EXP-PCT</th><th data-sort-key="strk">STRK</th><th data-sort-key="l10">L10</th><th data-sort-key="u5">U5</th>
               </tr>
             </thead>
             <tbody id="standings-body"></tbody>
           </table>
         </div>
+        <section id="metrics-glossary" class="glossary" hidden>
+          <h2>Glosario de métricas</h2>
+          <dl>
+            <div><dt>JJ</dt><dd>Juegos jugados (G + P).</dd></div>
+            <div><dt>G / P</dt><dd>Victorias (G) y derrotas (P).</dd></div>
+            <div><dt>PCT</dt><dd>Porcentaje de victorias: G / JJ.</dd></div>
+            <div><dt>GB</dt><dd>Juegos detrás del líder: ((G líder - G) + (P - P líder)) / 2.</dd></div>
+            <div><dt>CA / CP</dt><dd>Carreras anotadas (CA) y carreras permitidas (CP).</dd></div>
+            <div><dt>DIF</dt><dd>Diferencia de carreras: CA - CP.</dd></div>
+            <div><dt>C/J y CP/J</dt><dd>Promedios por juego: CA / JJ y CP / JJ.</dd></div>
+            <div><dt>LOC / VIS</dt><dd>Récord como local y como visitante.</dd></div>
+            <div><dt>1-RUN</dt><dd>Récord en juegos decididos por una carrera.</dd></div>
+            <div><dt>SHO</dt><dd>Blanqueadas conseguidas (CP = 0).</dd></div>
+            <div><dt>EXP-PCT</dt><dd>Expectativa pitagórica: CA^1.83 / (CA^1.83 + CP^1.83).</dd></div>
+            <div><dt>STRK / L10 / U5</dt><dd>Racha actual, últimos 10 juegos y últimos 5 juegos.</dd></div>
+          </dl>
+        </section>
       </main>
     </div>
 
