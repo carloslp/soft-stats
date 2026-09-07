@@ -72,22 +72,98 @@
           </table>
         </div>
         <section id="metrics-glossary" class="glossary" hidden>
-          <h2>Glosario de métricas</h2>
-          <dl>
-            <div><dt>JJ</dt><dd>Juegos jugados (G + P).</dd></div>
-            <div><dt>G / P</dt><dd>Victorias (G) y derrotas (P).</dd></div>
-            <div><dt>PCT</dt><dd>Porcentaje de victorias: G / JJ.</dd></div>
-            <div><dt>GB</dt><dd>Juegos detrás del líder: ((G líder - G) + (P - P líder)) / 2.</dd></div>
-            <div><dt>CA / CP</dt><dd>Carreras anotadas (CA) y carreras permitidas (CP).</dd></div>
-            <div><dt>DIF</dt><dd>Diferencia de carreras: CA - CP.</dd></div>
-            <div><dt>C/J y CP/J</dt><dd>Promedios por juego: CA / JJ y CP / JJ.</dd></div>
-            <div><dt>LOC / VIS</dt><dd>Récord como local y como visitante.</dd></div>
-            <div><dt>1-RUN</dt><dd>Récord en juegos decididos por una carrera.</dd></div>
-            <div><dt>SHO</dt><dd>Blanqueadas conseguidas (CP = 0).</dd></div>
-            <div><dt>EXP-PCT</dt><dd>Expectativa pitagórica: CA^1.83 / (CA^1.83 + CP^1.83).</dd></div>
-            <div><dt>STRK / L10 / U5</dt><dd>Racha actual, últimos 10 juegos y últimos 5 juegos.</dd></div>
-          </dl>
-        </section>
+  <h2>Glosario de Métricas y Sabermetría</h2>
+  <p class="glossary-intro">El sistema calcula y consolida las métricas de rendimiento bajo el modelo estandarizado de Major League Baseball (MLB).</p>
+
+  <div class="glossary-grid">
+    <article class="glossary-module">
+      <h3>1. Clasificación General</h3>
+      <dl>
+        <div>
+          <dt>JJ (Juegos Jugados)</dt>
+          <dd>Total de partidos oficializados por equipo (G + P).</dd>
+        </div>
+        <div>
+          <dt>G / P (Ganados / Perdidos)</dt>
+          <dd>Total acumulado de victorias y derrotas.</dd>
+        </div>
+        <div>
+          <dt>PCT (Porcentaje de Victorias)</dt>
+          <dd>Rendimiento general expresado a tres decimales.<br>
+          <span class="formula">PCT = G / JJ</span></dd>
+        </div>
+        <div>
+          <dt>GB (Juegos de Ventaja)</dt>
+          <dd>Distancia de cada equipo respecto al líder de la tabla.<br>
+          <span class="formula">GB = ((G<sub>líder</sub> - G) + (P - P<sub>líder</sub>)) / 2</span></dd>
+        </div>
+      </dl>
+    </article>
+
+    <article class="glossary-module">
+      <h3>2. Rendimiento Ofensivo y Defensivo</h3>
+      <dl>
+        <div>
+          <dt>CA / CP (Carreras)</dt>
+          <dd>Total de carreras anotadas a favor (CA) y carreras permitidas en contra (CP).</dd>
+        </div>
+        <div>
+          <dt>DIF (Diferencia de Carreras)</dt>
+          <dd>Métrica principal de desempate.<br>
+          <span class="formula">DIF = CA - CP</span></dd>
+        </div>
+        <div>
+          <dt>C/J y CP/J (Promedios)</dt>
+          <dd>Promedios de anotación y contención por partido.<br>
+          <span class="formula">C/J = CA / JJ</span> y <span class="formula">CP/J = CP / JJ</span></dd>
+        </div>
+      </dl>
+    </article>
+
+    <article class="glossary-module">
+      <h3>3. Situacionales y Sabermetría</h3>
+      <dl>
+        <div>
+          <dt>LOC / VIS (Récord de Sede)</dt>
+          <dd>Balance de victorias y derrotas según la condición de local o visitante.</dd>
+        </div>
+        <div>
+          <dt>1-RUN (Bajo Presión)</dt>
+          <dd>Récord de victorias y derrotas en encuentros cuya diferencia final es de exactamente 1 carrera.</dd>
+        </div>
+        <div>
+          <dt>SHO (Blanqueadas)</dt>
+          <dd>Partidos concluidos en los que el equipo no permitió carreras al rival (CP = 0).</dd>
+        </div>
+        <div>
+          <dt>EXP-PCT (Expectativa Pitagórica)</dt>
+          <dd>Proyección sabermétrica de victorias esperadas (exponente de Bill James).<br>
+          <span class="formula">EXP-PCT = CA<sup>1.83</sup> / (CA<sup>1.83</sup> + CP<sup>1.83</sup>)</span></dd>
+        </div>
+        <div>
+          <dt>STRK / L10 / U5 (Tendencia)</dt>
+          <dd><strong>STRK:</strong> Racha activa indicando tipo y cantidad (ej. W3 para 3 victorias).<br>
+          <strong>L10 / U5:</strong> Récord en los últimos 10 y 5 partidos.</dd>
+        </div>
+      </dl>
+    </article>
+
+    <article class="glossary-module">
+      <h3>4. Análisis Global de la Liga</h3>
+      <dl>
+        <div>
+          <dt>Paridad Competitiva</dt>
+          <dd>Diferencia promedio de carreras por juego entre ganador y perdedor para determinar el nivel de equilibrio del torneo.</dd>
+        </div>
+        <div>
+          <dt>Factor Ofensivo</dt>
+          <dd>Promedio global de carreras combinadas por partido para clasificar si la liga es de "dominio de pitcheo" o "alto bateo".<br>
+          <span class="formula">Factor = Total CA Liga / Total JJ Liga</span></dd>
+        </div>
+      </dl>
+    </article>
+  </div>
+</section>
       </main>
     </div>
 
