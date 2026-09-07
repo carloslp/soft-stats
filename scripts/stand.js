@@ -13,12 +13,17 @@
   var emptyState = document.getElementById('state-empty');
   var tableWrapper = document.getElementById('table-wrapper');
   var summarySection = document.getElementById('league-summary');
+  var glossarySection = document.getElementById('metrics-glossary');
   var errorMessage = document.getElementById('error-message');
   var retryBtn = document.getElementById('retry-btn');
   var tableBody = document.getElementById('standings-body');
   var parityValue = document.getElementById('parity-value');
   var offenseValue = document.getElementById('offense-value');
   var offenseTag = document.getElementById('offense-tag');
+  var headerCells = Array.prototype.slice.call(document.querySelectorAll('thead th[data-sort-key]'));
+
+  var sortKey = null;
+  var sortDirection = 'desc';
 
   // NORMALIZACIÓN ABSOLUTA DE TEXTOS
   function cleanString(str) {
@@ -38,6 +43,7 @@
     emptyState.hidden = name !== 'empty';
     tableWrapper.hidden = name !== 'table';
     summarySection.hidden = name !== 'table';
+    glossarySection.hidden = name !== 'table';
   }
 
   function getSeason(row) {
@@ -191,8 +197,98 @@
     rows.forEach(function (r) {
       r.gb = !leader ? 0 : ((leader.g - r.g) + (r.p - leader.p)) / 2;
     });
+    rows.forEach(function (r, idx) {
+      r.rank = idx + 1;
+    });
 
     return { rows: rows, finals: finals };
+  }
+
+  function parseRecord(record) {
+    var match = /^(\d+)-(\d+)$/.exec(record || '');
+    if (!match) return { wins: 0, losses: 0, pct: 0 };
+    var wins = parseInt(match[1], 10);
+    var losses = parseInt(match[2], 10);
+    var total = wins + losses;
+    return { wins: wins, losses: losses, pct: total ? wins / total : 0 };
+  }
+
+  function parseStreak(streak) {
+    var match = /^([WL])(\d+)$/.exec(streak || '');
+    if (!match) return 0;
+    var amount = parseInt(match[2], 10) || 0;
+    return match[1] === 'W' ? amount : -amount;
+  }
+
+  function getDefaultDirectionForKey(key) {
+    return key === 'equipo' ? 'asc' : 'desc';
+  }
+
+  function compareValues(a, b, key) {
+    if (key === 'equipo') return a.equipo.localeCompare(b.equipo);
+    if (key === 'strk') return parseStreak(a.strk) - parseStreak(b.strk);
+    if (key === 'loc' || key === 'vis' || key === 'oneRun' || key === 'l10' || key === 'u5') {
+      var recA = parseRecord(a[key]);
+      var recB = parseRecord(b[key]);
+      if (recA.pct !== recB.pct) return recA.pct - recB.pct;
+      if (recA.wins !== recB.wins) return recA.wins - recB.wins;
+      return recA.losses - recB.losses;
+    }
+    return (Number(a[key]) || 0) - (Number(b[key]) || 0);
+  }
+
+  function getSortedRows(rows) {
+    if (!sortKey) return rows;
+    var sorted = rows.slice();
+    sorted.sort(function (a, b) {
+      var base = compareValues(a, b, sortKey);
+      if (base === 0) return a.rank - b.rank;
+      return sortDirection === 'asc' ? base : -base;
+    });
+    return sorted;
+  }
+
+  function updateSortHeaders() {
+    headerCells.forEach(function (th) {
+      var key = th.getAttribute('data-sort-key');
+      var btn = th.querySelector('.sort-btn');
+      if (!btn) return;
+      var active = key === sortKey;
+      var order = active ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none';
+      var symbol = active ? (sortDirection === 'asc' ? '▲' : '▼') : '↕';
+      th.setAttribute('aria-sort', order);
+      btn.querySelector('.sort-indicator').textContent = symbol;
+    });
+  }
+
+  function applySort(key) {
+    if (!key) return;
+    if (sortKey === key) {
+      sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortKey = key;
+      sortDirection = getDefaultDirectionForKey(key);
+    }
+    renderAll();
+  }
+
+  function initSortableHeaders() {
+    headerCells.forEach(function (th) {
+      var key = th.getAttribute('data-sort-key');
+      var label = (th.textContent || '').trim();
+      th.innerHTML = '<button type="button" class="sort-btn" aria-label="Ordenar por ' + escapeHtml(label) + '">' +
+        '<span>' + escapeHtml(label) + '</span><span class="sort-indicator" aria-hidden="true">↕</span></button>';
+      var btn = th.querySelector('.sort-btn');
+      btn.addEventListener('click', function () { applySort(key); });
+      btn.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter' || ev.key === ' ') {
+          ev.preventDefault();
+          applySort(key);
+        }
+      });
+      th.setAttribute('aria-sort', 'none');
+    });
+    updateSortHeaders();
   }
 
   function renderSummary(finalGames) {
@@ -293,8 +389,9 @@
       showState('empty');
       return;
     }
-    renderTable(result.rows);
+    renderTable(getSortedRows(result.rows));
     renderSummary(result.finals);
+    updateSortHeaders();
     showState('table');
   }
 
@@ -321,5 +418,6 @@
 
   retryBtn.addEventListener('click', fetchData);
 
+  initSortableHeaders();
   fetchData();
 })();
