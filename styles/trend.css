@@ -1,126 +1,18 @@
 /* =========================================================
    trend.css — Gráfica de Tendencia (Line Chart) page
-   Chicago Cubs theme: Navy / Red / Sky / Gold
+   Reset, variables, header, footer y dark-mode global viven
+   en styles/lms.css (sistema compartido LMS).
    ========================================================= */
 
-/* ── Variables (mirrored from scatter.css / avg.css) ── */
-:root {
-  --navy:      #003087;
-  --navy-dark: #001f5b;
-  --red:       #CC3433;
-  --red-dark:  #a82726;
-  --sky:       #ACC9E7;
-  --gold:      #F9C645;
-  --green:     #22c55e;
-  --white:     #ffffff;
-  --off-white: #f4f6fb;
-  --gray-100:  #eef1f7;
-  --gray-500:  #7a84a0;
-  --gray-700:  #3a4260;
-
-  --shadow-sm: 0 1px 3px rgba(0,48,135,.08);
-  --shadow:    0 4px 16px rgba(0,48,135,.12);
-  --shadow-lg: 0 8px 32px rgba(0,48,135,.18);
-
-  --radius:    12px;
-  --radius-sm: 8px;
-}
-
-/* ── Reset ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-[hidden] { display: none !important; }
-
-html { font-size: 16px; scroll-behavior: smooth; }
-
-body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: var(--off-white);
-  color: var(--gray-700);
-  line-height: 1.5;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* ── Accessibility ── */
-.sr-only {
-  position: absolute; width: 1px; height: 1px;
-  padding: 0; margin: -1px; overflow: hidden;
-  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-}
-
-/* =========================================================
-   Header
-   ========================================================= */
-.trend-header {
-  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
-  color: var(--white);
-  padding: 1rem 1.25rem;
-  box-shadow: var(--shadow);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.trend-header-top {
-  display: flex;
-  align-items: center;
-  gap: .875rem;
-  max-width: 960px;
-  margin: 0 auto;
-}
-
-.trend-back-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 50%;
-  background: rgba(255,255,255,.12);
-  color: var(--white);
-  text-decoration: none;
-  font-size: 1.125rem;
-  transition: background .2s;
-  flex-shrink: 0;
-}
-.trend-back-btn:hover,
-.trend-back-btn:focus-visible {
-  background: rgba(255,255,255,.24);
-  outline: 2px solid var(--gold);
-  outline-offset: 2px;
-}
-
-.trend-logo { border-radius: 50%; flex-shrink: 0; }
-
-.trend-header-text { flex: 1; min-width: 0; }
-.trend-header-title {
-  font-size: 1.05rem;
-  font-weight: 700;
-  line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.trend-header-subtitle {
-  font-size: .8rem;
-  color: var(--sky);
-  margin-top: .125rem;
-}
-
-/* =========================================================
-   Controls bar
-   ========================================================= */
+/* ---- Controls bar ---- */
 .trend-controls {
   background: var(--white);
-  border-bottom: 1px solid var(--gray-100);
-  padding: .75rem 1.25rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: .9rem 1.25rem;
 }
 
 .trend-controls-inner {
-  max-width: 960px;
-  margin: 0 auto;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -130,18 +22,20 @@ body {
 .ctrl-label {
   font-size: .8125rem;
   font-weight: 600;
-  color: var(--gray-700);
+  color: var(--gray-500);
   white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: .04em;
 }
 
 .ctrl-select {
-  font-family: inherit;
+  font-family: var(--font-body);
   font-size: .875rem;
-  color: var(--gray-700);
+  color: var(--text);
   background: var(--off-white);
-  border: 1.5px solid var(--gray-100);
+  border: 1.5px solid var(--gray-200);
   border-radius: var(--radius-sm);
-  padding: .375rem .625rem;
+  padding: .5rem .75rem;
   cursor: pointer;
   transition: border-color .2s;
   min-width: 180px;
@@ -158,9 +52,7 @@ body {
   gap: .5rem;
 }
 
-/* =========================================================
-   States (loading / error)
-   ========================================================= */
+/* ---- States (loading / error) ---- */
 .trend-state {
   display: flex;
   flex-direction: column;
@@ -183,18 +75,16 @@ body {
 .trend-spinner {
   width: 2.5rem;
   height: 2.5rem;
-  border: 3px solid var(--gray-100);
+  border: 3px solid var(--gray-200);
   border-top-color: var(--navy);
   border-radius: 50%;
-  animation: spin .75s linear infinite;
+  animation: spinTrend .75s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spinTrend { to { transform: rotate(360deg); } }
 
-/* =========================================================
-   Retry button
-   ========================================================= */
+/* ---- Retry button ---- */
 .trend-btn {
-  font-family: inherit;
+  font-family: var(--font-body);
   font-size: .875rem;
   font-weight: 600;
   padding: .5rem 1.25rem;
@@ -202,7 +92,7 @@ body {
   border-radius: var(--radius-sm);
   cursor: pointer;
   background: var(--navy);
-  color: var(--white);
+  color: #fff;
   transition: background .2s, transform .1s;
 }
 .trend-btn:hover { background: var(--navy-dark); }
@@ -213,11 +103,6 @@ body {
    Main content
    ========================================================= */
 .trend-main {
-  flex: 1;
-  padding: 1.25rem;
-  max-width: 960px;
-  width: 100%;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -234,7 +119,7 @@ body {
 
 .trend-summary-card {
   background: var(--white);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   padding: .875rem 1rem;
   display: flex;
@@ -264,8 +149,8 @@ body {
    ========================================================= */
 .chart-card {
   background: var(--white);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
   padding: 1.25rem;
   overflow: hidden;
 }
@@ -293,9 +178,7 @@ body {
   display: block;
 }
 
-/* =========================================================
-   Info bar
-   ========================================================= */
+/* ---- Info bar ---- */
 .trend-info {
   font-size: .8125rem;
   color: var(--gray-500);
@@ -311,7 +194,7 @@ body {
   flex-direction: column;
   gap: .625rem;
   background: var(--white);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   padding: 1rem 1.25rem;
 }
@@ -345,7 +228,7 @@ body {
 .legend-name {
   font-size: .875rem;
   font-weight: 700;
-  color: var(--gray-700);
+  color: var(--text);
   line-height: 1.2;
 }
 .legend-desc {
@@ -356,81 +239,9 @@ body {
 }
 
 /* =========================================================
-   Footer
-   ========================================================= */
-.trend-footer {
-  text-align: center;
-  font-size: .75rem;
-  color: var(--gray-500);
-  padding: 1.25rem;
-  border-top: 1px solid var(--gray-100);
-  background: var(--white);
-}
-
-/* =========================================================
    Responsive
    ========================================================= */
 @media (max-width: 640px) {
   .trend-summary { grid-template-columns: repeat(2, 1fr); }
-
-  .trend-header-title { font-size: .95rem; }
-
-  .trend-controls-inner { gap: .5rem; }
-
   .ctrl-select { min-width: 0; flex: 1; }
-}
-
-@media (max-width: 400px) {
-  .trend-summary { grid-template-columns: 1fr 1fr; }
-}
-
-/* =========================================================
-   Dark Mode
-   ========================================================= */
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --off-white: #0f172a;
-    --white:     #1e293b;
-    --gray-100:  #243244;
-    --gray-200:  #334155;
-    --gray-500:  #94a3b8;
-    --gray-700:  #cbd5e1;
-    color-scheme: dark;
-  }
-
-  /* Restore true-white text on always-dark surfaces */
-  .trend-header,
-  .trend-back-btn,
-  .trend-btn { color: #ffffff; }
-}
-
-html.dark {
-  --off-white: #0f172a;
-  --white:     #1e293b;
-  --gray-100:  #243244;
-  --gray-200:  #334155;
-  --gray-500:  #94a3b8;
-  --gray-700:  #cbd5e1;
-  color-scheme: dark;
-}
-
-html.dark .trend-header,
-html.dark .trend-back-btn,
-html.dark .trend-btn { color: #ffffff; }
-
-html.light {
-  --off-white: #f4f6fb;
-  --white:     #ffffff;
-  --gray-100:  #eef1f7;
-  --gray-200:  #d5daea;
-  --gray-500:  #7a84a0;
-  --gray-700:  #3a4260;
-  color-scheme: light;
-}
-
-/* Dark mode toggle button */
-#dark-mode-toggle {
-  border: none;
-  cursor: pointer;
 }

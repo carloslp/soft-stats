@@ -3,12 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cachorros de Sinaloa — Seguimiento de Pagos</title>
+    <title>Aula Cachorros — Seguimiento de Pagos</title>
     <meta name="description" content="Seguimiento de pagos de inscripción y juegos por jugador." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles/lms.css" />
     <link rel="stylesheet" href="styles/pagos.css" />
+    <!-- Anti-flash: apply saved dark/light preference before first paint -->
     <script>
       (function () {
         var t = localStorage.getItem('theme');
@@ -22,55 +24,154 @@
     </script>
   </head>
   <body>
-    <header class="pay-header">
-      <div class="pay-header-top">
-        <a href="index.html" class="pay-back-btn" aria-label="Regresar a estadísticas">&#8592;</a>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Chicago_Cubs_Cap_Insignia.svg" alt="Cachorros de Sinaloa logo" class="pay-logo" width="44" height="44" />
-        <div class="pay-header-text">
-          <h1 class="pay-header-title">Cachorros de Sinaloa</h1>
-          <p class="pay-header-subtitle">Seguimiento de pagos</p>
-        </div>
-        <button id="dark-mode-toggle" class="pay-back-btn" type="button" aria-label="Cambiar a modo oscuro" title="Modo oscuro" style="margin-left:auto;">
-          <svg class="dm-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="18" height="18"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <svg class="dm-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="18" height="18" hidden><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    <!-- ===== HEADER DE PLATAFORMA ===== -->
+    <header class="lms-header">
+      <div class="lms-header-inner">
+        <button id="lms-sidebar-toggle" class="lms-sidebar-toggle" type="button" aria-label="Abrir índice del curso" aria-expanded="false" aria-controls="lms-sidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
         </button>
+        <a class="lms-brand" href="index.html">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Chicago_Cubs_Cap_Insignia.svg" alt="Cachorros de Sinaloa logo" class="lms-logo" width="44" height="44" />
+          <span class="lms-brand-text">
+            <span class="lms-brand-name">Cachorros de Sinaloa</span>
+            <span class="lms-brand-sub">Estadísticas de Softbol</span>
+          </span>
+        </a>
+        <div class="lms-header-actions">
+          <nav class="lms-social" aria-label="Redes sociales">
+            <a href="https://www.instagram.com/cachorrosdesin" target="_blank" rel="noopener noreferrer" class="lms-social-link" aria-label="Instagram" title="Instagram">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="https://kick.com/cachorrosdesin" target="_blank" rel="noopener noreferrer" class="lms-social-link" aria-label="kick" title="kick">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+          </nav>
+          <button id="dark-mode-toggle" class="lms-dark-toggle" type="button" aria-label="Cambiar a modo oscuro" title="Modo oscuro">
+            <svg class="dm-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="18" height="18"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="dm-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="18" height="18" hidden><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+        </div>
       </div>
     </header>
 
-    <main class="pay-main">
-      <section class="pay-state pay-state--loading" id="pay-loading" role="status" aria-live="polite">
-        <div class="pay-spinner" aria-hidden="true"></div>
-        <p>Cargando pagos...</p>
-      </section>
+    <nav class="lms-nav-bar" id="lms-nav-bar">
+      <div class="lms-nav-bar-inner">
+        <a href="index.html" class="lms-nav-link">Dashboard</a>
+        <a href="avg.html" class="lms-nav-link">Promedios</a>
+        <a href="stand.html" class="lms-nav-link">Standings</a>
+        <a href="scatter.html" class="lms-nav-link">Dispersión</a>
+        <a href="trend.html" class="lms-nav-link">Tendencia</a>
+        <a href="tombola.html" class="lms-nav-link">Tómbola</a>
+        <a href="pagos.html" class="lms-nav-link lms-nav-link--active" aria-current="page">Pagos</a>
+      </div>
+    </nav>
 
-      <section class="pay-state pay-state--error" id="pay-error" role="alert" aria-live="assertive" hidden>
-        <p id="pay-error-msg">Error al cargar los datos de pagos.</p>
-        <button id="pay-retry-btn" class="pay-btn" type="button">Reintentar</button>
-      </section>
+    <!-- ===== CUERPO: SIDEBAR + CONTENIDO ===== -->
+    <div class="lms-body">
+      <!-- Sidebar: índice del curso -->
+      <aside class="lms-sidebar" id="lms-sidebar" aria-label="Índice del curso">
+        <div class="lms-sidebar-head">Índice del curso</div>
+        <div class="lms-sidebar-sub">Temporada · 7 módulos</div>
+        <nav class="lms-sidebar-nav" aria-label="Módulos del curso">
+          <a href="index.html" class="lms-module"><span class="lms-module-num">01</span><span class="lms-module-title">Aula — Dashboard</span></a>
+          <a href="avg.html" class="lms-module"><span class="lms-module-num">02</span><span class="lms-module-title">Promedios de Bateo</span></a>
+          <a href="stand.html" class="lms-module"><span class="lms-module-num">03</span><span class="lms-module-title">Standings</span></a>
+          <a href="scatter.html" class="lms-module"><span class="lms-module-num">04</span><span class="lms-module-title">Dispersión</span></a>
+          <a href="trend.html" class="lms-module"><span class="lms-module-num">05</span><span class="lms-module-title">Tendencia</span></a>
+          <a href="tombola.html" class="lms-module"><span class="lms-module-num">06</span><span class="lms-module-title">Tómbola</span></a>
+          <a href="pagos.html" class="lms-module lms-module--active" aria-current="page"><span class="lms-module-num">07</span><span class="lms-module-title">Pagos</span></a>
+        </nav>
+      </aside>
 
-      <section id="pay-content" hidden>
-        <div class="pay-toolbar">
-          <label class="pay-filter-label">
-            <input type="checkbox" id="pay-filter-unpaid" />
-            Solo sin pagar
-          </label>
-          <button id="pay-copy-btn" class="pay-btn" type="button">&#128203; Copiar sin pagar</button>
-          <span id="pay-copy-feedback" class="pay-copy-feedback" hidden>¡Copiado!</span>
+      <div class="lms-content">
+        <div class="lms-main">
+          <!-- Encabezado de unidad -->
+          <section class="lms-unit">
+            <span class="lms-unit-module">Administración</span>
+            <h1 class="lms-unit-title">Seguimiento de Pagos</h1>
+            <p class="lms-unit-desc">Control de pagos de inscripción y por juego de cada integrante del equipo.</p>
+          </section>
+
+          <main class="pay-main">
+            <section class="pay-state pay-state--loading" id="pay-loading" role="status" aria-live="polite">
+              <div class="pay-spinner" aria-hidden="true"></div>
+              <p>Cargando pagos...</p>
+            </section>
+
+            <section class="pay-state pay-state--error" id="pay-error" role="alert" aria-live="assertive" hidden>
+              <p id="pay-error-msg">Error al cargar los datos de pagos.</p>
+              <button id="pay-retry-btn" class="pay-btn" type="button">Reintentar</button>
+            </section>
+
+            <section id="pay-content" hidden>
+              <div class="pay-toolbar">
+                <label class="pay-filter-label">
+                  <input type="checkbox" id="pay-filter-unpaid" />
+                  Solo sin pagar
+                </label>
+                <button id="pay-copy-btn" class="pay-btn" type="button">&#128203; Copiar sin pagar</button>
+                <span id="pay-copy-feedback" class="pay-copy-feedback" hidden>¡Copiado!</span>
+              </div>
+              <div class="pay-table-wrap" role="region" aria-label="Tabla de seguimiento de pagos" tabindex="0">
+                <table class="pay-table" id="pay-table">
+                  <thead id="pay-thead"></thead>
+                  <tbody id="pay-tbody"></tbody>
+                </table>
+              </div>
+            </section>
+          </main>
         </div>
-        <div class="pay-table-wrap" role="region" aria-label="Tabla de seguimiento de pagos" tabindex="0">
-          <table class="pay-table" id="pay-table">
-            <thead id="pay-thead"></thead>
-            <tbody id="pay-tbody"></tbody>
-          </table>
-        </div>
-      </section>
-    </main>
 
-    <footer class="pay-footer">
-      <p>&copy; <span id="pay-footer-year"></span> Cachorros de Sinaloa.</p>
-    </footer>
+        <!-- ===== FOOTER ===== -->
+        <footer class="lms-footer">
+          <div class="lms-footer-inner">
+            <div class="lms-footer-brand">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Chicago_Cubs_Cap_Insignia.svg" alt="Cachorros logo" class="lms-footer-logo" width="48" height="48" />
+              <div class="lms-footer-brand-text">
+                Cachorros de Sinaloa
+                <span class="lms-footer-brand-sub">Estadísticas de Softbol</span>
+              </div>
+            </div>
+            <nav class="lms-footer-nav">
+              <div class="lms-footer-col">
+                <h4>Estadísticas</h4>
+                <ul>
+                  <li><a href="index.html">Dashboard</a></li>
+                  <li><a href="avg.html">Promedios</a></li>
+                  <li><a href="stand.html">Standings</a></li>
+                </ul>
+              </div>
+              <div class="lms-footer-col">
+                <h4>Análisis</h4>
+                <ul>
+                  <li><a href="scatter.html">Dispersión</a></li>
+                  <li><a href="trend.html">Tendencia</a></li>
+                  <li><a href="tombola.html">Tómbola</a></li>
+                  <li><a href="pagos.html">Pagos</a></li>
+                </ul>
+              </div>
+              <div class="lms-footer-col">
+                <h4>Social</h4>
+                <div class="lms-footer-social">
+                  <a href="https://www.instagram.com/cachorrosdesin" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                  </a>
+                  <a href="https://kick.com/cachorrosdesin" target="_blank" rel="noopener noreferrer" aria-label="Kick">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                  </a>
+                </div>
+              </div>
+            </nav>
+          </div>
+          <div class="lms-footer-bottom">
+            &copy; <span id="pay-footer-year">2026</span> Cachorros de Sinaloa. Hecho con ❤️ para la comunidad softbolera.
+          </div>
+        </footer>
+      </div>
+    </div>
 
     <script src="scripts/pagos.js"></script>
     <script src="scripts/dark-mode.js"></script>
+    <script src="scripts/lms-shell.js"></script>
   </body>
 </html>

@@ -1,57 +1,25 @@
+/* =========================================================
+   tombola.css — Lista y Tómbola de Posiciones page
+   Reset, variables, header, footer y dark-mode global viven
+   en styles/lms.css (sistema compartido LMS).
+   ========================================================= */
+
 :root {
-  --tb-navy: #003087;
-  --tb-red: #CC3433;
-  --tb-sky: #ACC9E7;
+  --tb-navy: #002B49;
+  --tb-red: #C8102E;
+  --tb-sky: #2A7DE1;
   --tb-gold: #F9C645;
   --tb-white: #FFFFFF;
-  --tb-bg: #f6f8fc;
-  --tb-border: #d9e1ef;
-  --tb-text: #1d2b44;
+  --tb-bg: #F4F6F8;
+  --tb-border: #E2E8F0;
+  --tb-text: #0F172A;
 }
 
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: var(--tb-bg);
-  color: var(--tb-text);
-}
-
-.tb-header {
-  background: linear-gradient(120deg, var(--tb-navy), #0a4fa8);
-  color: var(--tb-white);
-  padding: .9rem 1rem;
-}
-
-.tb-header-top {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-}
-
-.tb-back-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
-  color: var(--tb-white);
-  text-decoration: none;
-  border: 1px solid rgba(255,255,255,.35);
-}
-
-.tb-logo { border-radius: 50%; background: #fff; }
-.tb-header-title { margin: 0; font-size: 1.05rem; }
-.tb-header-subtitle { margin: .1rem 0 0; font-size: .82rem; opacity: .9; }
-
+/* ---- Main ---- */
 .tb-main {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .tb-layout {
@@ -87,6 +55,7 @@ body {
   font-weight: 700;
   padding: .55rem .85rem;
   cursor: pointer;
+  font-family: var(--font-body);
 }
 
 .tb-btn--light {
@@ -141,16 +110,10 @@ body {
   border-top-color: var(--tb-red);
   border-radius: 50%;
   margin: 0 auto .8rem;
-  animation: spin 1s linear infinite;
+  animation: spinTb 1s linear infinite;
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.tb-footer {
-  padding: .8rem 1rem 1.4rem;
-  text-align: center;
-  color: #6a7c9f;
-}
+@keyframes spinTb { to { transform: rotate(360deg); } }
 
 .tb-lineup-mode {
   display: flex;
@@ -194,38 +157,8 @@ body {
 }
 
 /* =========================================================
-   Dark Mode
+   Dark Mode (contenido)
    ========================================================= */
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --tb-bg:     #0f172a;
-    --tb-white:  #1e293b;
-    --tb-border: #334155;
-    --tb-text:   #e2e8f0;
-    color-scheme: dark;
-  }
-
-  .tb-muted   { color: #94a3b8; }
-  .tb-empty   { color: #94a3b8; }
-  .tb-footer  { color: #94a3b8; }
-  .tb-spinner { border-color: #334155; }
-
-  /* Restore true-white text on always-dark surfaces */
-  .tb-header,
-  .tb-back-btn,
-  .tb-btn { color: #ffffff; }
-
-  /* Light button variant: swap to dark-mode outline style */
-  .tb-btn--light {
-    background: transparent;
-    color: #cbd5e1;
-    border: 1px solid #334155;
-  }
-
-  .tb-role--contacto { background: #1e3a5f; color: #93c5fd; }
-  .tb-role--poder    { background: #4c1d1d; color: #fca5a5; }
-}
 
 html.dark {
   --tb-bg:     #0f172a;
@@ -237,11 +170,8 @@ html.dark {
 
 html.dark .tb-muted   { color: #94a3b8; }
 html.dark .tb-empty   { color: #94a3b8; }
-html.dark .tb-footer  { color: #94a3b8; }
 html.dark .tb-spinner { border-color: #334155; }
 
-html.dark .tb-header,
-html.dark .tb-back-btn,
 html.dark .tb-btn { color: #ffffff; }
 
 html.dark .tb-btn--light {
@@ -259,10 +189,4 @@ html.light {
   --tb-border: #d9e1ef;
   --tb-text:   #1d2b44;
   color-scheme: light;
-}
-
-/* Dark mode toggle button */
-#dark-mode-toggle {
-  border: none;
-  cursor: pointer;
 }

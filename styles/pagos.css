@@ -1,56 +1,24 @@
+/* =========================================================
+   pagos.css — Seguimiento de Pagos page
+   Reset, variables, header, footer y dark-mode global viven
+   en styles/lms.css (sistema compartido LMS).
+   ========================================================= */
+
 :root {
-  --pay-navy: #003087;
-  --pay-red: #CC3433;
+  --pay-navy: #002B49;
+  --pay-red: #C8102E;
   --pay-white: #FFFFFF;
-  --pay-bg: #f6f8fc;
-  --pay-border: #d9e1ef;
-  --pay-text: #1d2b44;
-  --pay-muted: #5a6c8f;
+  --pay-bg: #F4F6F8;
+  --pay-border: #E2E8F0;
+  --pay-text: #0F172A;
+  --pay-muted: #64748B;
 }
 
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: var(--pay-bg);
-  color: var(--pay-text);
-}
-
-.pay-header {
-  background: linear-gradient(120deg, var(--pay-navy), #0a4fa8);
-  color: var(--pay-white);
-  padding: .9rem 1rem;
-}
-
-.pay-header-top {
-  max-width: 1180px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-}
-
-.pay-back-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
-  color: var(--pay-white);
-  text-decoration: none;
-  border: 1px solid rgba(255,255,255,.35);
-}
-
-.pay-logo { border-radius: 50%; background: #fff; }
-.pay-header-title { margin: 0; font-size: 1.05rem; }
-.pay-header-subtitle { margin: .1rem 0 0; font-size: .82rem; opacity: .9; }
-
+/* ---- Main ---- */
 .pay-main {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .pay-state {
@@ -68,10 +36,10 @@ body {
   border-top-color: var(--pay-red);
   border-radius: 50%;
   margin: 0 auto .8rem;
-  animation: spin 1s linear infinite;
+  animation: spinPay 1s linear infinite;
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spinPay { to { transform: rotate(360deg); } }
 
 .pay-btn {
   border: 0;
@@ -81,6 +49,7 @@ body {
   font-weight: 700;
   padding: .55rem .85rem;
   cursor: pointer;
+  font-family: var(--font-body);
 }
 
 .pay-table-wrap {
@@ -125,12 +94,6 @@ body {
   background: #f9fbff;
 }
 
-.pay-footer {
-  padding: .8rem 1rem 1.4rem;
-  text-align: center;
-  color: var(--pay-muted);
-}
-
 .pay-toolbar {
   display: flex;
   align-items: center;
@@ -167,24 +130,9 @@ body {
   font-weight: 700;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --pay-bg: #0f172a;
-    --pay-white: #1e293b;
-    --pay-border: #334155;
-    --pay-text: #e2e8f0;
-    --pay-muted: #94a3b8;
-    color-scheme: dark;
-  }
-
-  .pay-header,
-  .pay-back-btn,
-  .pay-btn { color: #ffffff; }
-
-  .pay-spinner { border-color: #334155; }
-  .pay-table th { background: #162034; }
-  .pay-row--summary td { background: #1a263d; }
-}
+/* =========================================================
+   Dark Mode (contenido)
+   ========================================================= */
 
 html.dark {
   --pay-bg: #0f172a;
@@ -195,13 +143,10 @@ html.dark {
   color-scheme: dark;
 }
 
-html.dark .pay-header,
-html.dark .pay-back-btn,
 html.dark .pay-btn { color: #ffffff; }
 html.dark .pay-spinner { border-color: #334155; }
 html.dark .pay-table th { background: #162034; }
 html.dark .pay-row--summary td { background: #1a263d; }
-
 html.dark .pay-copy-feedback { color: #4ade80; }
 
 html.light {
@@ -211,9 +156,4 @@ html.light {
   --pay-text: #1d2b44;
   --pay-muted: #5a6c8f;
   color-scheme: light;
-}
-
-#dark-mode-toggle {
-  border: none;
-  cursor: pointer;
 }

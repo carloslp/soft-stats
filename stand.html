@@ -3,12 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cachorros de Sinaloa — Standings</title>
+    <title>Aula Cachorros — Standings</title>
     <meta name="description" content="Standings por temporada con métricas de rendimiento y sabermetría." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles/lms.css" />
     <link rel="stylesheet" href="styles/stand.css" />
+    <!-- Anti-flash: apply saved dark/light preference before first paint -->
     <script>
       (function () {
         var t = localStorage.getItem('theme');
@@ -22,152 +24,253 @@
     </script>
   </head>
   <body>
-    <div class="stand-page">
-      <header class="stand-header">
-        <a href="index.html" class="stand-back" aria-label="Regresar">&#8592;</a>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Chicago_Cubs_Cap_Insignia.svg" alt="Cachorros de Sinaloa logo" class="stand-logo" width="44" height="44" />
-        <div>
-          <h1>Standings</h1>
-          <p>Clasificación por temporada</p>
-        </div>
-        <button id="dark-mode-toggle" class="stand-back" type="button" aria-label="Cambiar a modo oscuro" title="Modo oscuro">
-          <svg class="dm-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="18" height="18"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <svg class="dm-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="18" height="18" hidden><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    <!-- ===== HEADER DE PLATAFORMA ===== -->
+    <header class="lms-header">
+      <div class="lms-header-inner">
+        <button id="lms-sidebar-toggle" class="lms-sidebar-toggle" type="button" aria-label="Abrir índice del curso" aria-expanded="false" aria-controls="lms-sidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
         </button>
-      </header>
+        <a class="lms-brand" href="index.html">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Chicago_Cubs_Cap_Insignia.svg" alt="Cachorros de Sinaloa logo" class="lms-logo" width="44" height="44" />
+          <span class="lms-brand-text">
+            <span class="lms-brand-name">Cachorros de Sinaloa</span>
+            <span class="lms-brand-sub">Estadísticas de Softbol</span>
+          </span>
+        </a>
+        <div class="lms-header-actions">
+          <nav class="lms-social" aria-label="Redes sociales">
+            <a href="https://www.instagram.com/cachorrosdesin" target="_blank" rel="noopener noreferrer" class="lms-social-link" aria-label="Instagram" title="Instagram">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="https://kick.com/cachorrosdesin" target="_blank" rel="noopener noreferrer" class="lms-social-link" aria-label="kick" title="kick">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+          </nav>
+          <button id="dark-mode-toggle" class="lms-dark-toggle" type="button" aria-label="Cambiar a modo oscuro" title="Modo oscuro">
+            <svg class="dm-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="18" height="18"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="dm-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="18" height="18" hidden><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
 
-      <main>
-        <div class="controls">
-          <label for="season-select">Temporada:</label>
-          <select id="season-select" aria-label="Seleccionar temporada"></select>
+    <nav class="lms-nav-bar" id="lms-nav-bar">
+      <div class="lms-nav-bar-inner">
+        <a href="index.html" class="lms-nav-link">Dashboard</a>
+        <a href="avg.html" class="lms-nav-link">Promedios</a>
+        <a href="stand.html" class="lms-nav-link lms-nav-link--active" aria-current="page">Standings</a>
+        <a href="scatter.html" class="lms-nav-link">Dispersión</a>
+        <a href="trend.html" class="lms-nav-link">Tendencia</a>
+        <a href="tombola.html" class="lms-nav-link">Tómbola</a>
+        <a href="pagos.html" class="lms-nav-link">Pagos</a>
+      </div>
+    </nav>
+
+    <!-- ===== CUERPO: SIDEBAR + CONTENIDO ===== -->
+    <div class="lms-body">
+      <!-- Sidebar: índice del curso -->
+      <aside class="lms-sidebar" id="lms-sidebar" aria-label="Índice del curso">
+        <div class="lms-sidebar-head">Índice del curso</div>
+        <div class="lms-sidebar-sub">Temporada · 7 módulos</div>
+        <nav class="lms-sidebar-nav" aria-label="Módulos del curso">
+          <a href="index.html" class="lms-module"><span class="lms-module-num">01</span><span class="lms-module-title">Aula — Dashboard</span></a>
+          <a href="avg.html" class="lms-module"><span class="lms-module-num">02</span><span class="lms-module-title">Promedios de Bateo</span></a>
+          <a href="stand.html" class="lms-module lms-module--active" aria-current="page"><span class="lms-module-num">03</span><span class="lms-module-title">Standings</span></a>
+          <a href="scatter.html" class="lms-module"><span class="lms-module-num">04</span><span class="lms-module-title">Dispersión</span></a>
+          <a href="trend.html" class="lms-module"><span class="lms-module-num">05</span><span class="lms-module-title">Tendencia</span></a>
+          <a href="tombola.html" class="lms-module"><span class="lms-module-num">06</span><span class="lms-module-title">Tómbola</span></a>
+          <a href="pagos.html" class="lms-module"><span class="lms-module-num">07</span><span class="lms-module-title">Pagos</span></a>
+        </nav>
+      </aside>
+
+      <div class="lms-content">
+        <div class="lms-main">
+          <!-- Encabezado de unidad -->
+          <section class="lms-unit">
+            <span class="lms-unit-module">Clasificación</span>
+            <h1 class="lms-unit-title">Standings</h1>
+            <p class="lms-unit-desc">Clasificación por temporada, métricas de rendimiento y sabermetría del torneo.</p>
+          </section>
+
+          <div class="controls">
+            <label for="season-select">Temporada:</label>
+            <select id="season-select" aria-label="Seleccionar temporada"></select>
+          </div>
+
+          <section id="state-loading" class="state" role="status" aria-live="polite">Cargando standings…</section>
+          <section id="state-error" class="state state-error" role="alert" hidden>
+            <p id="error-message">Error al cargar los datos.</p>
+            <button id="retry-btn" type="button">Reintentar</button>
+          </section>
+          <section id="state-empty" class="state" hidden>No hay juegos finalizados para esta temporada.</section>
+
+          <section id="league-summary" class="summary" hidden>
+            <article class="card">
+              <span class="label">Paridad competitiva</span>
+              <strong id="parity-value">—</strong>
+            </article>
+            <article class="card">
+              <span class="label">Factor ofensivo</span>
+              <strong id="offense-value">—</strong>
+              <small id="offense-tag">—</small>
+            </article>
+          </section>
+
+          <div class="table-wrap" id="table-wrapper" hidden>
+            <table aria-label="Tabla de standings">
+              <thead>
+                <tr>
+                  <th data-sort-key="equipo">Equipo</th><th data-sort-key="jj">JJ</th><th data-sort-key="g">G</th><th data-sort-key="p">P</th><th data-sort-key="pct">PCT</th><th data-sort-key="gb">GB</th><th data-sort-key="ca">CA</th><th data-sort-key="cp">CP</th><th data-sort-key="dif">DIF</th><th data-sort-key="rpg">C/J</th><th data-sort-key="rapg">CP/J</th><th data-sort-key="loc">LOC</th><th data-sort-key="vis">VIS</th><th data-sort-key="oneRun">1-RUN</th><th data-sort-key="sho">SHO</th><th data-sort-key="expPct">EXP-PCT</th><th data-sort-key="strk">STRK</th><th data-sort-key="l10">L10</th><th data-sort-key="u5">U5</th>
+                </tr>
+              </thead>
+              <tbody id="standings-body"></tbody>
+            </table>
+          </div>
+
+          <section id="metrics-glossary" class="glossary" hidden>
+            <h2>Glosario de Métricas y Sabermetría</h2>
+            <p class="glossary-intro">El sistema calcula y consolida las métricas de rendimiento bajo el modelo estandarizado de Major League Baseball (MLB).</p>
+
+            <div class="glossary-grid">
+              <article class="glossary-module">
+                <h3>1. Clasificación General</h3>
+                <dl>
+                  <div>
+                    <dt>JJ (Juegos Jugados)</dt>
+                    <dd>Total de partidos oficializados por equipo (G + P).</dd>
+                  </div>
+                  <div>
+                    <dt>G / P (Ganados / Perdidos)</dt>
+                    <dd>Total acumulado de victorias y derrotas.</dd>
+                  </div>
+                  <div>
+                    <dt>PCT (Porcentaje de Victorias)</dt>
+                    <dd>Rendimiento general expresado a tres decimales.<br>
+                    <span class="formula">PCT = G / JJ</span></dd>
+                  </div>
+                  <div>
+                    <dt>GB (Juegos de Ventaja)</dt>
+                    <dd>Distancia de cada equipo respecto al líder de la tabla.<br>
+                    <span class="formula">GB = ((G<sub>líder</sub> - G) + (P - P<sub>líder</sub>)) / 2</span></dd>
+                  </div>
+                </dl>
+              </article>
+
+              <article class="glossary-module">
+                <h3>2. Rendimiento Ofensivo y Defensivo</h3>
+                <dl>
+                  <div>
+                    <dt>CA / CP (Carreras)</dt>
+                    <dd>Total de carreras anotadas a favor (CA) y carreras permitidas en contra (CP).</dd>
+                  </div>
+                  <div>
+                    <dt>DIF (Diferencia de Carreras)</dt>
+                    <dd>Métrica principal de desempate.<br>
+                    <span class="formula">DIF = CA - CP</span></dd>
+                  </div>
+                  <div>
+                    <dt>C/J y CP/J (Promedios)</dt>
+                    <dd>Promedios de anotación y contención por partido.<br>
+                    <span class="formula">C/J = CA / JJ</span> y <span class="formula">CP/J = CP / JJ</span></dd>
+                  </div>
+                </dl>
+              </article>
+
+              <article class="glossary-module">
+                <h3>3. Situacionales y Sabermetría</h3>
+                <dl>
+                  <div>
+                    <dt>LOC / VIS (Récord de Sede)</dt>
+                    <dd>Balance de victorias y derrotas según la condición de local o visitante.</dd>
+                  </div>
+                  <div>
+                    <dt>1-RUN (Bajo Presión)</dt>
+                    <dd>Récord de victorias y derrotas en encuentros cuya diferencia final es de exactamente 1 carrera.</dd>
+                  </div>
+                  <div>
+                    <dt>SHO (Blanqueadas)</dt>
+                    <dd>Partidos concluidos en los que el equipo no permitió carreras al rival (CP = 0).</dd>
+                  </div>
+                  <div>
+                    <dt>EXP-PCT (Expectativa Pitagórica)</dt>
+                    <dd>Proyección sabermétrica de victorias esperadas (exponente de Bill James).<br>
+                    <span class="formula">EXP-PCT = CA<sup>1.83</sup> / (CA<sup>1.83</sup> + CP<sup>1.83</sup>)</span></dd>
+                  </div>
+                  <div>
+                    <dt>STRK / L10 / U5 (Tendencia)</dt>
+                    <dd><strong>STRK:</strong> Racha activa indicando tipo y cantidad (ej. W3 para 3 victorias).<br>
+                    <strong>L10 / U5:</strong> Récord en los últimos 10 y 5 partidos.</dd>
+                  </div>
+                </dl>
+              </article>
+
+              <article class="glossary-module">
+                <h3>4. Análisis Global de la Liga</h3>
+                <dl>
+                  <div>
+                    <dt>Paridad Competitiva</dt>
+                    <dd>Diferencia promedio de carreras por juego entre ganador y perdedor para determinar el nivel de equilibrio del torneo.</dd>
+                  </div>
+                  <div>
+                    <dt>Factor Ofensivo</dt>
+                    <dd>Promedio global de carreras combinadas por partido para clasificar si la liga es de "dominio de pitcheo" o "alto bateo".<br>
+                    <span class="formula">Factor = Total CA Liga / Total JJ Liga</span></dd>
+                  </div>
+                </dl>
+              </article>
+            </div>
+          </section>
         </div>
 
-        <section id="state-loading" class="state" role="status" aria-live="polite">Cargando standings…</section>
-        <section id="state-error" class="state state-error" role="alert" hidden>
-          <p id="error-message">Error al cargar los datos.</p>
-          <button id="retry-btn" type="button">Reintentar</button>
-        </section>
-        <section id="state-empty" class="state" hidden>No hay juegos finalizados para esta temporada.</section>
-
-        <section id="league-summary" class="summary" hidden>
-          <article class="card">
-            <span class="label">Paridad competitiva</span>
-            <strong id="parity-value">—</strong>
-          </article>
-          <article class="card">
-            <span class="label">Factor ofensivo</span>
-            <strong id="offense-value">—</strong>
-            <small id="offense-tag">—</small>
-          </article>
-        </section>
-
-        <div class="table-wrap" id="table-wrapper" hidden>
-          <table aria-label="Tabla de standings">
-            <thead>
-              <tr>
-                <th data-sort-key="equipo">Equipo</th><th data-sort-key="jj">JJ</th><th data-sort-key="g">G</th><th data-sort-key="p">P</th><th data-sort-key="pct">PCT</th><th data-sort-key="gb">GB</th><th data-sort-key="ca">CA</th><th data-sort-key="cp">CP</th><th data-sort-key="dif">DIF</th><th data-sort-key="rpg">C/J</th><th data-sort-key="rapg">CP/J</th><th data-sort-key="loc">LOC</th><th data-sort-key="vis">VIS</th><th data-sort-key="oneRun">1-RUN</th><th data-sort-key="sho">SHO</th><th data-sort-key="expPct">EXP-PCT</th><th data-sort-key="strk">STRK</th><th data-sort-key="l10">L10</th><th data-sort-key="u5">U5</th>
-              </tr>
-            </thead>
-            <tbody id="standings-body"></tbody>
-          </table>
-        </div>
-        <section id="metrics-glossary" class="glossary" hidden>
-  <h2>Glosario de Métricas y Sabermetría</h2>
-  <p class="glossary-intro">El sistema calcula y consolida las métricas de rendimiento bajo el modelo estandarizado de Major League Baseball (MLB).</p>
-
-  <div class="glossary-grid">
-    <article class="glossary-module">
-      <h3>1. Clasificación General</h3>
-      <dl>
-        <div>
-          <dt>JJ (Juegos Jugados)</dt>
-          <dd>Total de partidos oficializados por equipo (G + P).</dd>
-        </div>
-        <div>
-          <dt>G / P (Ganados / Perdidos)</dt>
-          <dd>Total acumulado de victorias y derrotas.</dd>
-        </div>
-        <div>
-          <dt>PCT (Porcentaje de Victorias)</dt>
-          <dd>Rendimiento general expresado a tres decimales.<br>
-          <span class="formula">PCT = G / JJ</span></dd>
-        </div>
-        <div>
-          <dt>GB (Juegos de Ventaja)</dt>
-          <dd>Distancia de cada equipo respecto al líder de la tabla.<br>
-          <span class="formula">GB = ((G<sub>líder</sub> - G) + (P - P<sub>líder</sub>)) / 2</span></dd>
-        </div>
-      </dl>
-    </article>
-
-    <article class="glossary-module">
-      <h3>2. Rendimiento Ofensivo y Defensivo</h3>
-      <dl>
-        <div>
-          <dt>CA / CP (Carreras)</dt>
-          <dd>Total de carreras anotadas a favor (CA) y carreras permitidas en contra (CP).</dd>
-        </div>
-        <div>
-          <dt>DIF (Diferencia de Carreras)</dt>
-          <dd>Métrica principal de desempate.<br>
-          <span class="formula">DIF = CA - CP</span></dd>
-        </div>
-        <div>
-          <dt>C/J y CP/J (Promedios)</dt>
-          <dd>Promedios de anotación y contención por partido.<br>
-          <span class="formula">C/J = CA / JJ</span> y <span class="formula">CP/J = CP / JJ</span></dd>
-        </div>
-      </dl>
-    </article>
-
-    <article class="glossary-module">
-      <h3>3. Situacionales y Sabermetría</h3>
-      <dl>
-        <div>
-          <dt>LOC / VIS (Récord de Sede)</dt>
-          <dd>Balance de victorias y derrotas según la condición de local o visitante.</dd>
-        </div>
-        <div>
-          <dt>1-RUN (Bajo Presión)</dt>
-          <dd>Récord de victorias y derrotas en encuentros cuya diferencia final es de exactamente 1 carrera.</dd>
-        </div>
-        <div>
-          <dt>SHO (Blanqueadas)</dt>
-          <dd>Partidos concluidos en los que el equipo no permitió carreras al rival (CP = 0).</dd>
-        </div>
-        <div>
-          <dt>EXP-PCT (Expectativa Pitagórica)</dt>
-          <dd>Proyección sabermétrica de victorias esperadas (exponente de Bill James).<br>
-          <span class="formula">EXP-PCT = CA<sup>1.83</sup> / (CA<sup>1.83</sup> + CP<sup>1.83</sup>)</span></dd>
-        </div>
-        <div>
-          <dt>STRK / L10 / U5 (Tendencia)</dt>
-          <dd><strong>STRK:</strong> Racha activa indicando tipo y cantidad (ej. W3 para 3 victorias).<br>
-          <strong>L10 / U5:</strong> Récord en los últimos 10 y 5 partidos.</dd>
-        </div>
-      </dl>
-    </article>
-
-    <article class="glossary-module">
-      <h3>4. Análisis Global de la Liga</h3>
-      <dl>
-        <div>
-          <dt>Paridad Competitiva</dt>
-          <dd>Diferencia promedio de carreras por juego entre ganador y perdedor para determinar el nivel de equilibrio del torneo.</dd>
-        </div>
-        <div>
-          <dt>Factor Ofensivo</dt>
-          <dd>Promedio global de carreras combinadas por partido para clasificar si la liga es de "dominio de pitcheo" o "alto bateo".<br>
-          <span class="formula">Factor = Total CA Liga / Total JJ Liga</span></dd>
-        </div>
-      </dl>
-    </article>
-  </div>
-</section>
-      </main>
+        <footer class="lms-footer">
+          <div class="lms-footer-inner">
+            <div class="lms-footer-brand">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Chicago_Cubs_Cap_Insignia.svg" alt="Cachorros logo" class="lms-footer-logo" width="48" height="48" />
+              <div class="lms-footer-brand-text">
+                Cachorros de Sinaloa
+                <span class="lms-footer-brand-sub">Estadísticas de Softbol</span>
+              </div>
+            </div>
+            <nav class="lms-footer-nav">
+              <div class="lms-footer-col">
+                <h4>Estadísticas</h4>
+                <ul>
+                  <li><a href="index.html">Dashboard</a></li>
+                  <li><a href="avg.html">Promedios</a></li>
+                  <li><a href="stand.html">Standings</a></li>
+                </ul>
+              </div>
+              <div class="lms-footer-col">
+                <h4>Análisis</h4>
+                <ul>
+                  <li><a href="scatter.html">Dispersión</a></li>
+                  <li><a href="trend.html">Tendencia</a></li>
+                  <li><a href="tombola.html">Tómbola</a></li>
+                  <li><a href="pagos.html">Pagos</a></li>
+                </ul>
+              </div>
+              <div class="lms-footer-col">
+                <h4>Social</h4>
+                <div class="lms-footer-social">
+                  <a href="https://www.instagram.com/cachorrosdesin" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                  </a>
+                  <a href="https://kick.com/cachorrosdesin" target="_blank" rel="noopener noreferrer" aria-label="Kick">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                  </a>
+                </div>
+              </div>
+            </nav>
+          </div>
+          <div class="lms-footer-bottom">
+            &copy; <span id="stand-footer-year">2026</span> Cachorros de Sinaloa. Hecho con ❤️ para la comunidad softbolera.
+          </div>
+        </footer>
+      </div>
     </div>
 
     <script src="scripts/stand.js"></script>
     <script src="scripts/dark-mode.js"></script>
+    <script src="scripts/lms-shell.js"></script>
   </body>
 </html>

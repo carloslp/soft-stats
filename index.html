@@ -3,11 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cachorros de Sinaloa — Estadísticas de Softbol</title>
+    <title>Aula Cachorros — Estadísticas de Softbol</title>
     <meta name="description" content="Estadísticas de softbol en tiempo real. Consulta promedios de bateo, hits, home runs y más." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles/lms.css" />
     <link rel="stylesheet" href="styles/main.css" />
     <!-- Anti-flash: apply saved dark/light preference before first paint -->
     <script>
@@ -23,427 +24,478 @@
     </script>
   </head>
   <body>
-    <!-- ===== HEADER ===== -->
-    <header class="site-header">
-      <div class="header-inner container">
-        <div class="brand">
-          <div class="logo">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Chicago_Cubs_Cap_Insignia.svg" alt="Cachorros de Sinaloa logo" width="56" height="56" />
-          </div>
-          <div class="brand-text">
-            <h1 class="brand-name">Cachorros de Sinaloa - Estadísticas</h1>
-            <p class="brand-tagline">Estadísticas de Softbol en Tiempo Real</p>
-          </div>
-        </div>
-
-        <div class="header-right">
-          <nav class="site-nav" aria-label="Navegación">
-            <a href="avg.html" class="nav-link min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" title="Promedios de Bateo">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="16" height="16"><path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
-              AVG
-            </a>
-            <a href="stand.html" class="nav-link min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" title="Standings por temporada">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="16" height="16"><path d="M6 9h12M8 5h8M10 13h4"/><path d="M7 9v8l5-3 5 3V9"/></svg>
-              Stand
-            </a>
-            <a href="scatter.html" class="nav-link min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" title="Gráfico de Dispersión: Contacto vs Poder">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="16" height="16"><circle cx="7" cy="17" r="2"/><circle cx="17" cy="7" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="5" cy="9" r="2"/><circle cx="19" cy="16" r="2"/></svg>
-              Dispersión
-            </a>
-            <a href="trend.html" class="nav-link min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" title="Gráfica de Tendencia por Jugador">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="16" height="16"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              Tendencia
-            </a>
-            <a href="tombola.html" class="nav-link min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" title="Lista y tómbola de posiciones">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="16" height="16"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
-              Tómbola
-            </a>
-            <a href="pagos.html" class="nav-link min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" title="Seguimiento de pagos">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="16" height="16"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H7"/></svg>
-              Pagos
-            </a>
-            <button id="dark-mode-toggle" class="nav-link" type="button" aria-label="Cambiar a modo oscuro" title="Modo oscuro">
-              <!-- Moon icon: shown in light mode -->
-              <svg class="dm-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="16" height="16"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-              <!-- Sun icon: shown in dark mode -->
-              <svg class="dm-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="16" height="16" hidden><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-            </button>
-          </nav>
-          <nav class="social-nav" aria-label="Redes sociales">
-            <a href="https://www.instagram.com/cachorrosdesin" target="_blank" rel="noopener noreferrer" class="social-link min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" aria-label="Instagram" title="Instagram">
+    <!-- ===== HEADER DE PLATAFORMA ===== -->
+    <header class="lms-header">
+      <div class="lms-header-inner">
+        <button id="lms-sidebar-toggle" class="lms-sidebar-toggle" type="button" aria-label="Abrir índice del curso" aria-expanded="false" aria-controls="lms-sidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <a class="lms-brand" href="index.html">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Chicago_Cubs_Cap_Insignia.svg" alt="Cachorros de Sinaloa logo" class="lms-logo" width="44" height="44" />
+          <span class="lms-brand-text">
+            <span class="lms-brand-name">Cachorros de Sinaloa</span>
+            <span class="lms-brand-sub">Estadísticas de Softbol</span>
+          </span>
+        </a>
+        <div class="lms-header-actions">
+          <nav class="lms-social" aria-label="Redes sociales">
+            <a href="https://www.instagram.com/cachorrosdesin" target="_blank" rel="noopener noreferrer" class="lms-social-link" aria-label="Instagram" title="Instagram">
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
             </a>
-            <a href="https://kick.com/cachorrosdesin" target="_blank" rel="noopener noreferrer" class="social-link min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" aria-label="kick" title="kick">
+            <a href="https://kick.com/cachorrosdesin" target="_blank" rel="noopener noreferrer" class="lms-social-link" aria-label="kick" title="kick">
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
             </a>
           </nav>
+          <button id="dark-mode-toggle" class="lms-dark-toggle" type="button" aria-label="Cambiar a modo oscuro" title="Modo oscuro">
+            <!-- Moon icon: shown in light mode -->
+            <svg class="dm-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="18" height="18"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <!-- Sun icon: shown in dark mode -->
+            <svg class="dm-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="18" height="18" hidden><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
         </div>
       </div>
     </header>
 
-    <!-- ===== MAIN CONTENT ===== -->
-    <main class="main-content container">
-
-      <!-- FILTERS -->
-      <section class="filters-section" aria-label="Filtros">
-        <div class="filters-row">
-          <div class="filter-group">
-            <label for="search-input" class="filter-label">Buscar jugador</label>
-            <div class="search-wrapper">
-              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-              </svg>
-              <input
-                type="search"
-                id="search-input"
-                class="filter-input min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
-                placeholder="Nombre del jugador…"
-                aria-label="Buscar por nombre de jugador"
-              />
-            </div>
-          </div>
-
-          <div class="filter-group">
-            <label for="min-avg" class="filter-label">AVG</label>
-            <select id="min-avg" class="filter-select min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" aria-label="Filtrar por promedio mínimo de bateo">
-              <option value="0">Todos</option>
-              <option value="0.1">&ge; .100</option>
-              <option value="0.2">&ge; .200</option>
-              <option value="0.3">&ge; .300</option>
-              <option value="0.5">&ge; .500</option>
-              <option value="1">1.000 (Perfecto)</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label for="min-hr" class="filter-label">Home Runs</label>
-            <select id="min-hr" class="filter-select min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" aria-label="Filtrar por home runs mínimos">
-              <option value="0">Todos</option>
-              <option value="1">&ge; 1 HR</option>
-              <option value="2">&ge; 2 HR</option>
-              <option value="3">&ge; 3 HR</option>
-            </select>
-          </div>
-
-          <div class="filter-group filter-group--right">
-            <button id="reset-filters" class="btn btn--outline min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" type="button">
-              Limpiar filtros
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- SUMMARY CARDS -->
-      <section class="summary-cards" aria-label="Resumen del equipo" id="summary-cards">
-        <div class="card" id="card-players">
-          <span class="card-value" id="stat-players">—</span>
-          <span class="card-label">Jugadores</span>
-        </div>
-        <div class="card" id="card-avg">
-          <span class="card-value" id="stat-avg">—</span>
-          <span class="card-label">AVG Equipo</span>
-        </div>
-        <div class="card" id="card-hits">
-          <span class="card-value" id="stat-hits">—</span>
-          <span class="card-label">Hits Totales</span>
-        </div>
-        <div class="card" id="card-hr">
-          <span class="card-value" id="stat-hr">—</span>
-          <span class="card-label">Home Runs</span>
-        </div>
-        <div class="card" id="card-k">
-          <span class="card-value" id="stat-k">—</span>
-          <span class="card-label">Ponches (K)</span>
-        </div>
-      </section>
-
-      <!-- BATTING LINEUP CARD -->
-      <section class="lineup-section" aria-label="Cuadro de Bateo y Turno">
-        <h2 class="lineup-section__title">Cuadro de Bateo y Turno</h2>
-
-        <div class="state state--loading state--skeleton" id="lineup-loading" role="status" aria-live="polite">
-          <span class="sr-only">Cargando cuadro de bateo…</span>
-          <div class="lineup-card lineup-card--skeleton animate-pulse" aria-hidden="true">
-            <div class="lineup-skeleton__order">
-              <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__heading"></div>
-              <div class="lineup-skeleton__rows">
-                <div class="lineup-skeleton__row">
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
-                </div>
-                <div class="lineup-skeleton__row">
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
-                </div>
-                <div class="lineup-skeleton__row">
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
-                </div>
-                <div class="lineup-skeleton__row">
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
-                </div>
-                <div class="lineup-skeleton__row">
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
-                </div>
-                <div class="lineup-skeleton__row">
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
-                </div>
-                <div class="lineup-skeleton__row">
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
-                </div>
-                <div class="lineup-skeleton__row">
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
-                </div>
-              </div>
-            </div>
-            <div class="lineup-skeleton__field-area">
-              <div class="lineup-skeleton__diamond">
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
-              </div>
-              <div class="lineup-skeleton__bench">
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__bench-title"></div>
-                <div class="lineup-skeleton__bench-grid">
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__bench-slot"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__bench-slot"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__bench-slot"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__bench-slot"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="state state--error" id="lineup-error" role="alert" aria-live="assertive" hidden>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
-          <p id="lineup-error-msg">Error al cargar el cuadro de bateo.</p>
-          <button id="lineup-retry-btn" class="btn btn--primary min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" type="button">Reintentar</button>
-        </div>
-
-        <div class="lineup-card" id="lineup-card" hidden>
-          <!-- Left: Batting order -->
-          <div class="batting-order">
-            <h3 class="batting-order__title">BATTING ORDER</h3>
-            <ol class="batting-order__list" id="batting-order-list"></ol>
-          </div>
-
-          <!-- Right: Field + Bench -->
-          <div class="field-area">
-            <div class="field-wrap">
-              <!-- Field position grid -->
-              <div class="field">
-                <div class="field__pos field__pos--lf">
-                  <span class="field__pos-label">LF</span>
-                  <span class="field__pos-name" id="fname-LF"></span>
-                </div>
-                <div class="field__pos field__pos--cf">
-                  <span class="field__pos-label">CF</span>
-                  <span class="field__pos-name" id="fname-CF"></span>
-                </div>
-                <div class="field__pos field__pos--rf">
-                  <span class="field__pos-label">RF</span>
-                  <span class="field__pos-name" id="fname-RF"></span>
-                </div>
-                <div class="field__pos field__pos--ss">
-                  <span class="field__pos-label">SS</span>
-                  <span class="field__pos-name" id="fname-SS"></span>
-                </div>
-                <div class="field__pos field__pos--2b">
-                  <span class="field__pos-label">2B</span>
-                  <span class="field__pos-name" id="fname-2B"></span>
-                </div>
-                <div class="field__pos field__pos--3b">
-                  <span class="field__pos-label">3B</span>
-                  <span class="field__pos-name" id="fname-3B"></span>
-                </div>
-                <div class="field__pos field__pos--p">
-                  <span class="field__pos-label">P</span>
-                  <span class="field__pos-name" id="fname-P"></span>
-                </div>
-                <div class="field__pos field__pos--1b">
-                  <span class="field__pos-label">1B</span>
-                  <span class="field__pos-name" id="fname-1B"></span>
-                </div>
-                <div class="field__pos field__pos--c">
-                  <span class="field__pos-label">C</span>
-                  <span class="field__pos-name" id="fname-C"></span>
-                </div>
-              </div>
-
-              <!-- Extra positions: DH, BC (right of field) -->
-              <div class="field-extras">
-                <div class="field__pos">
-                  <span class="field__pos-label">DH</span>
-                  <span class="field__pos-name" id="fname-DH"></span>
-                </div>
-                <div class="field__pos">
-                  <span class="field__pos-label">BC</span>
-                  <span class="field__pos-name" id="fname-BC"></span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Bench -->
-            <div class="bench">
-              <h3 class="bench__title">BENCH</h3>
-              <div class="bench__grid" id="bench-grid"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- DATA TABLE -->
-      <section class="table-section" aria-label="Tabla de estadísticas">
-        <!-- Loading state -->
-        <div class="state state--loading state--skeleton" id="state-loading" role="status" aria-live="polite">
-          <span class="sr-only">Cargando estadísticas…</span>
-          <div class="stats-skeleton animate-pulse" aria-hidden="true">
-            <div class="summary-cards stats-skeleton__cards">
-              <div class="card skeleton-card">
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__value"></div>
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__label"></div>
-              </div>
-              <div class="card skeleton-card">
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__value"></div>
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__label"></div>
-              </div>
-              <div class="card skeleton-card">
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__value"></div>
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__label"></div>
-              </div>
-              <div class="card skeleton-card">
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__value"></div>
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__label"></div>
-              </div>
-              <div class="card skeleton-card">
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__value"></div>
-                <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__label"></div>
-              </div>
-            </div>
-            <div class="stats-skeleton__table-wrap">
-              <div class="stats-skeleton__table">
-                <div class="stats-skeleton__row">
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell stats-skeleton__cell--name"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                </div>
-                <div class="stats-skeleton__row">
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell stats-skeleton__cell--name"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                </div>
-                <div class="stats-skeleton__row">
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell stats-skeleton__cell--name"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                </div>
-                <div class="stats-skeleton__row">
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell stats-skeleton__cell--name"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                </div>
-                <div class="stats-skeleton__row">
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell stats-skeleton__cell--name"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Error state -->
-        <div class="state state--error" id="state-error" role="alert" aria-live="assertive" hidden>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
-          <p id="error-message">Error al cargar los datos.</p>
-          <button id="retry-btn" class="btn btn--primary min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" type="button">Reintentar</button>
-        </div>
-
-        <!-- Empty state -->
-        <div class="state state--empty" id="state-empty" role="status" aria-live="polite" hidden>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9.172 16.172a4 4 0 0 1 5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
-          <p>No se encontraron jugadores con los filtros seleccionados.</p>
-        </div>
-
-        <!-- Table -->
-        <div class="table-wrapper overflow-x-auto" id="table-wrapper" hidden>
-          <table class="stats-table w-full text-sm text-left" id="stats-table" aria-label="Estadísticas de jugadores">
-            <caption class="sr-only">Estadísticas de softbol — haz clic en el encabezado de columna para ordenar</caption>
-            <thead>
-              <tr>
-                <th scope="col" class="th-sortable sticky-player-col sticky left-0 bg-white z-10 shadow-[2px_0_5px_rgba(0,0,0,0.05)]" data-col="Nombre" data-type="string" tabindex="0" aria-sort="none">
-                  Jugador <span class="sort-icon" aria-hidden="true">⇅</span>
-                </th>
-                <th scope="col" class="th-sortable th--num" data-col="AB" data-type="number" tabindex="0" aria-sort="none">
-                  AB <span class="sort-icon" aria-hidden="true">⇅</span>
-                </th>
-                <th scope="col" class="th-sortable th--num" data-col="H" data-type="number" tabindex="0" aria-sort="none">
-                  H <span class="sort-icon" aria-hidden="true">⇅</span>
-                </th>
-                <th scope="col" class="th-sortable th--num" data-col="HR" data-type="number" tabindex="0" aria-sort="none">
-                  HR <span class="sort-icon" aria-hidden="true">⇅</span>
-                </th>
-                <th scope="col" class="th-sortable th--num" data-col="K" data-type="number" tabindex="0" aria-sort="none">
-                  K <span class="sort-icon" aria-hidden="true">⇅</span>
-                </th>
-                <th scope="col" class="th-sortable th--num th--avg" data-col="AVG" data-type="number" tabindex="0" aria-sort="none">
-                  AVG <span class="sort-icon" aria-hidden="true">⇅</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody id="table-body">
-            </tbody>
-            <tfoot id="table-foot">
-            </tfoot>
-          </table>
-          <p class="table-meta" id="table-meta" aria-live="polite"></p>
-        </div>
-      </section>
-    </main>
-
-    <!-- ===== FOOTER ===== -->
-    <footer class="site-footer">
-      <div class="container">
-        <p>&copy; <span id="footer-year"></span> Cachorros de Sinaloa. Hecho con ❤️ para la comunidad softbolera.</p>
+    <nav class="lms-nav-bar" id="lms-nav-bar">
+      <div class="lms-nav-bar-inner">
+        <a href="index.html" class="lms-nav-link lms-nav-link--active" aria-current="page">Dashboard</a>
+        <a href="avg.html" class="lms-nav-link">Promedios</a>
+        <a href="stand.html" class="lms-nav-link">Standings</a>
+        <a href="scatter.html" class="lms-nav-link">Dispersión</a>
+        <a href="trend.html" class="lms-nav-link">Tendencia</a>
+        <a href="tombola.html" class="lms-nav-link">Tómbola</a>
+        <a href="pagos.html" class="lms-nav-link">Pagos</a>
       </div>
-    </footer>
+    </nav>
+
+    <!-- ===== CUERPO: SIDEBAR + CONTENIDO ===== -->
+    <div class="lms-body">
+      <!-- Sidebar: índice del curso -->
+      <aside class="lms-sidebar" id="lms-sidebar" aria-label="Índice del curso">
+        <div class="lms-sidebar-head">Índice del curso</div>
+        <div class="lms-sidebar-sub">Temporada · 7 módulos</div>
+        <nav class="lms-sidebar-nav" aria-label="Módulos del curso">
+          <a href="index.html" class="lms-module lms-module--active" aria-current="page"><span class="lms-module-num">01</span><span class="lms-module-title">Aula — Dashboard</span></a>
+          <a href="avg.html" class="lms-module"><span class="lms-module-num">02</span><span class="lms-module-title">Promedios de Bateo</span></a>
+          <a href="stand.html" class="lms-module"><span class="lms-module-num">03</span><span class="lms-module-title">Standings</span></a>
+          <a href="scatter.html" class="lms-module"><span class="lms-module-num">04</span><span class="lms-module-title">Dispersión</span></a>
+          <a href="trend.html" class="lms-module"><span class="lms-module-num">05</span><span class="lms-module-title">Tendencia</span></a>
+          <a href="tombola.html" class="lms-module"><span class="lms-module-num">06</span><span class="lms-module-title">Tómbola</span></a>
+          <a href="pagos.html" class="lms-module"><span class="lms-module-num">07</span><span class="lms-module-title">Pagos</span></a>
+        </nav>
+      </aside>
+
+      <div class="lms-content">
+        <div class="lms-main">
+          <!-- Encabezado de unidad -->
+          <section class="lms-unit">
+            <span class="lms-unit-module">Estadísticas</span>
+            <h1 class="lms-unit-title">Dashboard</h1>
+            <p class="lms-unit-desc">Cuadro de bateo, resumen del equipo y la tabla de estadísticas en tiempo real.</p>
+          </section>
+
+          <!-- FILTERS -->
+          <section class="filters-section" aria-label="Filtros">
+            <div class="filters-row">
+              <div class="filter-group">
+                <label for="search-input" class="filter-label">Buscar jugador</label>
+                <div class="search-wrapper">
+                  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                  </svg>
+                  <input
+                    type="search"
+                    id="search-input"
+                    class="filter-input min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
+                    placeholder="Nombre del jugador…"
+                    aria-label="Buscar por nombre de jugador"
+                  />
+                </div>
+              </div>
+
+              <div class="filter-group">
+                <label for="min-avg" class="filter-label">AVG</label>
+                <select id="min-avg" class="filter-select min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" aria-label="Filtrar por promedio mínimo de bateo">
+                  <option value="0">Todos</option>
+                  <option value="0.1">&ge; .100</option>
+                  <option value="0.2">&ge; .200</option>
+                  <option value="0.3">&ge; .300</option>
+                  <option value="0.5">&ge; .500</option>
+                  <option value="1">1.000 (Perfecto)</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label for="min-hr" class="filter-label">Home Runs</label>
+                <select id="min-hr" class="filter-select min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" aria-label="Filtrar por home runs mínimos">
+                  <option value="0">Todos</option>
+                  <option value="1">&ge; 1 HR</option>
+                  <option value="2">&ge; 2 HR</option>
+                  <option value="3">&ge; 3 HR</option>
+                </select>
+              </div>
+
+              <div class="filter-group filter-group--right">
+                <button id="reset-filters" class="btn btn--outline min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" type="button">
+                  Limpiar filtros
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- SUMMARY CARDS -->
+          <section class="summary-cards" aria-label="Resumen del equipo" id="summary-cards">
+            <div class="card" id="card-players">
+              <span class="card-value" id="stat-players">—</span>
+              <span class="card-label">Jugadores</span>
+            </div>
+            <div class="card" id="card-avg">
+              <span class="card-value" id="stat-avg">—</span>
+              <span class="card-label">AVG Equipo</span>
+            </div>
+            <div class="card" id="card-hits">
+              <span class="card-value" id="stat-hits">—</span>
+              <span class="card-label">Hits Totales</span>
+            </div>
+            <div class="card" id="card-hr">
+              <span class="card-value" id="stat-hr">—</span>
+              <span class="card-label">Home Runs</span>
+            </div>
+            <div class="card" id="card-k">
+              <span class="card-value" id="stat-k">—</span>
+              <span class="card-label">Ponches (K)</span>
+            </div>
+          </section>
+
+          <!-- BATTING LINEUP CARD -->
+          <section class="lineup-section" aria-label="Cuadro de Bateo y Turno">
+            <h2 class="lineup-section__title">Cuadro de Bateo y Turno</h2>
+
+            <div class="state state--loading state--skeleton" id="lineup-loading" role="status" aria-live="polite">
+              <span class="sr-only">Cargando cuadro de bateo…</span>
+              <div class="lineup-card lineup-card--skeleton animate-pulse" aria-hidden="true">
+                <div class="lineup-skeleton__order">
+                  <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__heading"></div>
+                  <div class="lineup-skeleton__rows">
+                    <div class="lineup-skeleton__row">
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
+                    </div>
+                    <div class="lineup-skeleton__row">
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
+                    </div>
+                    <div class="lineup-skeleton__row">
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
+                    </div>
+                    <div class="lineup-skeleton__row">
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
+                    </div>
+                    <div class="lineup-skeleton__row">
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
+                    </div>
+                    <div class="lineup-skeleton__row">
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
+                    </div>
+                    <div class="lineup-skeleton__row">
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
+                    </div>
+                    <div class="lineup-skeleton__row">
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__index"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__name"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="lineup-skeleton__field-area">
+                  <div class="lineup-skeleton__diamond">
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__slot"></div>
+                  </div>
+                  <div class="lineup-skeleton__bench">
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__bench-title"></div>
+                    <div class="lineup-skeleton__bench-grid">
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__bench-slot"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__bench-slot"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__bench-slot"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded lineup-skeleton__bench-slot"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="state state--error" id="lineup-error" role="alert" aria-live="assertive" hidden>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+              <p id="lineup-error-msg">Error al cargar el cuadro de bateo.</p>
+              <button id="lineup-retry-btn" class="btn btn--primary min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" type="button">Reintentar</button>
+            </div>
+
+            <div class="lineup-card" id="lineup-card" hidden>
+              <!-- Left: Batting order -->
+              <div class="batting-order">
+                <h3 class="batting-order__title">BATTING ORDER</h3>
+                <ol class="batting-order__list" id="batting-order-list"></ol>
+              </div>
+
+              <!-- Right: Field + Bench -->
+              <div class="field-area">
+                <div class="field-wrap">
+                  <!-- Field position grid -->
+                  <div class="field">
+                    <div class="field__pos field__pos--lf">
+                      <span class="field__pos-label">LF</span>
+                      <span class="field__pos-name" id="fname-LF"></span>
+                    </div>
+                    <div class="field__pos field__pos--cf">
+                      <span class="field__pos-label">CF</span>
+                      <span class="field__pos-name" id="fname-CF"></span>
+                    </div>
+                    <div class="field__pos field__pos--rf">
+                      <span class="field__pos-label">RF</span>
+                      <span class="field__pos-name" id="fname-RF"></span>
+                    </div>
+                    <div class="field__pos field__pos--ss">
+                      <span class="field__pos-label">SS</span>
+                      <span class="field__pos-name" id="fname-SS"></span>
+                    </div>
+                    <div class="field__pos field__pos--2b">
+                      <span class="field__pos-label">2B</span>
+                      <span class="field__pos-name" id="fname-2B"></span>
+                    </div>
+                    <div class="field__pos field__pos--3b">
+                      <span class="field__pos-label">3B</span>
+                      <span class="field__pos-name" id="fname-3B"></span>
+                    </div>
+                    <div class="field__pos field__pos--p">
+                      <span class="field__pos-label">P</span>
+                      <span class="field__pos-name" id="fname-P"></span>
+                    </div>
+                    <div class="field__pos field__pos--1b">
+                      <span class="field__pos-label">1B</span>
+                      <span class="field__pos-name" id="fname-1B"></span>
+                    </div>
+                    <div class="field__pos field__pos--c">
+                      <span class="field__pos-label">C</span>
+                      <span class="field__pos-name" id="fname-C"></span>
+                    </div>
+                  </div>
+
+                  <!-- Extra positions: DH, BC (right of field) -->
+                  <div class="field-extras">
+                    <div class="field__pos">
+                      <span class="field__pos-label">DH</span>
+                      <span class="field__pos-name" id="fname-DH"></span>
+                    </div>
+                    <div class="field__pos">
+                      <span class="field__pos-label">BC</span>
+                      <span class="field__pos-name" id="fname-BC"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bench -->
+                <div class="bench">
+                  <h3 class="bench__title">BENCH</h3>
+                  <div class="bench__grid" id="bench-grid"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- DATA TABLE -->
+          <section class="table-section" aria-label="Tabla de estadísticas">
+            <!-- Loading state -->
+            <div class="state state--loading state--skeleton" id="state-loading" role="status" aria-live="polite">
+              <span class="sr-only">Cargando estadísticas…</span>
+              <div class="stats-skeleton animate-pulse" aria-hidden="true">
+                <div class="summary-cards stats-skeleton__cards">
+                  <div class="card skeleton-card">
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__value"></div>
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__label"></div>
+                  </div>
+                  <div class="card skeleton-card">
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__value"></div>
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__label"></div>
+                  </div>
+                  <div class="card skeleton-card">
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__value"></div>
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__label"></div>
+                  </div>
+                  <div class="card skeleton-card">
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__value"></div>
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__label"></div>
+                  </div>
+                  <div class="card skeleton-card">
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__value"></div>
+                    <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded skeleton-card__label"></div>
+                  </div>
+                </div>
+                <div class="stats-skeleton__table-wrap">
+                  <div class="stats-skeleton__table">
+                    <div class="stats-skeleton__row">
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell stats-skeleton__cell--name"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                    </div>
+                    <div class="stats-skeleton__row">
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell stats-skeleton__cell--name"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                    </div>
+                    <div class="stats-skeleton__row">
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell stats-skeleton__cell--name"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                    </div>
+                    <div class="stats-skeleton__row">
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell stats-skeleton__cell--name"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                    </div>
+                    <div class="stats-skeleton__row">
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell stats-skeleton__cell--name"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                      <div class="skeleton-block bg-gray-200 dark:bg-gray-700 rounded stats-skeleton__cell"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Error state -->
+            <div class="state state--error" id="state-error" role="alert" aria-live="assertive" hidden>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+              <p id="error-message">Error al cargar los datos.</p>
+              <button id="retry-btn" class="btn btn--primary min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900" type="button">Reintentar</button>
+            </div>
+
+            <!-- Empty state -->
+            <div class="state state--empty" id="state-empty" role="status" aria-live="polite" hidden>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9.172 16.172a4 4 0 0 1 5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+              <p>No se encontraron jugadores con los filtros seleccionados.</p>
+            </div>
+
+            <!-- Table -->
+            <div class="table-wrapper overflow-x-auto" id="table-wrapper" hidden>
+              <table class="stats-table w-full text-sm text-left" id="stats-table" aria-label="Estadísticas de jugadores">
+                <caption class="sr-only">Estadísticas de softbol — haz clic en el encabezado de columna para ordenar</caption>
+                <thead>
+                  <tr>
+                    <th scope="col" class="th-sortable sticky-player-col sticky left-0 bg-white z-10 shadow-[2px_0_5px_rgba(0,0,0,0.05)]" data-col="Nombre" data-type="string" tabindex="0" aria-sort="none">
+                      Jugador <span class="sort-icon" aria-hidden="true">⇅</span>
+                    </th>
+                    <th scope="col" class="th-sortable th--num" data-col="AB" data-type="number" tabindex="0" aria-sort="none">
+                      AB <span class="sort-icon" aria-hidden="true">⇅</span>
+                    </th>
+                    <th scope="col" class="th-sortable th--num" data-col="H" data-type="number" tabindex="0" aria-sort="none">
+                      H <span class="sort-icon" aria-hidden="true">⇅</span>
+                    </th>
+                    <th scope="col" class="th-sortable th--num" data-col="HR" data-type="number" tabindex="0" aria-sort="none">
+                      HR <span class="sort-icon" aria-hidden="true">⇅</span>
+                    </th>
+                    <th scope="col" class="th-sortable th--num" data-col="K" data-type="number" tabindex="0" aria-sort="none">
+                      K <span class="sort-icon" aria-hidden="true">⇅</span>
+                    </th>
+                    <th scope="col" class="th-sortable th--num th--avg" data-col="AVG" data-type="number" tabindex="0" aria-sort="none">
+                      AVG <span class="sort-icon" aria-hidden="true">⇅</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="table-body">
+                </tbody>
+                <tfoot id="table-foot">
+                </tfoot>
+              </table>
+              <p class="table-meta" id="table-meta" aria-live="polite"></p>
+            </div>
+          </section>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="lms-footer">
+          <div class="lms-footer-inner">
+            <div class="lms-footer-brand">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Chicago_Cubs_Cap_Insignia.svg" alt="Cachorros logo" class="lms-footer-logo" width="48" height="48" />
+              <div class="lms-footer-brand-text">
+                Cachorros de Sinaloa
+                <span class="lms-footer-brand-sub">Estadísticas de Softbol</span>
+              </div>
+            </div>
+            <nav class="lms-footer-nav">
+              <div class="lms-footer-col">
+                <h4>Estadísticas</h4>
+                <ul>
+                  <li><a href="index.html">Dashboard</a></li>
+                  <li><a href="avg.html">Promedios</a></li>
+                  <li><a href="stand.html">Standings</a></li>
+                </ul>
+              </div>
+              <div class="lms-footer-col">
+                <h4>Análisis</h4>
+                <ul>
+                  <li><a href="scatter.html">Dispersión</a></li>
+                  <li><a href="trend.html">Tendencia</a></li>
+                  <li><a href="tombola.html">Tómbola</a></li>
+                  <li><a href="pagos.html">Pagos</a></li>
+                </ul>
+              </div>
+              <div class="lms-footer-col">
+                <h4>Social</h4>
+                <div class="lms-footer-social">
+                  <a href="https://www.instagram.com/cachorrosdesin" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                  </a>
+                  <a href="https://kick.com/cachorrosdesin" target="_blank" rel="noopener noreferrer" aria-label="Kick">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                  </a>
+                </div>
+              </div>
+            </nav>
+          </div>
+          <div class="lms-footer-bottom">
+            &copy; <span id="footer-year">2026</span> Cachorros de Sinaloa. Hecho con ❤️ para la comunidad softbolera.
+          </div>
+        </footer>
+      </div>
+    </div>
 
     <script src="scripts/config.js"></script>
     <script src="scripts/app.js"></script>
     <script src="scripts/dark-mode.js"></script>
+    <script src="scripts/lms-shell.js"></script>
   </body>
 </html>

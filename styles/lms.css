@@ -1,0 +1,649 @@
+/* ============================================================
+   LMB SHELL — Cachorros de Sinaloa
+   Diseño inspirado en lmb.com.mx — portal deportivo profesional.
+
+   Two-Tier Header (top-bar + nav-bar), contenido full-width,
+   footer con columnas, dark mode conservado.
+   ============================================================ */
+
+/* ---------- Reset & Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+[hidden] { display: none !important; }
+
+html {
+  scroll-behavior: smooth;
+
+  /* Paleta LMB */
+  --navy:      #002B49;
+  --navy-dark: #001D33;
+  --red:       #C8102E;
+  --red-dark:  #9B0A22;
+  --sky:       #2A7DE1;
+  --gold:      #F9C645;
+  --white:     #ffffff;
+  --off-white: #F4F6F8;
+  --gray-100:  #F1F5F9;
+  --gray-200:  #E2E8F0;
+  --gray-500:  #64748B;
+  --gray-700:  #334155;
+  --text:      #0F172A;
+  --green:     #0a7a0a;
+
+  --radius-sm: 6px;
+  --radius:    8px;
+  --radius-lg: 12px;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.05);
+  --shadow:    0 2px 8px rgba(0,0,0,.08);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,.12);
+
+  --transition: 200ms ease;
+
+  /* Tokens LMB */
+  --ink:           #002B49;
+  --ink-soft:      #0A3D5F;
+  --paper:         #F4F6F8;
+  --cream:         #F8FAFC;
+  --line:          #E2E8F0;
+  --text-secondary:#64748B;
+  --font-body:     'Inter', system-ui, sans-serif;
+  --font-display:  'Barlow Condensed', 'Inter', sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- A11y utilities ---------- */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.min-h-\[44px\] { min-height: 44px; }
+.min-w-\[44px\] { min-width: 44px; }
+
+.focus-visible\:outline-none:focus-visible { outline: none; }
+
+.focus-visible\:ring-2.focus-visible\:ring-gold:focus-visible {
+  box-shadow: 0 0 0 2px var(--gold);
+}
+
+.focus-visible\:ring-2.focus-visible\:ring-gold.focus-visible\:ring-offset-2:focus-visible {
+  --focus-ring-offset-color: var(--white);
+  box-shadow: 0 0 0 2px var(--focus-ring-offset-color), 0 0 0 4px var(--gold);
+}
+
+.dark .dark\:focus-visible\:ring-offset-slate-900.focus-visible\:ring-2.focus-visible\:ring-gold.focus-visible\:ring-offset-2:focus-visible {
+  --focus-ring-offset-color: #0f172a;
+}
+
+/* ============================================================
+   TWO-TIER HEADER — Estilo LMB
+   Tier 1: Top Bar (navy oscuro) — logo + social + dark toggle
+   Tier 2: Nav Bar (blanco) — links de navegación horizontal
+   ============================================================ */
+
+.lms-header {
+  background: var(--navy);
+  color: var(--white);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  box-shadow: var(--shadow);
+}
+
+/* ---- Tier 1: Top Bar ---- */
+.lms-header-inner {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .65rem 1.5rem;
+  max-width: 1400px;
+  margin-inline: auto;
+}
+
+/* Hamburger: only visible on mobile */
+.lms-sidebar-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px; height: 44px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,.1);
+  color: var(--white);
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.lms-sidebar-toggle:hover,
+.lms-sidebar-toggle:focus-visible {
+  background: rgba(255,255,255,.2);
+}
+
+.lms-sidebar-toggle svg { width: 22px; height: 22px; }
+
+/* Brand */
+.lms-brand {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  text-decoration: none;
+  color: var(--white);
+  min-width: 0;
+}
+
+.lms-logo {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 4px rgba(0,0,0,.3));
+  border-radius: 50%;
+  transition: transform var(--transition);
+}
+
+.lms-brand:hover .lms-logo { transform: scale(1.06); }
+
+.lms-brand-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.lms-brand-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.3rem;
+  line-height: 1.1;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  color: var(--white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lms-brand-sub {
+  font-size: .72rem;
+  font-weight: 500;
+  color: rgba(255,255,255,.65);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Header right actions */
+.lms-header-actions {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.lms-social {
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+}
+
+.lms-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  color: var(--white);
+  text-decoration: none;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.lms-social-link svg { width: 16px; height: 16px; }
+
+.lms-social-link:hover,
+.lms-social-link:focus-visible {
+  background: rgba(255,255,255,.2);
+  transform: translateY(-1px);
+}
+
+.lms-dark-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  color: var(--white);
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.lms-dark-toggle svg { width: 16px; height: 16px; }
+
+.lms-dark-toggle:hover,
+.lms-dark-toggle:focus-visible {
+  background: rgba(255,255,255,.2);
+  transform: translateY(-1px);
+}
+
+/* ---- Tier 2: Nav Bar (Horizontal) ---- */
+.lms-nav-bar {
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 58px; /* below top bar */
+  z-index: 39;
+}
+
+.lms-nav-bar-inner {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  max-width: 1400px;
+  margin-inline: auto;
+  padding: 0 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.lms-nav-bar-inner::-webkit-scrollbar { display: none; }
+
+.lms-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .75rem 1rem;
+  text-decoration: none;
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+}
+
+.lms-nav-link:hover {
+  color: var(--navy);
+  background: rgba(0,43,73,.03);
+}
+
+.lms-nav-link--active {
+  color: var(--navy);
+  border-bottom-color: var(--sky);
+  font-weight: 700;
+}
+
+.lms-nav-link--active:hover {
+  border-bottom-color: var(--sky);
+}
+
+/* ---- Sidebar: HIDDEN (kept in DOM for JS compatibility) ---- */
+.lms-sidebar {
+  display: none !important;
+}
+
+/* Backdrop for mobile nav */
+.lms-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 27, 51, .5);
+  z-index: 38;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition);
+}
+
+.lms-backdrop--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ============================================================
+   LAYOUT — Full-width content
+   ============================================================ */
+.lms-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.lms-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+}
+
+.lms-main {
+  flex: 1;
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding: 1.75rem 1.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ---- Unit Header ---- */
+.lms-unit {
+  padding-bottom: .25rem;
+}
+
+.lms-unit-module {
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--white);
+  background: var(--sky);
+  padding: .2rem .65rem;
+  border-radius: 4px;
+}
+
+.lms-unit-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 4.5vw, 2.6rem);
+  line-height: 1.05;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  color: var(--navy);
+  margin-top: .5rem;
+}
+
+.lms-unit-desc {
+  font-size: .92rem;
+  color: var(--text-secondary);
+  max-width: 62ch;
+  margin-top: .35rem;
+}
+
+/* ============================================================
+   FOOTER — Estilo LMB: columnas + social + copyright
+   ============================================================ */
+.lms-footer {
+  background: var(--navy);
+  color: rgba(255,255,255,.85);
+  margin-top: auto;
+}
+
+.lms-footer-inner {
+  max-width: 1400px;
+  margin-inline: auto;
+  padding: 2rem 1.5rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.lms-footer-brand {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  min-width: 200px;
+}
+
+.lms-footer-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,.3));
+}
+
+.lms-footer-brand-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  color: var(--white);
+  line-height: 1.2;
+}
+
+.lms-footer-brand-sub {
+  font-size: .72rem;
+  font-weight: 400;
+  color: rgba(255,255,255,.5);
+  text-transform: none;
+}
+
+.lms-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.lms-footer-col h4 {
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: rgba(255,255,255,.5);
+  margin-bottom: .5rem;
+}
+
+.lms-footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+
+.lms-footer-col a {
+  color: rgba(255,255,255,.8);
+  text-decoration: none;
+  font-size: .82rem;
+  transition: color var(--transition);
+}
+
+.lms-footer-col a:hover { color: var(--white); }
+
+.lms-footer-social {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.lms-footer-social-label {
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: rgba(255,255,255,.5);
+  margin-right: .25rem;
+}
+
+.lms-footer-social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  color: rgba(255,255,255,.8);
+  text-decoration: none;
+  transition: background var(--transition), color var(--transition);
+}
+
+.lms-footer-social a svg { width: 15px; height: 15px; }
+
+.lms-footer-social a:hover {
+  background: rgba(255,255,255,.2);
+  color: var(--white);
+}
+
+.lms-footer-bottom {
+  width: 100%;
+  border-top: 1px solid rgba(255,255,255,.12);
+  padding: .85rem 1.5rem;
+  text-align: center;
+  font-size: .75rem;
+  color: rgba(255,255,255,.45);
+  max-width: 1400px;
+  margin-inline: auto;
+}
+
+/* Legacy footer support (simple single-line) */
+.lms-footer > p {
+  text-align: center;
+  padding-block: 1rem;
+  font-size: .8rem;
+  color: rgba(255,255,255,.5);
+  max-width: 1400px;
+  margin-inline: auto;
+}
+
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+html.dark {
+  --off-white: #0f172a;
+  --white:     #1e293b;
+  --gray-100:  #1e293b;
+  --gray-200:  #334155;
+  --gray-500:  #94a3b8;
+  --gray-700:  #cbd5e1;
+  --text:      #e2e8f0;
+  --paper:     #0f172a;
+  --line:      #334155;
+  color-scheme: dark;
+}
+
+html.dark body,
+html.dark .lms-content { background: var(--paper); }
+
+html.dark .lms-unit-title { color: #eef2ff; }
+html.dark .lms-unit-desc   { color: var(--gray-500); }
+html.dark .lms-unit-module { background: var(--sky); color: #fff; }
+
+/* Nav bar dark */
+html.dark .lms-nav-bar {
+  background: #1e293b;
+  border-bottom-color: #334155;
+}
+
+html.dark .lms-nav-link {
+  color: #94a3b8;
+}
+
+html.dark .lms-nav-link:hover {
+  color: #e2e8f0;
+  background: rgba(255,255,255,.04);
+}
+
+html.dark .lms-nav-link--active {
+  color: #e2e8f0;
+  border-bottom-color: var(--sky);
+}
+
+/* Header and footer: always navy, text stays white */
+html.dark .lms-brand-name,
+html.dark .lms-brand-sub,
+html.dark .lms-social-link,
+html.dark .lms-dark-toggle { color: #ffffff; }
+
+/* Light mode forced */
+html.light {
+  --off-white: #F4F6F8;
+  --white:     #ffffff;
+  --gray-100:  #F1F5F9;
+  --gray-200:  #E2E8F0;
+  --gray-500:  #64748B;
+  --gray-700:  #334155;
+  --text:      #0F172A;
+  --paper:     #F4F6F8;
+  --line:      #E2E8F0;
+  color-scheme: light;
+}
+
+html.light body,
+html.light .lms-content { background: var(--paper); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+  .lms-header-inner { padding: .55rem .9rem; }
+
+  .lms-sidebar-toggle { display: inline-flex; }
+
+  /* Nav bar becomes a mobile dropdown */
+  .lms-nav-bar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 280px;
+    max-width: 82vw;
+    background: var(--white);
+    z-index: 50;
+    transform: translateX(-105%);
+    transition: transform 240ms ease;
+    box-shadow: var(--shadow-lg);
+    border-bottom: none;
+    overflow-y: auto;
+  }
+
+  .lms-nav-bar-inner {
+    flex-direction: column;
+    padding: 1.25rem .75rem;
+    gap: .15rem;
+  }
+
+  .lms-nav-link {
+    width: 100%;
+    padding: .7rem 1rem;
+    border-bottom: none;
+    border-left: 3px solid transparent;
+    border-radius: 0;
+  }
+
+  .lms-nav-link--active {
+    border-left-color: var(--sky);
+    border-bottom-color: transparent;
+    background: rgba(42,125,225,.06);
+  }
+
+  body.lms-sidebar-open .lms-nav-bar { transform: translateX(0); }
+
+  html.dark .lms-nav-bar {
+    background: #1e293b;
+  }
+}
+
+@media (max-width: 640px) {
+  .lms-brand-name { font-size: 1.1rem; }
+  .lms-brand-sub { display: none; }
+  .lms-social { display: none; }
+  .lms-main { padding: 1.25rem 1rem 2rem; }
+
+  .lms-footer-inner { flex-direction: column; gap: 1.25rem; }
+  .lms-footer-nav { justify-content: flex-start; gap: 1.5rem; }
+}
